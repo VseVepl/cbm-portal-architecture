@@ -478,7 +478,7 @@ A Store/Shop owned directly by an Organization is an internal operational unit o
 1. Each independent Business Identity must have one or more explicit Ownership Links to its Owner or Owners.
 2. Each Owner is identified by an Owner ID. Each individual Owner-to-Business relationship is identified by a distinct Ownership ID.
 3. One Owner ID may be linked to multiple independent Business Identities. A Business Identity may be linked to multiple Owner IDs.
-4. Owner ID identifies the Owner; Ownership ID identifies the particular Ownership Link; Business ID identifies the business. These identifiers are not interchangeable.
+4. Owner ID identifies the Owner; Ownership ID identifies the particular Ownership Link; Business Identity identifies the independent business. These identifiers and concepts are not interchangeable.
 5. In this CBM model, ownership records identify who owns or holds ownership rights in a business for authority-scope purposes. They do not represent or calculate equity, financial shares, percentages, investment, profit entitlement, or economic interest.
 6. Owner identity and ownership are separate from User accounts, authentication credentials, Roles, Permissions, and operational assignments. An Owner does not automatically become a User, and an Owner's User account does not automatically receive access to every business linked to that Owner.
 7. Separate businesses linked to the same Owner ID remain separate Business Identities and separate data contexts.
