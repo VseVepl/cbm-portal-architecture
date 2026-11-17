@@ -539,7 +539,7 @@ This rule is separate from Sub-Portal or customer Service Provider migration, wh
 
 An Organization has one of the following three network configurations:
 
-| Organization network configuration | Distribution operations / Distribution Network | Retail operations / Retail Network |
+| Organization network configuration | Distribution operations present | Retail operations present |
 |---|---:|---:|
 | **Hybrid Network** | Yes | Yes |
 | **Distribution Network** | Yes | No |
@@ -551,7 +551,7 @@ These are three configurations of one Organization's business operations. They d
 - A **Distribution Network** configuration means that the Organization operates distribution operations. Multiple Distributor entities within that Organization may be grouped as its Distribution Network. The Organization does not operate its own Organization-owned Retail Stores under this configuration, although Independent Shops may be associated with its Distributors through separately governed Business Relationships.
 - A **Retail Network** configuration means that the Organization operates its own Retail Stores. Multiple Organization-owned Store/Shop operational units may be grouped as its Retail Network. The Organization does not operate distribution operations under this configuration.
 
-**Terminology boundary:** A Distributor remains an individual entity; a Distribution Network is the collective grouping of Distributor entities within one Organization. An Organization-owned Store remains an individual operational unit; a Retail Network is the collective grouping of those Store/Shop operational units within one Organization. A Hybrid Network is the combined Organization-level operating configuration, not a third kind of business entity. None of these network labels, by itself, creates or changes Business Identity, Ownership Links, Service Provider relationships, Distributor–Shop mappings, or authority scope.
+**Terminology boundary:** A Distributor remains an individual entity; an Organization's Distribution Network is the collective grouping of its Distributor entities when multiple Distributors are present. An Organization-owned Store remains an individual operational unit; an Organization's Retail Network is the collective grouping of its Store/Shop operational units when multiple Stores are present. The labels **Distribution Network** and **Retail Network** may also be used as the Organization's configuration names in the table above; in prose, use **Distribution Network configuration** or **Retail Network configuration** when referring to the configuration choice, and **the Organization's Distribution Network/Retail Network** when referring to the grouped operating units. A **Hybrid Network** is the combined Organization-level operating configuration containing both distribution and retail operations, not a third kind of business entity. None of these network labels, by itself, creates or changes Business Identity, Ownership Links, Service Provider relationships, Distributor–Shop mappings, or authority scope.
 
 ## 6. Service-provider architecture
 
