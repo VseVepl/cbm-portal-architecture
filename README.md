@@ -14,7 +14,7 @@ Read that document before drafting, reviewing, or implementing any project-speci
 
 Every architecture and product decision must consider scalability, configurability, extensibility, customization, controlled override capability, and explicit applicability to the correct business contexts. Business-specific variation should be supported within one governed platform wherever appropriate.
 
-Business and Tenant Data Isolation and the Key Hierarchy are strict, non-configurable Stable Core constraints. No customization, configuration, delegation, extension, or override may weaken or bypass them. Flexibility must always remain within Main Portal governance and all other Stable Core rules.
+Business and Tenant Data Isolation and the Business Structure Hierarchy and Structural Integrity are strict, non-configurable Stable Core constraints. No customization, configuration, delegation, extension, or override may weaken or bypass them. Flexibility must always remain within Main Portal governance and all other Stable Core rules.
 
 ## Documentation rule
 
