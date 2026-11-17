@@ -140,7 +140,7 @@ These dimensions are design obligations, not a requirement to make every feature
 
 #### 2.6.1 Immutable boundary takes precedence
 
-Data Isolation and the Key Hierarchy are strict Stable Core constraints. They must not be weakened, bypassed, or made subject to business-level customization, configuration, delegation, or override. All flexibility elsewhere must operate within these constraints, as well as Main Portal's supreme governance and other Stable Core rules.
+Business Data Isolation and Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints. They must not be weakened, bypassed, or made subject to business-level customization, configuration, delegation, or override. All flexibility elsewhere must operate within these constraints, as well as Main Portal's supreme governance and other Stable Core rules.
 
 An explicitly authorized business interaction does not merge the parties' data boundaries. It permits only the specific access or transaction allowed by the applicable relationship, authority, and permission rules.
 
@@ -284,11 +284,13 @@ Approval is a control layered on top of permission. Approval does not create a p
 
 **Customization** is an authorized adaptation of permitted product behaviour, presentation, workflow, or operational choices to meet a business's legitimate requirements. Customization must remain within Main Portal governance, the applicable authority and permission model, and all Stable Core constraints. It does not mean changing immutable platform rules or another business's data or settings.
 
-### 3.25 Key Hierarchy
+### 3.25 Business Structure Hierarchy and Structural Integrity
 
-**Key Hierarchy** is a strict, non-configurable Stable Core constraint identified by the project owner. No business, Service Provider, User, Role, delegated authority, configuration, customization, or override may weaken, bypass, or supersede the governing Key Hierarchy.
+**Business Structure Hierarchy and Structural Integrity** is the strict, non-configurable rule governing the permitted structural levels, entity placement, and parent–child relationships among Main Portal, Sub-Portal, Organization, Distributor, and Shop. Only explicitly valid structures defined by the CBM business model are permitted. A structurally invalid arrangement cannot be created, configured, customized, delegated, or overridden into validity.
 
-This baseline records the mandatory status of the Key Hierarchy but does not infer or prescribe its technical key classes, levels, derivation, storage, rotation, or cryptographic implementation. The phrase is retained as approved by the project owner; this document does not guess whether “key” refers to cryptographic keys, business identifiers, or another key structure. No more specific meaning or implementation may be inferred from this baseline. Any later definition must preserve the strict, non-overridable invariant.
+The following arrangements are expressly invalid: a Distributor placed under a Shop; an Organization placed under a Distributor; and a Distributor existing independently without belonging to an Organization's business structure. The hierarchy must not be inverted, bypassed, or treated as an arbitrary user-configurable tree.
+
+This is a business-structure rule only. It has no meaning or application in cryptography, encryption, encryption-key management, or key derivation. The service-provider relationship, Organization business structure, ownership relationship, and Distributor–Shop business mapping remain distinct relationship views; one must not be inferred from another.
 
 ---
 
@@ -305,7 +307,7 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 | **Business Authority Scope** | Over which business entities may a business-level authority be assigned or exercised? | Organization scope includes its Network Distributor but does not automatically pass through it to the Distributor's independent Shops. |
 | **User authorization** | Which actions may a particular User perform in a particular business context? | A Store Manager may update records only for Store A. |
 
-These views may refer to the same businesses, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so.
+These views may refer to the same businesses, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so. The Business Structure Hierarchy has its own strict valid-parent and valid-child constraints; it is not a freely rearrangeable universal tree.
 
 ### 3A.1 Conceptual illustration
 
@@ -405,9 +407,9 @@ Business identity, ownership relationships, mapping relationships, authority del
 
 Business and Tenant data boundaries are immutable security constraints. No configuration, customization, extension, delegated authority, or override may merge independent business data contexts or weaken their isolation. Any permitted cross-business interaction must be explicit, purpose-limited, authorized, and auditable without changing the underlying ownership or isolation boundary.
 
-### 4.10 Strict Key Hierarchy
+### 4.10 Strict Business Structure Hierarchy and Structural Integrity
 
-The Key Hierarchy is an immutable Stable Core security constraint. It must not be configurable, customizable, overridden, bypassed, or weakened by any subordinate business, Service Provider, User, Role, or workflow. All later security and technical designs must preserve it.
+The permitted Business Structure Hierarchy is an immutable Stable Core business-structure constraint. The valid entity levels and parent–child placements must be preserved in every domain, logical, data, and technical design. The invalid arrangements defined in Section 3.25 must never be supported. No subordinate business, Service Provider, User, Role, workflow, configuration, customization, delegation, or override may invert, bypass, or weaken these structural rules.
 
 ---
 
@@ -717,7 +719,7 @@ Approval requests, approver identity, decision, decision time, approval stage, a
 
 Distributor–Shop mapping is a business relationship between separate identities, not an ownership hierarchy. The relationship is independent from both parties' ownership and does not merge their data contexts.
 
-The CBM Ecosystem must support relationships between Distributors and Shops across the ecosystem, regardless of whether the Distributor is directly under Main Portal, under a Sub-Portal, or associated with an Organization served through another Sub-Portal.
+The CBM Ecosystem must support authorized Distributor–Shop business mappings across the ecosystem. A Distributor must belong to an Organization's business structure and cannot exist as a standalone entity without an Organization. The Organization may receive CBM services directly from Main Portal or through a Sub-Portal; that service-provider relationship does not change the Distributor's structural placement. A Shop's mapping to a Distributor is a separate business relationship, not a change to either entity's structural parent.
 
 ### 12.2 Cardinality
 
@@ -875,7 +877,7 @@ Stable Core contains fundamental protections and invariants that must not be mad
 - Business Identity integrity.
 - Ownership boundaries.
 - Strict Business and Tenant Data Isolation.
-- Strict Key Hierarchy.
+- Strict Business Structure Hierarchy and Structural Integrity.
 - Separation of Business Authority Scope from User/Role Permissions.
 - Authorization integrity.
 - Configuration guardrails and protection against unauthorized overrides.
@@ -900,7 +902,7 @@ The approved configurable approach includes:
 - Operational/business settings within system-defined bounds.
 - Applicable lifecycle and archival policy settings within the governance model.
 
-Configurability must not allow a lower level to weaken or bypass an immutable higher-level rule. Data Isolation and the Key Hierarchy are never configurable or overridable. Customization and configuration must be limited to the applicable business context and must not silently affect another business.
+Configurability must not allow a lower level to weaken or bypass an immutable higher-level rule. Data Isolation and Business Structure Hierarchy and Structural Integrity are never configurable or overridable. Customization and configuration must be limited to the applicable business context and must not silently affect another business.
 
 ### 16.3 Extensible
 
@@ -922,7 +924,7 @@ Extensibility must not become an excuse for unnecessary abstraction or overengin
 - Override is a controlled authority, not an inherent consequence of having access to a configuration screen. It requires explicit permission for the specific setting and business context.
 - Applicability must be defined for every policy, configuration, workflow, permission, and extension where different business contexts may require different treatment.
 - Business-specific customization and overrides must be isolated to their authorized context and must not propagate to sibling or unrelated businesses unless an explicit governing rule requires inheritance.
-- None of these capabilities may weaken Data Isolation, Key Hierarchy, ownership integrity, Main Portal supremacy, or other Stable Core constraints.
+- None of these capabilities may weaken Data Isolation, Business Structure Hierarchy and Structural Integrity, ownership integrity, Main Portal supremacy, or other Stable Core constraints.
 
 ---
 
@@ -956,7 +958,7 @@ The following statements summarize rules that must remain true across all future
 24. Operational data may be removed after the applicable download period only after archival is verified.
 25. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it.
 26. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
-27. The Key Hierarchy is a strict Stable Core constraint and cannot be weakened, bypassed, configured, customized, or overridden by subordinate actors.
+27. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
 28. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
 29. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
 30. A business-specific variation must remain within its authorized business context and must not silently affect another business.
@@ -1018,7 +1020,7 @@ Every later project document must:
 - Use the canonical definitions in this master document.
 - Preserve the ownership, authority-scope, permission, configuration, approval, and isolation distinctions.
 - Apply the architecture-wide design doctrine: evaluate scalability, configurability, extensibility, customization, override capability, and applicability.
-- Treat Data Isolation and the Key Hierarchy as strict, non-overridable Stable Core constraints.
+- Treat Data Isolation and Business Structure Hierarchy and Structural Integrity as strict, non-overridable Stable Core constraints.
 - Identify the master decisions on which it depends.
 - Avoid introducing contradictory or broader rights by implication.
 - Be updated when a governing master decision changes.
