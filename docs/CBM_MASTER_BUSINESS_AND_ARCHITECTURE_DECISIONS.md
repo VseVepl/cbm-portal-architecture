@@ -206,9 +206,9 @@ An **Owner** or **Ownership Holder** is the person or legal entity that owns a B
 
 ### 3.9 Distributor
 
-A **Distributor** is an independently identifiable distribution business participating in an Organization's Distribution Network or otherwise operating within the CBM Ecosystem. It has its own Business Identity and ownership. Its network association does not, by itself, transfer ownership to the Organization.
+A **Distributor** is an independently identifiable distribution business participating in an Organization's Distribution Network or otherwise operating within the CBM Ecosystem. It has its own Business Identity and one or more Ownership Links. Its network association does not, by itself, transfer ownership to the Organization.
 
-A Distributor's own business authority scope is limited to the Distributor itself. A Distributor does not acquire authority over an independently owned Shop merely because that Shop is mapped to it.
+A Distributor's Business Available Authority Scope includes the Distributor itself and may include an Independent Shop linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7. A Distributor does not acquire authority over another independently owned Shop merely because that Shop is mapped to it.
 
 ### 3.10 Independent Shop
 
