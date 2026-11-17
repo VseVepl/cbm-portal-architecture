@@ -25,15 +25,16 @@
 11. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
 12. [Approval Workflow governance](#11-approval-workflow-governance)
 13. [Distributor–Shop relationships and mapping](#12-distributor-shop-business-relationships-and-mapping)
-14. [Distribution closure and Shop continuity](#13-distribution-closure-and-independent-shop-continuity)
-15. [Sub-Portal migration](#14-sub-portal-migration-and-service-continuity)
-16. [Data archival](#15-data-archival-and-object-storage-principles)
-17. [Stable Core, Configurable, Customizable, and Extensible design principles](#16-stable-core-configurable-customizable-and-extensible-design-principles)
-18. [Cross-concept invariants](#17-required-cross-concept-invariants)
-19. [Illustrative scenarios](#18-illustrative-scenarios)
-20. [Documentation governance](#19-documentation-governance)
-21. [Source basis](#20-source-basis-and-decision-provenance)
-
+14. [GST Taxpayer Profile and GST Registration Architecture](#12a-gst-taxpayer-profile-and-gst-registration-architecture)
+15. [Distribution closure and Independent Shop continuity](#13-distribution-closure-and-independent-shop-continuity)
+16. [Sub-Portal migration and service continuity](#14-sub-portal-migration-and-service-continuity)
+17. [Data archival and object-storage principles](#15-data-archival-and-object-storage-principles)
+18. [Domain History and Audit Trail Management](#15a-domain-history-and-audit-trail-management)
+19. [Stable Core, Configurable, Customizable, and Extensible principles](#16-stable-core-configurable-customizable-and-extensible-design-principles)
+20. [Cross-concept invariants](#17-required-cross-concept-invariants)
+21. [Illustrative scenarios](#18-illustrative-scenarios)
+22. [Documentation governance](#19-documentation-governance)
+23. [Source basis and decision provenance](#20-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -254,7 +255,7 @@ A **Business Relationship** is an explicitly established association between dis
 
 #### 3.14.2 User Assigned Authority Scope
 
-**User Assigned Authority Scope** is the explicit subset of a Business Available Authority Scope assigned to a specific User within a valid User–Business association. It may cover one entity, selected multiple entities, or the full available scope. Full-scope access must be explicitly assigned; it must never be inferred from a User's level, title, Role, ownership, business association, parent–child position, or a Distributor–Shop mapping. Explicit exclusions may be applied where the governing assignment model permits them.
+**User Assigned Authority Scope** is the specific set of entities, operational units, locations, or business areas explicitly assigned to a User through one or more User Scope Mappings, within a valid User–Business association and subject to the assigning authority's permitted scope. It may cover one entity, selected multiple entities, or the full scope the assigning authority is permitted to assign. Full-scope assignment must be explicit. It must never be inferred from a User's level, title, Role, ownership, business association, parent–child position, Business Available Authority Scope, or any other Mapping. Explicit exclusions may be applied where the governing assignment model permits them.
 
 ### 3.15 User
 
@@ -312,6 +313,44 @@ The following arrangements are expressly invalid: a Distributor placed under a S
 
 This is a business-structure rule only. It has no meaning or application in cryptography, encryption, encryption-key management, or key derivation. The service-provider relationship, Organization business structure, ownership relationship, and Distributor–Shop business mapping remain distinct relationship views; one must not be inferred from another.
 
+### 3.26 Mapping
+
+**Mapping** is a typed, purpose-specific, explicitly established association between defined source and target entity types or contexts. The unqualified term does not imply a particular pair of entity types, direction, purpose, eligibility, authority, or effect. Every Mapping type must have its own definition of purpose, endpoints, direction, cardinality, eligibility, authorization, lifecycle, effective dates, applicable History, and access controls. Rules for one Mapping type must not be generalized to another.
+
+**Distributor–Shop Mapping** is one specific Business Relationship Mapping type defined in Section 12. It is not the universal Mapping model and does not limit Mapping or Assignment capabilities elsewhere in CBM. Other separately defined types may associate other eligible CBM entity types or contexts, including Main Portal, Sub-Portals, Organizations, Distributors, Independent Shops, Organization-owned Stores/Shops, Users, GST Registrations, and future approved entity types. This illustrative list does not itself authorize any association. Where ambiguity is possible, use a complete qualified term such as Distributor–Shop Mapping, User Scope Mapping, or GST Registration Assignment.
+
+### 3.27 User Scope Mapping
+
+**User Scope Mapping** is the explicit assignment relationship identifying the CBM entities, operational units, locations, or business areas within which a specific User may act, within a valid User–Business association and the assigning authority's permitted scope. Business Available Authority Scope defines the business-level authority boundary; it does not automatically assign every eligible entity or location to every User. User Scope Mapping determines the specific scope assigned to that User. Full-scope assignment must be deliberate and explicit. Roles and Permissions independently determine permitted actions within the assigned scope.
+
+### 3.28 Domain History
+
+**Domain History**, also called Business History or History in a specific domain, is the structured, chronological record of meaningful business events and changes for one defined domain object or relationship, maintained for business reference. Each History record set must contain only events and information belonging to that domain. For example, GST Registration History records GST Registration changes and must not contain unrelated User ID or User profile changes.
+
+History is distinct from the Audit Trail. It is maintained throughout the existence of the relevant Business Identity/business context and must not be routinely purged while that business remains in existence. It may be removed only as part of authorized permanent deletion of the relevant business. History visibility is controlled by its own business permissions and scope; it is not automatically restricted to Audit Trail administrators.
+
+### 3.29 Audit Trail
+
+**Audit Trail** is the comprehensive, chronological record of system events and activities across CBM, including successful and failed actions, changes, access and authentication events, administrative operations, approvals, security events, and other system or User activities required to reconstruct what happened, when, in which context, by whom or by what process, and with what outcome. It may contain events from multiple domains in chronological order; it is not divided into business-facing domain Histories.
+
+Audit Trail access is separately permissioned and more restricted than ordinary business History access. Its retention is governed by a separate retention and archival policy. Audit Trail records are not required to be retained permanently in every case, subject to applicable legal, regulatory, contractual, and security requirements.
+
+### 3.30 GST Taxpayer Profile
+
+A **GST Taxpayer Profile** represents the actual person or legal entity registered, or intended to be registered, as a taxpayer under applicable GST law. It is distinct from Owner ID, Business Identity, User ID, and every CBM portal or business entity record.
+
+### 3.31 GST Registration
+
+A **GST Registration** is a specific registration granted to a taxpayer under applicable GST law and identified by its GSTIN or other applicable registration identifier. Each registration is an independently identifiable record with its own jurisdiction, registration particulars, official status, effective dates, and statutory consequences.
+
+### 3.32 GST Registration Assignment
+
+A **GST Registration Assignment** is the explicit, typed association by which a specific GST Registration is associated with an eligible CBM entity, operational unit, location, or transaction context for a defined GST purpose, subject to verified taxpayer identity, lawful registration coverage, applicable tax rules, and Main Portal governance. Its target is not restricted to Distributor or Shop. It may be any CBM entity type or context enabled by Main Portal, including Main Portal, Sub-Portal, Organization, Distributor, Independent Shop, Organization-owned Store/Shop, or another approved current or future context. This list is illustrative, not an automatic eligibility grant.
+
+### 3.33 Place of Business
+
+A **Place of Business** for GST purposes is a location recognized and recorded in relation to a GST Registration under applicable GST law and official registration records. A CBM operational location is not automatically a GST-registered Place of Business merely because it exists in the Business Structure or participates in a Mapping.
+
 ---
 
 ## 3A. How the CBM relationship model must be read
@@ -323,12 +362,12 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 | **Platform/service-provider structure** | Who provides the CBM service to this customer business, and under whose platform governance does that provider operate? | Main Portal → Sub-Portal → served Organization/Tenant; or Main Portal → directly served Organization/Tenant. |
 | **Business structure** | Which operating units and business components belong within an Organization's own business structure? | Organization → its directly owned Retail Stores; Organization → its Distribution Network. |
 | **Ownership relationship** | Who owns each independent Business Identity? | Owner ID → Ownership ID → Business Identity; one Owner may be linked to several separate businesses. |
-| **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Independent Shop mapping. |
+| **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Independent Shop through the specific Distributor–Shop Mapping type. |
 | **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | A Distributor may include an associated Shop linked to the same Owner ID, only under Section 7; mapping alone is insufficient. |
 | **User Assigned Authority Scope** | Which of the business-available entities has been explicitly assigned to this User? | An Organization-level User may be assigned only Store A and Store C, not every Store. |
 | **Permission / Role** | Which actions may this User perform within the assigned entity scope? | A Store Manager may update records only for Store A. |
 
-These views may refer to the same businesses, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so. Ownership Links may inform eligible Business Available Authority Scope under Section 7; they do not change Business Structure, create a Distributor–Shop mapping, or automatically grant a User access. The Business Structure Hierarchy has its own strict valid-parent and valid-child constraints; it is not a freely rearrangeable universal tree.
+These views may refer to the same businesses or operational contexts, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so. Distributor–Shop Mapping is one specific Mapping type, not a universal definition or restriction on Mapping across CBM. Other Mapping and Assignment types must be separately defined with their own endpoints, purpose, eligibility, authority, and lifecycle. Ownership Links may inform eligible Business Available Authority Scope under Section 7; they do not change Business Structure or automatically grant a User access. User Scope Mapping determines the specific entities or areas assigned to a User; business-level authority availability alone does not assign a User's scope. GST Registration Assignment is separately governed and is never inferred from Owner ID, Business Structure, service-provider association, or another Mapping. The Business Structure Hierarchy has its own strict valid-parent and valid-child constraints; it is not a freely rearrangeable universal tree.
 
 ### 3A.1 Conceptual illustration
 
@@ -357,8 +396,8 @@ BUSINESS STRUCTURE / BUSINESS RELATIONSHIP VIEW
        - - mapping relationship - - INDEPENDENT SHOP X
        - - mapping relationship - - INDEPENDENT SHOP Y
 
-Mapping connects the Distributor and each Shop for expressly
-authorized business interactions. Mapping does not establish ownership.
+The Distributor–Shop Mapping shown here is one specific Mapping type. It connects the Distributor and each Shop only for expressly
+authorized business interactions. It does not establish ownership or define the endpoints of other Mapping types.
 
 
 OWNERSHIP LINK VIEW (INDEPENDENT OF BUSINESS STRUCTURE AND MAPPING)
@@ -404,7 +443,7 @@ No one may infer any of the following solely from the existence of another relat
 - Service Provider status does not imply ownership.
 - Ownership does not automatically imply a User login, User Assigned Authority Scope, or unrestricted operational Permission.
 - Business-structure membership does not imply that every User can perform every action or access every subordinate entity.
-- A Distributor–Shop mapping alone does not imply ownership or ownership-based authority over the Shop. Any eligible owner-linked scope must arise separately under Section 7.
+- A Distributor–Shop Mapping alone does not imply ownership or ownership-based authority over the Shop. Any eligible owner-linked scope must arise separately under Section 7. This specific Mapping type does not define or restrict other Mapping or Assignment types across CBM.
 - An Ownership Link may inform Business Available Authority Scope only under the explicit rules in Section 7; it does not automatically grant User access.
 - A Sub-Portal's authority scope over associated businesses does not imply unrestricted record access for every Sub-Portal User.
 - A business's Business Available Authority Scope does not itself define the User Assigned Authority Scope or action types available to a User.
@@ -443,7 +482,7 @@ Distinct independently owned businesses retain their own identities and data bou
 
 ### 4.8 Integrity and auditability
 
-Business identity, ownership relationships, mapping relationships, authority delegation, permission changes, configuration changes, approvals, migration, archival, and other security-significant operations must preserve integrity and be auditable.
+Business identity, ownership relationships, Mapping relationships, authority delegation, User Scope Mapping changes, permission changes, configuration changes, approvals, migration, archival, and all other relevant system activities must be captured in the comprehensive Audit Trail. Where an approved domain History exists, its domain-specific record must be maintained separately.
 
 ### 4.9 Strict Business Data Isolation
 
@@ -800,7 +839,7 @@ Approval rules must support highly granular combinations so that different Users
 
 ### 11.5 Approval and audit
 
-Approval requests, approver identity, decision, decision time, approval stage, and final outcome must be recorded for accountability and auditability.
+Approval requests, approver identity, decision, decision time, approval stage, and final outcome must be recorded in the comprehensive Audit Trail. A separate Approval History may be introduced only if a distinct business need is explicitly approved; it must remain separate from the Audit Trail.
 
 ---
 
@@ -816,7 +855,7 @@ The CBM Ecosystem must support authorized Distributor–Shop business mappings a
 
 - One Distributor may be associated with multiple Independent Shops.
 - One Independent Shop may be associated with multiple Distributors.
-- Each Distributor–Shop mapping is an independently identifiable relationship with its own lifecycle and auditable history.
+- Each Distributor–Shop Mapping is an independently identifiable relationship with its own lifecycle and its own Distributor–Shop Mapping History. Related system events are separately recorded in the Audit Trail; Mapping History and Audit Trail are not combined.
 
 ### 12.3 Mapping initiation and approval
 
@@ -835,7 +874,7 @@ Knowing a Unique ID or Secret Code does not grant general access to the Distribu
 
 ### 12.5 Relationship effects and limits
 
-A mapping:
+A Distributor–Shop Mapping:
 
 - Establishes only the authorized business relationship.
 - Does not change either party's ownership or create an Ownership Link.
@@ -845,11 +884,90 @@ A mapping:
 - Does not grant unrestricted access to Accounting, Inventory, HR, Users, administration, or other business data.
 - May enable only the specific transactions and interactions expressly authorized for the relationship.
 
-The Distributor's authorization is necessary and sufficient for enabling the automated transactions covered by this mapping relationship. An additional mandatory Shop approval must not be introduced for those transactions without a separate business decision. This does not remove the Shop owner's role in initiating the mapping request.
+The Distributor's authorization is necessary and sufficient for enabling the automated transactions covered by this Distributor–Shop Mapping relationship. An additional mandatory Shop approval must not be introduced for those transactions without a separate business decision. This does not remove the Shop owner's role in initiating the mapping request. This authorization rule applies only to Distributor–Shop Mapping and must not be generalized to another Mapping or Assignment type.
 
 ### 12.6 Ending a mapping
 
 Ending one Distributor–Shop mapping ends that relationship only. It does not close the Shop, change its ownership, invalidate its Business Identity, or terminate its other Distributor relationships.
+
+---
+
+## 12A. GST Taxpayer Profile and GST Registration Architecture
+
+### 12A.1 Purpose and separation
+
+CBM must support configurable management of GST Taxpayer Profiles, GST Registrations, GSTINs, registered Places of Business, and explicit associations of registrations with eligible CBM entities and transaction contexts.
+
+Subject to applicable law and verified taxpayer facts, the architecture must support one taxpayer profile with one or multiple registrations; one registration associated with multiple eligible CBM entities or contexts of the same registered taxpayer; and one CBM entity/context associated with multiple registrations where legally required or permitted. These are legally constrained capabilities, not unrestricted many-to-many links.
+
+GST Taxpayer Profile, GST Registration, GST Registration Assignment, Business Identity, Owner ID, Business Structure, Business Relationship Mapping, Business Available Authority Scope, User Scope Mapping, and User Permissions are separate concepts. A relationship in one model does not automatically establish a relationship or permission in another.
+
+### 12A.2 GST Taxpayer Profile and GST Registration
+
+A GST Taxpayer Profile represents the actual person or legal entity registered, or intended to be registered, under GST. It is not an Owner ID, User account, Business Identity, or CBM entity merely because that entity has a name or owner. The legal person operating Main Portal or a Sub-Portal may have its own profile for its own taxable activities. A customer Organization or other business may have a separate profile. A service-provider relationship does not merge taxpayer identities.
+
+Each GST Registration is an independently identifiable record supporting, as applicable, GSTIN, linked taxpayer profile, State/Union Territory and jurisdiction, legal/trade name, taxpayer type, official status, effective dates, cancellation/suspension dates, Principal and Additional Places of Business, registration certificate, verification source/result/date, and other statutory particulars. GSTIN must be unique within CBM's GST Registration records. Official status is stored separately from CBM's internal verification or assignment workflow status.
+
+A taxpayer profile may group multiple registrations for administration, but that grouping must not merge registrations or suppress statutory consequences. Sections 25(4) and 25(5) of the CGST Act treat registrations/establishments covered by those provisions as distinct persons/establishments for GST purposes. CBM must preserve registration-level separation.
+
+### 12A.3 GST Registration Assignment across CBM levels
+
+A **GST Registration Assignment** is the explicit, typed association of a GST Registration with an eligible CBM entity, operational unit, location, or transaction context for a stated GST purpose.
+
+The target is not restricted to Distributor or Shop. Subject to Main Portal applicability rules and legal validation, this capability may be enabled for any supported CBM level/context, including:
+- Main Portal / the legal person operating the Main Portal service-provider business.
+- Sub-Portal / the legal person operating that Sub-Portal service-provider business.
+- Organization.
+- Distributor.
+- Independent Shop.
+- Organization-owned Store/Shop or another operational location.
+- Any future CBM entity/context expressly enabled by Main Portal.
+
+This list is illustrative, not restrictive, and does not mean every registration may be assigned to every target. Each assignment must be supported by the registered taxpayer's legal identity, lawful business/place-of-business coverage, intended purpose, applicable GST law, and verified registration particulars.
+
+A Main Portal or Sub-Portal GST Registration belongs to the legal person operating that service-provider business for its own taxable activities. It does not become the GSTIN of customer Organizations or their Users. A customer's GST Registration does not become the GSTIN of its Service Provider.
+
+GST Registration Assignment must not be inferred from Owner ID/Ownership Link, Business Structure, parent–child placement, any Business Relationship or Mapping (including Distributor–Shop Mapping), service-provider association, shared User accounts, Business Available Authority Scope, User Scope Mapping, or any other association that does not itself establish GST eligibility. No Mapping type is a shortcut for GSTIN eligibility. Distributor–Shop Mapping has no authority to authorize GSTIN use.
+
+A GST Registration Assignment does not transfer the GST registration, change the registered taxpayer, change Business Identity or ownership, modify Business Structure, create another Business Relationship, widen authority scope, or grant Users permission to view or use the GSTIN.
+
+### 12A.4 Places of Business, cardinality, and effective dates
+
+For each GST Registration, CBM must represent the Principal Place of Business and Additional Places of Business as recorded by the GST authority. CBM operational locations may be associated with a GST-registered Place of Business only through an explicit, verified location association. A CBM location or Mapping does not itself make a location a GST-registered Place of Business.
+
+Subject to legal eligibility, one taxpayer profile may have multiple registrations; one registration may be assigned to multiple eligible entities/locations/contexts of the same registered taxpayer; and one CBM entity/context may be associated with multiple registrations where State, location, or separate-registration requirements make this valid. A parent-level assignment does not automatically flow to subordinate entities or locations. Any permitted inheritance must be explicit, legally valid, and separately governed.
+
+The official registration effective dates/status period and the CBM assignment effective period are separate. Each assignment must support effective from/to, status, target context and purpose, linked registration, verification result/source, reason, supporting reference, recorded date/actor, and approval. Conflicts must be detected; a new assignment must not overwrite or erase a previous assignment.
+
+### 12A.5 GSTIN eligibility, verification, and selection
+
+GSTIN eligibility must be determined independently for each proposed GST Registration Assignment. Evaluation must consider the actual registered taxpayer, authoritative registration particulars, relevant State/Union Territory, registered Places of Business, target CBM entity/context, intended GST purpose, effective period, and applicable law.
+
+Owner ID, shared ownership, Distributor–Shop Mapping, any other Mapping, hierarchy, or service-provider association must not independently establish eligibility. Verification must use authoritative GST sources, including GST Portal taxpayer search and official registration evidence, and record source, result, time, and responsible process/User. A user-entered GSTIN is not automatically verified.
+
+GSTIN selection must consider the CBM entity and transaction context, validated assignment, registered Places of Business, State/Union Territory, effective period, official status, and applicable GST rules. A configured default must not override statutory requirements. A GSTIN assigned at one CBM level must not automatically be used by another. If the correct registration cannot be determined, CBM must require authorized resolution or block the GST-sensitive transaction. The GST Registration used on an issued GST document must be preserved; later assignment changes must not rewrite historical transactions.
+
+### 12A.6 User access and configurability
+
+A GST Registration Assignment does not grant every User of that entity access to the GSTIN. User access requires a valid User–Business association, explicit User Scope Mapping covering the relevant entity/context, the specific GST Permission, and applicable approval.
+
+Viewing taxpayer profiles, viewing registrations, amending records, verifying GSTIN, creating/changing assignments, selecting GSTIN for transactions, and viewing GST Registration History must be independently permissionable. Main Portal governs eligible entity types/contexts, mandatory eligibility and verification controls, permitted assignment patterns, effective-date rules, and approvals. Configuration cannot waive legal eligibility or make one taxpayer's GSTIN available to an unrelated taxpayer.
+
+### 12A.7 GST Registration History
+
+GST Registration History is a dedicated Domain History record set containing only GST Registration and GST Registration Assignment events. It records, as applicable, affected entity/context and registration, previous and new GSTIN/assignment, effective date/time, recorded date/time, reason, actor, approver, and supporting verification/document reference.
+
+It must not contain unrelated events such as User ID or User profile changes. Such events belong in the comprehensive Audit Trail and in a separate User History only if a distinct business need is approved. GST Registration History is preserved throughout the lifetime of the relevant business context and may be removed only as part of authorized permanent deletion of that business. Multiple appropriately authorized Users may view it under separate History permissions. It is not the Audit Trail.
+
+### 12A.8 GST legal and policy boundary
+
+CBM's GST capability supports information, configuration, validation, and transactions. It does not itself grant GST registration, conclusively decide legal eligibility, or replace the GST Portal, statutory filings, or professional tax advice. The design baseline must account for CGST Act Sections 25(1), 25(2), 25(4), and 25(5), and applicable CGST Rules governing separate registration for multiple places of business within a State/Union Territory. Current law and official GST Portal procedures must be rechecked before implementation.
+
+Official references:
+- [CGST Act, Section 25 — CBIC Tax Information Portal](https://taxinformation.cbic.gov.in/content-page/explore-act/1000294/1000001).
+- [CBIC consolidated CGST Rules, including Rule 11 amendment for multiple places of business](https://cbic-gst.gov.in/pdf/amended-01012022-CGST-Rules-2017-Part-A.pdf).
+- [GST Portal Manual — Search Taxpayer using GSTIN/UIN](https://tutorial.gst.gov.in/userguide/taxpayersdashboard/Search_Taxpayer_manual.htm).
+- [GST Portal Manual — Apply for Registration](https://tutorial.gst.gov.in/userguide/registration/Apply_for_Registration_Normal_Taxpayer.htm).
 
 ---
 
@@ -903,7 +1021,7 @@ Migration must include the complete Sub-Portal scope and all information require
 - Business records and transactions.
 - Documents and attachments.
 - Configurations and operational settings.
-- Relevant historical and audit records.
+- Relevant domain-specific History records and Audit Trail records, preserved separately and according to their respective retention rules.
 - Other associated information necessary for complete continuity and integrity.
 
 ### 14.3 Invariants during migration
@@ -945,12 +1063,74 @@ The archival capability must support:
 - Secure access controls.
 - Retention management under Main Portal policy.
 - Restore capability.
-- Audit history.
+- Domain-specific History records and Audit Trail records, preserved separately according to their respective retention rules.
 - Verification of successful archival before deletion of the operational copy.
 
 ### 15.3 Separation from operational data
 
 Archival is preservation, not continuation of normal operations. Removing an operational copy after the required download window and successful archival does not mean that the archived business history is erased or that ownership is transferred.
+
+---
+
+## 15A. Domain History and Audit Trail Management
+
+### 15A.1 Mandatory separation
+
+**Domain History** and **Audit Trail** are separate and independent record categories. They have different purposes, contents, structures, retention rules, and access permissions. They must not be merged into one table, one undifferentiated log, one combined domain History, or one permission domain. An event may create both records, but each is maintained independently for its own purpose.
+
+### 15A.2 Domain-specific History and approved History domains
+
+A History record set belongs to one clearly defined domain object, entity, or relationship. It records meaningful business changes and events that authorized business Users need to understand. It must contain only events and information belonging to that domain.
+
+The History domains established in this baseline are:
+1. **GST Registration History:** GST Registration and GST Registration Assignment events only.
+2. **Distributor–Shop Mapping History:** events concerning the specific Distributor–Shop relationship only.
+3. **Ownership History:** events concerning the relevant Owner ID, Ownership ID, and Ownership Link only.
+4. **User Scope Mapping History:** events concerning the relevant User-to-entity/location scope assignment only.
+
+A User ID or User profile change must never be inserted into GST Registration History, Ownership History, or Mapping History. A separate User account/profile History may be introduced only if a distinct business need is established and approved. Other History domains must not be assumed merely because Audit Trail records exist; each requires an explicit business requirement and a definition of scope, contents, permissions, and retention.
+
+### 15A.3 History contents, integrity, and retention
+
+Each History record set records only fields relevant to its own domain. As applicable, it may include affected domain object/relationship, event type, previous and new domain values/states, effective date/time, recorded date/time, reason, responsible actor, approver, and supporting reference. A significant domain change must not silently overwrite the only record of its previous state. Corrections must preserve the original entry and identify the correction or superseding event.
+
+History must be preserved throughout the existence of the relevant Business Identity/business context. It must not be routinely purged or deleted while that business remains in existence. It may be removed only as part of authorized permanent deletion of the relevant business.
+
+History may be available to multiple appropriately authorized Users. Its visibility is controlled by separate History permissions and applicable business scope. Permission to view History does not grant permission to perform the underlying action or to view the Audit Trail.
+
+### 15A.4 Comprehensive system-wide Audit Trail
+
+Audit Trail must capture all relevant system events and activities across CBM in chronological order. Its coverage is not limited to the History domains above or to security events alone.
+
+As applicable, Audit Trail includes successful and failed actions, creation and modification attempts, access and authentication events, User and Role changes, User Scope Mapping changes, Ownership Link changes, Business Relationship/Mapping changes, GST verification and assignment events, configuration changes, approvals and rejections, administrative actions, data exports, archival and deletion operations, and security events.
+
+Audit Trail must capture sufficient context to reconstruct what happened, when, in which business/entity context, by whom or by what system process, and with what outcome. It may contain events from multiple domains in one chronological sequence. It does not replace any domain-specific History.
+
+### 15A.5 Separate access permissions
+
+1. History and Audit Trail must have separate access permissions.
+2. A User may view relevant domain History without being allowed to view Audit Trail.
+3. Audit Trail access is restricted to specifically authorized roles/Users under Main Portal governance and applicable security policy.
+4. Access to one domain's History does not grant access to another domain's History.
+5. Permission to view History does not grant permission to create, change, or revoke the underlying business object.
+6. Audit Trail permission does not automatically grant access to all business History.
+7. Viewing or exporting either record category is itself an activity captured in the Audit Trail, subject to applicable policy.
+
+### 15A.6 Retention, archival, and deletion
+
+Domain History is retained for the full lifetime of the relevant business context and may be removed only through authorized permanent deletion of that business. It must not be purged according to an Audit Trail retention schedule.
+
+Audit Trail has a separate retention and archival policy. It is not required to be permanent in every case. Retention periods, archival, and eligible deletion are governed by Main Portal policy and applicable legal, regulatory, contractual, and security requirements.
+
+Business archival must preserve Domain History and Audit Trail separately where each remains within its applicable retention period. Their integrity, provenance, and access controls remain independently enforceable after archival or migration.
+
+### 15A.7 Paired-record examples
+
+When a GSTIN is changed, GST Registration History records only the previous and new GST registration/assignment, effective date, recorded date, reason, actor, and approver where applicable. The Audit Trail separately records relevant system events, including actor/session, request and outcome, verification, authorization, and approval events.
+
+When a User ID is changed, that event is recorded in the comprehensive Audit Trail. It is not inserted into GST Registration History. A separate User History is permitted only if a distinct business need is approved.
+
+When a Distributor–Shop Mapping is created, changed, suspended, or ended, the specific Mapping History records the business chronology of that relationship. The Audit Trail separately captures system events and actions associated with those operations.
 
 ---
 
@@ -1033,8 +1213,8 @@ The following statements summarize rules that must remain true across all future
 8. Organization authority scope includes its own subordinate Distributors and Organization-owned Stores. It does not automatically pass through a Distributor to all Independent Shops mapped to that Distributor. Any owner-linked eligibility must be separately established under Section 7 and must not be inferred from mapping.
 9. A Distributor's Business Available Authority Scope includes itself and may include only those associated Independent Shops whose Ownership Links establish an eligible shared Owner ID with the Distributor, subject to Main Portal-governed rules. Other mapped Shops remain outside that owner-linked scope.
 10. An Independent Shop retains its own Business Identity, ownership, and data boundary even when it has an owner-linked authority relationship with another business.
-11. Business Available Authority Scope determines which entities are eligible for business-level authority and User-scope assignment; it does not itself grant access to any User.
-12. Every User must have an explicit valid User–Business association and an explicit User Assigned Authority Scope for the target entity. User level, title, Role, Owner identity, structural position, or mapping does not automatically grant the full available scope.
+11. Business Available Authority Scope determines the business-level authority boundary; it does not itself assign any specific entity or location to a User or grant that User access. The User's specific entity/location scope is determined through explicit User Scope Mapping.
+12. Every User must have an explicit valid User–Business association and explicit User Scope Mapping for the target entity. User level, title, Role, Owner identity, structural position, Business Available Authority Scope, or another Mapping does not automatically grant the full available scope.
 13. Role/Permission determines what actions a User may perform; it cannot expand the User's assigned entity scope.
 14. A valid action requires the target to be within the relevant Business Available Authority Scope and the User Assigned Authority Scope, together with the required Permission and any applicable approval/control.
 15. Delegated Authority is constrained by Who, What, Where, Limits, and Duration.
@@ -1043,7 +1223,7 @@ The following statements summarize rules that must remain true across all future
 18. Approval requirements can vary by business, action, Role, and individual User.
 19. Approval workflows support single, multiple, sequential, and parallel approval patterns.
 20. Approval does not create an underlying action Permission.
-21. Distributor–Shop mapping is a Business Relationship, not ownership and not unrestricted access.
+21. Distributor–Shop Mapping is one specific Business Relationship Mapping type, not a universal definition or boundary for Mapping across CBM; it is not ownership and does not grant unrestricted access.
 22. One Shop may map to multiple Distributors; each mapping is a separate relationship.
 23. Ending a mapping does not close the Shop or terminate its other mappings.
 24. Distribution closure does not automatically erase the identity or history of independent associated Shops.
@@ -1058,6 +1238,15 @@ The following statements summarize rules that must remain true across all future
 33. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
 34. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
 35. A business-specific variation must remain within its authorized business context and must not silently affect another business.
+36. Mapping is typed and purpose-specific. Distributor–Shop Mapping does not restrict or define other Mapping or Assignment types.
+37. GST Registration Assignment may target any CBM entity type/context enabled by Main Portal, subject to verified taxpayer identity, lawful registration coverage, and applicable GST rules; it is not limited to Distributor or Shop.
+38. GSTIN eligibility is determined from the actual registered taxpayer, verified registration particulars, lawful Place of Business coverage, intended GST purpose, and applicable law. Owner ID, any Mapping, hierarchy, or service-provider association alone never establishes eligibility.
+39. GST Registration Assignment does not transfer a GST registration or permit an unrelated legal person/distinct person to use that GSTIN.
+40. User Scope Mapping, not merely a User's business level or Business Available Authority Scope, determines the specific entities/locations assigned to that User.
+41. Domain History is maintained separately for each approved domain and contains only that domain's events. It is preserved for the lifetime of the relevant business context and removed only through authorized permanent business deletion.
+42. Audit Trail is the comprehensive chronological record of relevant system events across all domains. It is separate from Domain History and follows its own retention policy; permanent retention is not universally required.
+43. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
+44. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
 
 ## 18. Illustrative scenarios
 
@@ -1101,6 +1290,14 @@ Main Portal establishes a default setting. Organization A has explicit permissio
 
 Organization A moves from Sub-Portal A to Sub-Portal B under Main Portal governance. Organization A's Business Identity, ownership, internal structure, data rights, and valid historical relationships remain intact. The Service Provider relationship changes.
 
+### 18.10 GST Registration Assignment at different CBM levels
+
+The GST Registration Assignment capability is not limited to Distributor–Shop relationships. Subject to legal eligibility and Main Portal policy, a GST Registration may be associated with the legal person/context operating Main Portal, a Sub-Portal service provider, an Organization, a Distributor, an Independent Shop, an Organization-owned Store/Shop, or another enabled CBM entity/context. The GST Registration always belongs to the actual registered taxpayer. The CBM association identifies an eligible operational or transaction context; it does not change the taxpayer or permit an unrelated entity to use that GSTIN. No Owner ID, Business Structure, service-provider relationship, or other Mapping automatically establishes GSTIN eligibility.
+
+### 18.11 Domain History and Audit Trail are separate
+
+When a GSTIN is changed, GST Registration History records only the GST Registration-domain change, including previous and new registration/assignment, effective date, recorded date, reason, actor, and approver where applicable. A User ID change is not inserted into GST Registration History. The User ID change and GSTIN change may both appear as separate events in the comprehensive Audit Trail, in chronological order. Authorized business Users may view GST Registration History without being permitted to view Audit Trail.
+
 ## 19. Documentation governance
 
 ### 19.1 Documentation completeness
@@ -1111,9 +1308,9 @@ Project documentation must be sufficiently precise that a reader can understand 
 
 The master decision record contains finalized decisions only. An unresolved matter must be discussed and explicitly finalized before it is added. It must not be represented as a decision, and it must not be silently filled by an AI recommendation or an assumed technical convention.
 
-### 19.3 Separate history from decisions
+### 19.3 Separate Project Discussion History from domain records and decisions
 
-Chronological discussions, reasoning history, rejected approaches, and superseded wording belong in a separate history record if one is maintained. They must not be mixed into the authoritative decision statements.
+Chronological project discussions, reasoning, rejected approaches, and superseded wording belong in a separate **Project Discussion History** record if one is maintained. Project Discussion History is not Domain History and is not the Audit Trail. Neither Domain History nor Audit Trail belongs in the authoritative decision text as a substitute for project discussion history.
 
 ### 19.4 Downstream documentation consistency
 
@@ -1138,14 +1335,27 @@ A proposed change is not final merely because it has been suggested or documente
 This baseline consolidates:
 
 1. The user-provided project context document **CBM_Project_Context_and_Decisions_2026-11-17** (provided in the conversation as the CBM project context text), including its confirmed business, service-provider, ownership, mapping, continuity, migration, archival, and Stable Core principles.
-2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, especially the accepted Business Identity and Ownership model, the Service Provider explanation, the corrected Business Authority Scope model, the separation between scope and User/Role Permissions, hierarchical configuration inheritance and business-specific overrides, and fine-grained approval workflow configurability.
+2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the approved GST Taxpayer Profile and GST Registration architecture, typed and purpose-specific Mapping, explicit User Scope Mapping, and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
+3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
 - Main Portal's ecosystem-wide authority scope;
 - Sub-Portal authority scope over associated businesses in its authorized domain;
 - Organization authority scope over its own subordinate Distributors and Organization-owned Stores/Shops, but not Independent Shops beneath a Distributor merely because of mapping; and
-- Distributor Business Available Authority Scope includes the Distributor itself and may include associated Independent Shops linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7; mapping alone does not confer that scope.
+- Distributor Business Available Authority Scope includes the Distributor itself and may include associated Independent Shops linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7; Distributor–Shop Mapping alone does not confer that scope.
+- GST Registration Assignment is a separate typed association that may target any CBM entity/context enabled by Main Portal; it is not limited to Distributor–Shop Mapping and is never inferred from Owner ID or another Mapping.
+- User Scope Mapping determines the specific entities/locations assigned to an individual User; business-level authority availability alone does not assign that User's scope.
+- Domain History and Audit Trail are separate records with separate contents, purposes, permissions, and retention rules.
+
+Official GST references consulted for the legal architecture boundary:
+
+- [CGST Act, Section 25 — CBIC Tax Information Portal](https://taxinformation.cbic.gov.in/content-page/explore-act/1000294/1000001).
+- [CBIC consolidated CGST Rules, including Rule 11 amendment for multiple places of business](https://cbic-gst.gov.in/pdf/amended-01012022-CGST-Rules-2017-Part-A.pdf).
+- [GST Portal Manual — Search Taxpayer using GSTIN/UIN](https://tutorial.gst.gov.in/userguide/taxpayersdashboard/Search_Taxpayer_manual.htm).
+- [GST Portal Manual — Apply for Registration](https://tutorial.gst.gov.in/userguide/registration/Apply_for_Registration_Normal_Taxpayer.htm).
+
+These references support the logical architecture boundaries. Current law and official GST Portal procedures must be rechecked before implementation.
 
 ---
 
