@@ -187,7 +187,7 @@ Being a Service Provider does not make that provider the owner of the customer b
 
 An **Organization** is an independent customer business that uses CBM software services. It has its own Business Identity, ownership, business data, internal business structure, and associated users. It may receive services directly from Main Portal or through an authorized Sub-Portal.
 
-An Organization may operate a Distribution Network, a Retail structure, or both, according to its approved business configuration.
+An Organization may operate distribution operations, retail operations, or both. Where it has multiple Distributor entities, they may be grouped as its **Distribution Network**. Where it has multiple Organization-owned Store/Shop operational units, they may be grouped as its **Retail Network**. The combined configuration containing both distribution and retail operations is called a **Hybrid Network**. These are Organization-level operating arrangements, not separate Business Identities, Owners, Service Providers, or customer businesses.
 
 ### 3.6 Tenant
 
@@ -221,7 +221,7 @@ An **Ownership Link** is the explicit relationship connecting an Owner ID to a B
 
 ### 3.9 Distributor
 
-A **Distributor** is an independently identifiable distribution business participating in an Organization's Distribution Network or otherwise operating within the CBM Ecosystem. It has its own Business Identity and one or more Ownership Links. Its network association does not, by itself, transfer ownership to the Organization.
+A **Distributor** is an independently identifiable distribution business entity that must belong to an Organization's business structure. An Organization may have multiple Distributors; collectively, those Distributor entities may be grouped as that Organization's **Distribution Network**. The Distributor retains its own Business Identity. Business Identity, structural placement, and Ownership Links are separate concepts; the fact that a Distributor is part of an Organization's Distribution Network does not, by itself, define or alter its Ownership Links.
 
 A Distributor's Business Available Authority Scope includes the Distributor itself and may include an Independent Shop linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7. A Distributor does not acquire authority over another independently owned Shop merely because that Shop is mapped to it.
 
@@ -233,7 +233,7 @@ A Distributor–Shop mapping does not make the Shop a child business owned by th
 
 ### 3.11 Organization-owned Store / Shop
 
-An **Organization-owned Store** (also described as a directly owned Shop or Retail Location) is an operational unit within an Organization's own business structure. It may have its own Store or Location identifier for operational purposes, but it is not a separate independently owned Business Identity merely because it has a separate location or operational record.
+An **Organization-owned Store** (also described as a directly owned Shop or Retail Location) is an operational unit within an Organization's own business structure. It may have its own Store or Location identifier for operational purposes, but it is not a separate independently owned Business Identity merely because it has a separate location or operational record. An Organization may have multiple such Stores; collectively, those operational units may be grouped as its **Retail Network**.
 
 Its ownership remains with the Organization's owner, and its operations remain within the Organization's business structure and authority scope.
 
@@ -360,7 +360,7 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 | Relationship view | Question it answers | Example |
 |---|---|---|
 | **Platform/service-provider structure** | Who provides the CBM service to this customer business, and under whose platform governance does that provider operate? | Main Portal → Sub-Portal → served Organization/Tenant; or Main Portal → directly served Organization/Tenant. |
-| **Business structure** | Which operating units and business components belong within an Organization's own business structure? | Organization → its directly owned Retail Stores; Organization → its Distribution Network. |
+| **Business structure** | Which operating units and business components belong within an Organization's own business structure? | Organization → its Distributor entities (grouped as a Distribution Network when multiple); Organization → its directly owned Stores (grouped as a Retail Network when multiple). |
 | **Ownership relationship** | Who owns each independent Business Identity? | Owner ID → Ownership ID → Business Identity; one Owner may be linked to several separate businesses. |
 | **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Independent Shop through the specific Distributor–Shop Mapping type. |
 | **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | A Distributor may include an associated Shop linked to the same Owner ID, only under Section 7; mapping alone is insufficient. |
@@ -389,7 +389,10 @@ BUSINESS STRUCTURE / BUSINESS RELATIONSHIP VIEW
 
                  ORGANIZATION A
                   /          \
-      Distribution Network   Organization-owned Stores
+      Distribution Network   Retail Network
+      (multiple Distributors) (multiple owned Stores)
+
+      A Hybrid Network is the Organization-level configuration containing both.
                |
           DISTRIBUTOR D1
                |
@@ -534,19 +537,21 @@ This rule is separate from Sub-Portal or customer Service Provider migration, wh
 
 ### 5.5 Organization configurations
 
-An Organization has one of the following business configurations:
+An Organization has one of the following three network configurations:
 
-| Organization configuration | Distribution Network | Organization-owned Retail Stores |
+| Organization network configuration | Distribution operations / Distribution Network | Retail operations / Retail Network |
 |---|---:|---:|
-| Hybrid Organization | Yes | Yes |
-| Distribution-only Organization | Yes | No |
-| Retail-only Organization | No | Yes |
+| **Hybrid Network** | Yes | Yes |
+| **Distribution Network** | Yes | No |
+| **Retail Network** | No | Yes |
 
-These are three distinct configurations of an Organization's business operation.
+These are three configurations of one Organization's business operations. They do not create three Organization Entity Types or separate Business Identities.
 
-- A **Hybrid Organization** operates both a Distribution Network and its own Retail structure. It may also have independent retailers associated with its distribution operations.
-- A **Distribution-only Organization** operates a distribution business and may have independently owned retailers associated with its Distribution Network. It does not operate its own Organization-owned Retail Stores under this configuration.
-- A **Retail-only Organization** operates its own Retail Stores. Those Stores belong to the Organization and do not have an independent Distributor–Shop relationship with their own Organization.
+- A **Hybrid Network** means that the Organization operates both distribution operations and its own retail operations. Multiple Distributors may be grouped as its Distribution Network, and multiple Organization-owned Stores may be grouped as its Retail Network. The Organization may also have Independent Shops associated with its distribution operations through separately governed Business Relationships.
+- A **Distribution Network** configuration means that the Organization operates distribution operations. Multiple Distributor entities within that Organization may be grouped as its Distribution Network. The Organization does not operate its own Organization-owned Retail Stores under this configuration, although Independent Shops may be associated with its Distributors through separately governed Business Relationships.
+- A **Retail Network** configuration means that the Organization operates its own Retail Stores. Multiple Organization-owned Store/Shop operational units may be grouped as its Retail Network. The Organization does not operate distribution operations under this configuration.
+
+**Terminology boundary:** A Distributor remains an individual entity; a Distribution Network is the collective grouping of Distributor entities within one Organization. An Organization-owned Store remains an individual operational unit; a Retail Network is the collective grouping of those Store/Shop operational units within one Organization. A Hybrid Network is the combined Organization-level operating configuration, not a third kind of business entity. None of these network labels, by itself, creates or changes Business Identity, Ownership Links, Service Provider relationships, Distributor–Shop mappings, or authority scope.
 
 ## 6. Service-provider architecture
 
@@ -612,8 +617,8 @@ This provider-level scope does not transfer ownership to the Sub-Portal and does
 An Organization's Business Available Authority Scope includes:
 
 - The Organization's own business context.
-- Distributors participating under its Distribution Network, within the Organization's permitted governance and operational authority.
-- Stores/Shops that are operational units owned and operated as part of the Organization's own Retail structure.
+- Distributor entities belonging to its business structure, grouped as its Distribution Network when multiple, within the Organization's permitted governance and operational authority.
+- Stores/Shops that are operational units owned and operated as part of the Organization's own Retail operations, grouped as its Retail Network when multiple.
 - Other directly subordinate operational entities that remain within the Organization's own business and ownership structure.
 - An independently identified business only where a valid Ownership Link and an explicit Main Portal-governed rule make that business eligible for the relevant owner-linked authority scope.
 
@@ -975,11 +980,11 @@ Official references:
 
 ### 13.1 Continuity principle
 
-Closing a Distribution Network must not automatically destroy or invalidate the Business Identity or historical data of independently owned Shops associated with that network.
+Closing an Organization's Distribution Network (the collective grouping/operation of its Distributor entities) must not automatically destroy or invalidate the Business Identity or historical data of independently owned Shops associated with any affected Distributor.
 
 ### 13.2 Shop options after Distribution Network closure
 
-When a Distribution business/network closes:
+When an Organization's Distribution Network operation closes:
 
 1. The Distribution business is closed under its applicable lifecycle process.
 2. Each affected Independent Shop remains identifiable and independently owned.
@@ -1262,7 +1267,7 @@ Organization A owns Store 1, Store 2, and Store 3 as operating units. The Organi
 
 ### 18.3 Organization and Distributor, with independently owned Shops under the Distributor
 
-Organization A has Distributor D1 in its Distribution Network. Distributor D1 is linked to Owner B through an Ownership Link. Shop X is independently owned and mapped to D1. If Shop X is also linked to Owner B through its own Ownership Link, and Main Portal-governed rules permit the owner-linked scope, Shop X may be included in D1's Business Available Authority Scope. Shop Y is mapped to D1 but is linked to a different Owner ID; Shop Y is not included in D1's owner-linked scope merely because of the mapping. Neither mapping changes either Shop's Business Identity, Owner, or data boundary.
+Organization A has Distributor D1 as one Distributor entity within its distribution operations. Where the Organization has multiple Distributor entities, they are collectively grouped as its Distribution Network. Distributor D1 is linked to Owner B through an Ownership Link. Shop X is independently owned and mapped to D1. If Shop X is also linked to Owner B through its own Ownership Link, and Main Portal-governed rules permit the owner-linked scope, Shop X may be included in D1's Business Available Authority Scope. Shop Y is mapped to D1 but is linked to a different Owner ID; Shop Y is not included in D1's owner-linked scope merely because of the mapping. Neither mapping changes either Shop's Business Identity, Owner, or data boundary.
 
 Organization A's scope does not automatically pass through D1 to Shop X or Shop Y. Any eligibility for Shop X must arise from the explicit Owner ID/Ownership Links and applicable governance rules, not from the Distributor–Shop mapping.
 
