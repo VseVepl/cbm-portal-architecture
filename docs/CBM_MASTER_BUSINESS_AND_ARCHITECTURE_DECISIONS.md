@@ -528,7 +528,7 @@ A Store/Shop owned directly by an Organization is an internal operational unit o
 
 ### 5.4 No in-place business ownership transfer
 
-CBM does not provide an in-place Business Identity ownership-transfer process for a business whose ownership changes. The existing business is closed under its applicable lifecycle rules; the new owner establishes a new business with a new Business Identity. The closed business's identity and history remain distinct and are handled under applicable retention and data rules.
+CBM does not provide an in-place Business Identity ownership-transfer process for a business whose ownership changes. The existing business is closed under its applicable lifecycle rules; the new owner establishes a new business with a new Business Identity. The closed business's identity and Domain History remain distinct. Domain History is preserved for the full lifetime of that Business Identity and may be removed only through its authorized permanent deletion process.
 
 This rule is separate from Sub-Portal or customer Service Provider migration, which does not change business ownership.
 
@@ -984,7 +984,7 @@ When a Distribution business/network closes:
 1. The Distribution business is closed under its applicable lifecycle process.
 2. Each affected Independent Shop remains identifiable and independently owned.
 3. Each affected Shop may independently choose whether to subscribe to an Organization Plan.
-4. If the Shop accepts the Organization Plan, it continues as an independent Organization/Shop business with its own Business Identity and preserved history.
+4. If the Shop accepts the Organization Plan, it continues as an independent Organization/Shop business with its own Business Identity and preserved applicable Domain History.
 5. The previous Distributor relationship does not become an ownership relationship.
 
 ### 13.3 Shop that does not continue on an Organization Plan
@@ -1080,7 +1080,7 @@ Archival is preservation, not continuation of normal operations. Removing an ope
 
 ### 15A.2 Domain-specific History and approved History domains
 
-A History record set belongs to one clearly defined domain object, entity, or relationship. It records meaningful business changes and events that authorized business Users need to understand. It must contain only events and information belonging to that domain.
+A History record set belongs to one clearly defined domain object, entity, or relationship. Each approved History domain must have its own dedicated domain-specific table/record set; a shared mixed-domain History table is not permitted. It records meaningful business changes and events that authorized business Users need to understand. It must contain only events and information belonging to that domain.
 
 The History domains established in this baseline are:
 1. **GST Registration History:** GST Registration and GST Registration Assignment events only.
