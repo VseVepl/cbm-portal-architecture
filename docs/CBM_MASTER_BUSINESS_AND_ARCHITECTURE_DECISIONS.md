@@ -197,9 +197,26 @@ For the initial business model, an Organization has one primary Tenant context. 
 
 ### 3.7 Business Identity
 
-A **Business Identity** is the persistent, unique CBM identity of an independently existing business. It distinguishes that business from its owner, its users, its Service Provider, its Tenant context, and its business relationships.
+A **Business Identity** is the complete CBM identity representation of a business or identifiable business-operating context. It comprises two distinct identity dimensions: **Legal Identity** and **Professional Identity**. These dimensions serve different purposes and must not be treated as interchangeable. A Business Identity is distinct from its Owner, Users, Service Provider, Tenant context, Business Structure, and Business Relationships.
 
-A Business Identity must not be replaced merely because the business changes its Service Provider or enters or leaves a business relationship. Closed identities must not be recycled for a different business.
+A **Legal Identity** represents the person or legal entity to which the relevant business activity legally belongs. It is represented using applicable legal particulars and identifiers, which may include legal name, legal form, incorporation/registration identifiers, PAN or other taxpayer identifier, applicable GST Taxpayer Profile and GST Registrations, registered address, and relevant statutory particulars. Legal Identity is not synonymous with a GSTIN: GSTIN identifies a particular GST Registration, and one legal taxpayer may have multiple registrations where applicable law permits or requires.
+
+A **Professional Identity** represents how a business, service, location, branch, store, or other identifiable operating context presents and is recognized in actual commercial/professional activity. It may include its trading/business name, brand, branch/store name, business category, operating address/location, contact details, logo/branding, and other context-specific particulars. It may be independently maintained even when the relevant Legal Identity is shared with other Professional Identities.
+
+Legal Identity and Professional Identity are separate but related. One Legal Identity may be associated with multiple distinct Professional Identities. For example, five stores may each have their own store name, location, contact details, and Professional Identity while operating under one legal taxpayer and one applicable GST Registration. The shared legal/tax identity does not merge the stores' distinct professional identities or operational records. Conversely, a Professional Identity must not be assumed to have a particular Legal Identity or GST Registration without an explicit, verified association.
+
+This two-dimensional identity model applies to all eligible CBM identity-bearing contexts, not only customer businesses. Main Portal and each Sub-Portal may each maintain their own Legal Identity and Professional Identity for their respective platform/service-provider business. Organizations, Distributors, Independent Shops, and eligible operational units such as Organization-owned Stores may likewise have the applicable identity dimensions. An operational unit may have its own Professional Identity without thereby becoming a separately owned legal person or a separate ownership-bearing business.
+
+A Business Identity must not be replaced merely because the business changes its Service Provider or enters or leaves a Business Relationship. Changes to Legal Identity particulars or Professional Identity particulars must be handled as changes to the relevant identity dimension, with appropriate domain history and audit records; they must not silently merge distinct identities. Closed identity records must not be recycled for a different business or operating context.
+
+#### 3.7.1 Identity dimensions and cardinality
+
+1. One Legal Identity may be associated with multiple distinct Professional Identities, including multiple branches, Stores, Shops, or operating contexts.
+2. A distinct Professional Identity does not automatically imply a distinct Legal Identity, legal person, GST Taxpayer Profile, GST Registration, Owner ID, or Ownership Link.
+3. Shared Legal Identity does not merge distinct Professional Identities, operational records, locations, transactions, inventory, staff scopes, or business relationships.
+4. The association between a Legal Identity and a Professional Identity must be explicit, validated, and effective-dated where appropriate. It must not be inferred solely from a shared Owner ID, similar name, common address, Business Structure, or Mapping.
+5. The same two-dimensional model applies to Main Portal and Sub-Portals as service-provider businesses, and to customer/business entities and eligible operational contexts. A portal's Service Provider role does not remove the need to represent its own legal and professional identity.
+6. Identity particulars must be maintained in the correct dimension. Legal names and statutory identifiers belong to Legal Identity; trading names, brand/branch/store presentation and operating contact/location particulars belong to Professional Identity, while shared or context-specific fields must be modelled without duplicating or conflating the two dimensions.
 
 ### 3.8 Owner / Ownership Holder
 
@@ -221,21 +238,21 @@ An **Ownership Link** is the explicit relationship connecting an Owner ID to a B
 
 ### 3.9 Distributor
 
-A **Distributor** is an independently identifiable distribution business entity that must belong to an Organization's business structure. An Organization may have multiple Distributors; collectively, those Distributor entities may be grouped as that Organization's **Distribution Network**. The Distributor retains its own Business Identity. Business Identity, structural placement, and Ownership Links are separate concepts; the fact that a Distributor is part of an Organization's Distribution Network does not, by itself, define or alter its Ownership Links.
+A **Distributor** is an identifiable distribution business entity within an Organization's business structure. An Organization may have multiple Distributors; collectively, those Distributor entities may be grouped as that Organization's **Distribution Network**. A Distributor may have its own distinct Professional Identity even where its Legal Identity is shared with the Organization or another business context. Its Business Identity dimensions must be represented explicitly; a distinct Professional Identity does not by itself prove a separate legal person, separate legal/tax identity, or separate Ownership Link. Business Identity, structural placement, and Ownership Links remain separate concepts. The fact that a Distributor is part of an Organization's Distribution Network does not, by itself, define or alter its Ownership Links.
 
 A Distributor's Business Available Authority Scope includes the Distributor itself and may include an Independent Shop linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7. A Distributor does not acquire authority over another independently owned Shop merely because that Shop is mapped to it.
 
 ### 3.10 Independent Shop
 
-An **Independent Shop** is a separately owned retail business with its own Business Identity, owner, business data, and operational responsibility. It may establish one or more authorized business relationships with Distributors.
+An **Independent Shop** is a separately owned retail business with its own Business Identity, owner, business data, and operational responsibility. Its Professional Identity is distinct as a shop/business identity. Its Legal Identity may be its own or may be associated with a legal taxpayer identity that also supports other business contexts, subject to the actual legal facts and applicable law. It may establish one or more authorized business relationships with Distributors.
 
 A Distributor–Shop mapping does not make the Shop a child business owned by the Distributor and does not grant unrestricted access to the Shop.
 
 ### 3.11 Organization-owned Store / Shop
 
-An **Organization-owned Store** (also described as a directly owned Shop or Retail Location) is an operational unit within an Organization's own business structure. It may have its own Store or Location identifier for operational purposes, but it is not a separate independently owned Business Identity merely because it has a separate location or operational record. An Organization may have multiple such Stores; collectively, those operational units may be grouped as its **Retail Network**.
+An **Organization-owned Store** (also described as a directly owned Shop or Retail Location) is an operational unit within an Organization's own business structure. It may and ordinarily should have its own distinct Professional Identity where it is separately presented or recognized in commercial activity, including its store/branch name, location, contact details, and branding. This distinct Professional Identity does not, by itself, make the Store a separate legal person, a separately owned business, or an independent ownership-bearing Business Identity. Its Legal Identity may be associated with the Organization's Legal Identity and applicable GST Registration(s), subject to verified legal and GST facts. An Organization may have multiple such Stores; collectively, those operational units may be grouped as its **Retail Network**.
 
-Its ownership remains with the Organization's owner, and its operations remain within the Organization's business structure and authority scope.
+Its ownership remains with the Owner or Owners linked to the Organization, and its operations remain within the Organization's business structure and authority scope. Separate Store identity, location, transactions, stock, staff, POS activity, reports, and User scope must be maintainable without falsely creating separate legal ownership.
 
 ### 3.12 Business Structure
 
@@ -361,7 +378,8 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 |---|---|---|
 | **Platform/service-provider structure** | Who provides the CBM service to this customer business, and under whose platform governance does that provider operate? | Main Portal → Sub-Portal → served Organization/Tenant; or Main Portal → directly served Organization/Tenant. |
 | **Business structure** | Which operating units and business components belong within an Organization's own business structure? | Organization → its Distributor entities (grouped as a Distribution Network when multiple); Organization → its directly owned Stores (grouped as a Retail Network when multiple). |
-| **Ownership relationship** | Who owns each independent Business Identity? | Owner ID → Ownership ID → Business Identity; one Owner may be linked to several separate businesses. |
+| **Identity relationship** | What legal person/entity is responsible, and how is each business or operating context professionally identified? | One Legal Identity may be associated with multiple distinct Professional Identities, such as five separately named Stores operating under one legal taxpayer. | 
+| **Ownership relationship** | Who owns each independently owned business? | Owner ID → Ownership ID → ownership-bearing Business Identity; one Owner may be linked to several separate businesses. |
 | **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Independent Shop through the specific Distributor–Shop Mapping type. |
 | **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | A Distributor may include an associated Shop linked to the same Owner ID, only under Section 7; mapping alone is insufficient. |
 | **User Assigned Authority Scope** | Which of the business-available entities has been explicitly assigned to this User? | An Organization-level User may be assigned only Store A and Store C, not every Store. |
@@ -501,19 +519,20 @@ The permitted Business Structure Hierarchy is an immutable Stable Core business-
 
 ### 5.1 Independent Business Identities
 
-The following are independent identity-bearing entities in the CBM business model:
+The following CBM contexts must be capable of maintaining the applicable Legal Identity and Professional Identity dimensions independently of their platform or business role:
 
-- Main Portal as the central platform/SaaS business.
-- Each Sub-Portal as an independently owned service-provider business.
+- Main Portal as the central platform/SaaS service-provider business.
+- Each Sub-Portal as an independently operated service-provider business.
 - Each Organization as an independent customer business.
-- Each Distributor as an independently identifiable distribution business.
+- Each Distributor as an identifiable distribution business entity within an Organization's business structure.
 - Each Independent Shop as an independently owned retail business.
+- Each Organization-owned Store/Shop as an operational unit that may have its own distinct Professional Identity without becoming a separate legal person or independently owned business solely for that reason.
 
-The fact that these entities have different platform roles does not make their roles interchangeable.
+The fact that these contexts have different platform, service-provider, business, or operational roles does not make their roles interchangeable. Identity dimensions must not be used to infer ownership or structural placement.
 
 ### 5.2 Organization-owned operational units
 
-A Store/Shop owned directly by an Organization is an internal operational unit of that Organization, not a separate independent business identity. It may have a unique operational Store/Location identity to distinguish its transactions, stock, staff, POS activity, and reports.
+A Store/Shop owned directly by an Organization is an internal operational unit of that Organization, not a separate independently owned legal business merely because it has a distinct location. It may and ordinarily should have its own distinct Professional Identity and unique operational Store/Location identifier to distinguish its name, presentation, transactions, stock, staff, POS activity, reports, and User scope. Its Legal Identity and ownership remain associated with the Organization as supported by the verified legal facts; a separate Professional Identity does not create a separate Owner ID or Ownership Link.
 
 ### 5.3 Ownership Links and ownership identity
 
@@ -909,7 +928,7 @@ GST Taxpayer Profile, GST Registration, GST Registration Assignment, Business Id
 
 ### 12A.2 GST Taxpayer Profile and GST Registration
 
-A GST Taxpayer Profile represents the actual person or legal entity registered, or intended to be registered, under GST. It is not an Owner ID, User account, Business Identity, or CBM entity merely because that entity has a name or owner. The legal person operating Main Portal or a Sub-Portal may have its own profile for its own taxable activities. A customer Organization or other business may have a separate profile. A service-provider relationship does not merge taxpayer identities.
+A GST Taxpayer Profile represents the actual person or legal entity registered, or intended to be registered, under GST. It is a tax-domain representation of the taxpayer's Legal Identity, not the Professional Identity of a Store, branch, brand, or portal presentation. It is not an Owner ID, User account, Business Identity, or CBM entity merely because that entity has a name or owner. The legal person operating Main Portal or a Sub-Portal may have its own profile for its own taxable activities. A customer Organization or other business may have a separate profile. Multiple distinct Professional Identities, such as several Stores, may be associated with the same taxpayer profile and applicable GST Registration(s) where verified legal and GST facts permit. A service-provider relationship does not merge taxpayer identities.
 
 Each GST Registration is an independently identifiable record supporting, as applicable, GSTIN, linked taxpayer profile, State/Union Territory and jurisdiction, legal/trade name, taxpayer type, official status, effective dates, cancellation/suspension dates, Principal and Additional Places of Business, registration certificate, verification source/result/date, and other statutory particulars. GSTIN must be unique within CBM's GST Registration records. Official status is stored separately from CBM's internal verification or assignment workflow status.
 
@@ -1259,11 +1278,11 @@ These scenarios explain how the finalized rules work together. They do not creat
 
 ### 18.1 One owner, multiple businesses
 
-Person A owns Organization A, Distributor A, and Independent Shop A. The same Owner ID is linked to each independent Business Identity through a separate Ownership ID for each Owner-to-Business relationship. These remain three independent Business Identities, with separate business data and service contexts. Shared ownership does not merge them or automatically give every User access to all three.
+Person A owns Organization A and Independent Shop A, and may also hold ownership rights in Distributor A where the legal/ownership facts support it. The same Owner ID may be linked to each independently owned Business Identity through a separate Ownership ID for each Owner-to-Business relationship. Their Professional Identities remain separately maintainable. Where two or more of these business contexts share one Legal Identity, that shared Legal Identity does not merge their Professional Identities, business data, or service contexts. Shared ownership does not merge independent businesses or automatically give every User access to all of them.
 
 ### 18.2 Organization with directly owned Stores
 
-Organization A owns Store 1, Store 2, and Store 3 as operating units. The Organization's Business Available Authority Scope includes these Stores. The Stores can have separate operational identifiers and different User Assigned Authority Scopes and Role/Permission access, but they are not separate independent Business Identities solely because they are different locations.
+Organization A operates Store 1, Store 2, and Store 3 as Organization-owned operational units. Each Store has its own distinct Professional Identity (for example, its own Store Name and Location) and operational identifier. All three may be associated with the same Organization Legal Identity and applicable GST Taxpayer Profile/GST Registration(s), where verified legal and GST facts permit. They remain Organization-owned operational units, not separate independently owned legal businesses solely because they have distinct Professional Identities or locations. The Organization's Business Available Authority Scope includes these Stores; each Store may have a different User Assigned Authority Scope and Role/Permission access.
 
 ### 18.3 Organization and Distributor, with independently owned Shops under the Distributor
 
