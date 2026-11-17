@@ -14,7 +14,7 @@ Read that document before drafting, reviewing, or implementing any project-speci
 
 Every architecture and product decision must consider scalability, configurability, extensibility, customization, controlled override capability, and explicit applicability to the correct business contexts. Business-specific variation should be supported within one governed platform wherever appropriate.
 
-Business and Tenant Data Isolation and the Business Structure Hierarchy and Structural Integrity are strict, non-configurable Stable Core constraints. No customization, configuration, delegation, extension, or override may weaken or bypass them. Flexibility must always remain within Main Portal governance and all other Stable Core rules.
+Business and Tenant Data Isolation and the Business Structure Hierarchy and Structural Integrity are strict, non-configurable Stable Core constraints. No customization, configuration, delegation, extension, or override may weaken or bypass them. Flexibility must always remain within Main Portal governance and all other Stable Core rules. Ownership Links, Owner IDs, and Ownership IDs must remain distinct from Business Structure and Business Relationships. Business Available Authority Scope must also remain distinct from explicit User Assigned Authority Scope and action Permissions.
 
 ## Documentation rule
 
@@ -22,4 +22,4 @@ Only decisions explicitly finalized by the project owner belong in the authorita
 
 ## Current project stage
 
-The documented baseline covers the finalized project vision and business-level concepts available as of **17 November 2026**. This repository is documentation-only at this stage. It does not authorize application implementation, database changes, infrastructure changes, or deployment.
+The documented baseline covers the finalized project vision and business-level concepts available as of **18 November 2026**. This repository is documentation-only at this stage. It does not authorize application implementation, database changes, infrastructure changes, or deployment.
