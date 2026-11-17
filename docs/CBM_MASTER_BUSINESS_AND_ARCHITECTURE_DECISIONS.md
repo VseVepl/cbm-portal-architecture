@@ -4,7 +4,7 @@
 | Document attribute | Value |
 |---|---|
 | Document status | Approved baseline of finalized decisions |
-| Baseline date | 17 November 2026 |
+| Baseline date | 18 November 2026 |
 | Document role | Single authoritative source for finalized business and architectural decisions captured to date |
 | Project stage | Business concept and logical architecture definition |
 | Implementation authorization | This document does not authorize software implementation or deployment |
@@ -40,7 +40,7 @@
 
 ### 1.1 Purpose
 
-This document consolidates the project vision and all business-level and logical-architecture decisions explicitly finalized for the CBM Portal through 17 November 2026. It is the authoritative baseline from which subsequent project documentation is to be derived.
+This document consolidates the project vision and all business-level and logical-architecture decisions explicitly finalized for the CBM Portal through 18 November 2026. It is the authoritative baseline from which subsequent project documentation is to be derived.
 
 The document exists to prevent finalized decisions from being lost, contradicted, interpreted inconsistently, or omitted when later architecture and development documents are prepared.
 
@@ -204,6 +204,20 @@ A Business Identity must not be replaced merely because the business changes its
 
 An **Owner** or **Ownership Holder** is the person or legal entity that owns a Business Identity. An owner is not the same thing as a User account. One owner may own multiple independent businesses. A business may have one or more ownership holders; ownership representation is separate from the assignment of operational Users and Roles.
 
+#### 3.8.1 Owner ID
+
+**Owner ID** is the unique CBM identifier for a person or legal entity acting as an Owner. It identifies the Owner independently of any Business Identity, Ownership Link, or User account. One Owner ID may be linked to multiple independent Business Identities. Owner ID is not a login credential or User ID.
+
+#### 3.8.2 Ownership ID
+
+**Ownership ID** is the unique identifier of one specific Ownership Link between an Owner ID and a Business Identity. Each distinct Owner-to-Business ownership relationship has its own Ownership ID. A Business Identity may have multiple Ownership IDs, and one Owner ID may participate in multiple Ownership Links across different businesses.
+
+Ownership ID identifies the relationship only. It does not represent an equity percentage, financial share, investment amount, or economic interest. CBM's ownership model in this context records who owns or holds ownership rights in a business for business-authority purposes; it does not calculate financial ownership.
+
+#### 3.8.3 Ownership Link
+
+An **Ownership Link** is the explicit relationship connecting an Owner ID to a Business Identity, identified by an Ownership ID. Ownership Links are independent of Business Structure and Business Relationships. A Shop's mapping to a Distributor does not create or change an Ownership Link. An Ownership Link may establish an eligible basis for ownership-related authority scope under Section 7, but it does not by itself grant a User operational access or action Permissions.
+
 ### 3.9 Distributor
 
 A **Distributor** is an independently identifiable distribution business participating in an Organization's Distribution Network or otherwise operating within the CBM Ecosystem. It has its own Business Identity and one or more Ownership Links. Its network association does not, by itself, transfer ownership to the Organization.
@@ -232,9 +246,15 @@ A **Business Relationship** is an explicitly established association between dis
 
 ### 3.14 Business Authority Scope
 
-**Business Authority Scope** means the set of business entities or business areas over which a business-level authority may be exercised or delegated. It answers: **“For which businesses or business areas may authority be assigned?”**
+**Business Authority Scope** is the business-level authority boundary that identifies the business entities or business areas for which authority may be exercised or assigned. It answers: **“Where may this business-level authority be applied?”** It does not itself grant access to an individual User or define which actions that User may perform.
 
-Business Authority Scope is a business-level concept. It is not itself a list of actions that an individual User may perform.
+#### 3.14.1 Business Available Authority Scope
+
+**Business Available Authority Scope** is the set of entities or business areas that a business-level authority is eligible to govern or make available for assignment, after applying Main Portal governance, valid Business Structure, applicable Ownership Links, permitted Business Relationships, and all relevant Stable Core constraints. It is the maximum eligible scope from which User-level scope may be assigned. Availability is not an automatic User grant.
+
+#### 3.14.2 User Assigned Authority Scope
+
+**User Assigned Authority Scope** is the explicit subset of a Business Available Authority Scope assigned to a specific User within a valid User–Business association. It may cover one entity, selected multiple entities, or the full available scope. Full-scope access must be explicitly assigned; it must never be inferred from a User's level, title, Role, ownership, business association, parent–child position, or a Distributor–Shop mapping. Explicit exclusions may be applied where the governing assignment model permits them.
 
 ### 3.15 User
 
@@ -431,16 +451,19 @@ The fact that these entities have different platform roles does not make their r
 
 A Store/Shop owned directly by an Organization is an internal operational unit of that Organization, not a separate independent business identity. It may have a unique operational Store/Location identity to distinguish its transactions, stock, staff, POS activity, and reports.
 
-### 5.3 Ownership rules
+### 5.3 Ownership Links and ownership identity
 
-1. Each independent business has an explicitly represented owner or ownership holder set.
-2. One owner may own multiple independent businesses.
-3. A business may have one or more ownership holders.
-4. Separate businesses owned by the same person remain separate Business Identities and separate data contexts.
-5. User accounts, roles, and operational access are distinct from ownership.
-6. A Distributor does not own an Independent Shop merely because the Shop is in its distribution network.
-7. An Organization's association with a Distributor does not itself change the Distributor's ownership.
-8. Organization-owned Stores remain under the ownership of the Organization's owner.
+1. Each independent Business Identity must have one or more explicit Ownership Links to its Owner or Owners.
+2. Each Owner is identified by an Owner ID. Each individual Owner-to-Business relationship is identified by a distinct Ownership ID.
+3. One Owner ID may be linked to multiple independent Business Identities. A Business Identity may be linked to multiple Owner IDs.
+4. Owner ID identifies the Owner; Ownership ID identifies the particular Ownership Link; Business ID identifies the business. These identifiers are not interchangeable.
+5. In this CBM model, ownership records identify who owns or holds ownership rights in a business for authority-scope purposes. They do not represent or calculate equity, financial shares, percentages, investment, profit entitlement, or economic interest.
+6. Owner identity and ownership are separate from User accounts, authentication credentials, Roles, Permissions, and operational assignments. An Owner does not automatically become a User, and an Owner's User account does not automatically receive access to every business linked to that Owner.
+7. Separate businesses linked to the same Owner ID remain separate Business Identities and separate data contexts.
+8. A Distributor does not own an Independent Shop merely because the Shop is in its Distribution Network or mapped to it.
+9. An Organization's association with a Distributor does not itself change the Distributor's ownership or the ownership of any Shop associated with that Distributor.
+10. Organization-owned Stores remain operational units of the Organization; their ownership remains with the Owner or Owners linked to the Organization.
+11. Ownership Links may be used as an eligibility input when determining Business Available Authority Scope, but only under the explicit rules in Section 7. They do not by themselves grant User access, User Assigned Authority Scope, or action Permissions.
 
 ### 5.4 No in-place business ownership transfer
 
@@ -463,8 +486,6 @@ These are three distinct configurations of an Organization's business operation.
 - A **Hybrid Organization** operates both a Distribution Network and its own Retail structure. It may also have independent retailers associated with its distribution operations.
 - A **Distribution-only Organization** operates a distribution business and may have independently owned retailers associated with its Distribution Network. It does not operate its own Organization-owned Retail Stores under this configuration.
 - A **Retail-only Organization** operates its own Retail Stores. Those Stores belong to the Organization and do not have an independent Distributor–Shop relationship with their own Organization.
-
----
 
 ## 6. Service-provider architecture
 
@@ -501,11 +522,17 @@ A customer business may migrate from one Service Provider to another under Main 
 
 ## 7. Business Authority Scope
 
-### 7.1 Meaning
+### 7.1 Meaning and separation
 
-Business Authority Scope defines the business entities or business areas within which a business-level authority may be assigned or exercised. It establishes the **“where”** boundary for authority.
+Business Authority Scope defines where a business-level authority may be exercised or made available for assignment. It does not, by itself, grant any User access or specify which actions a User may perform.
 
-It does not specify which actions a particular User may perform. That is the function of Permissions.
+The architecture must distinguish:
+
+- **Business Available Authority Scope:** the entities or business areas eligible to be governed by the relevant business-level authority and from which User scope may be assigned.
+- **User Assigned Authority Scope:** the specific entities or business areas explicitly assigned to an individual User within a valid User–Business association.
+- **Permissions:** the actions that the User may perform within the assigned scope.
+
+These are separate controls and must be evaluated independently.
 
 ### 7.2 Main Portal scope
 
@@ -515,43 +542,66 @@ No Sub-Portal, Organization, Distributor, Shop, User, or Role may narrow or cons
 
 ### 7.3 Sub-Portal scope
 
-A Sub-Portal's authority scope extends to the businesses and operational entities associated with and served within its authorized Sub-Portal domain. This includes the relevant Organizations, Distribution operations, Distributors, Organization-owned Stores, and Shops associated with that Sub-Portal's domain.
+A Sub-Portal's business/service-provider authority scope extends to the businesses and operational entities associated with and served within its authorized Sub-Portal domain. This includes the relevant Organizations, Distribution operations, Distributors, Organization-owned Stores, and Independent Shops associated with that domain, subject to Main Portal governance.
 
-This broader service-provider scope does not transfer ownership to the Sub-Portal and does not automatically grant every Sub-Portal User unrestricted access to every record. User-level access remains subject to Permissions, role/user assignments, applicable purpose, and data-isolation rules.
+This provider-level scope does not transfer ownership to the Sub-Portal and does not automatically grant every Sub-Portal User access to every associated entity or record. Each Sub-Portal User must have an explicit valid User–Business association, User Assigned Authority Scope, and required Permissions, subject to purpose limitation and Data Isolation.
 
 ### 7.4 Organization scope
 
-An Organization's authority scope extends to its own business and the subordinate business/operational entities within its Organization-level structure, including:
+An Organization's Business Available Authority Scope includes:
 
-- Distributors participating under its Distribution Network.
-- Stores/Shops owned by the Organization and operated as part of its Retail structure.
-- Other directly subordinate entities that remain within the Organization's own business and ownership structure.
+- The Organization's own business context.
+- Distributors participating under its Distribution Network, within the Organization's permitted governance and operational authority.
+- Stores/Shops that are operational units owned and operated as part of the Organization's own Retail structure.
+- Other directly subordinate operational entities that remain within the Organization's own business and ownership structure.
+- An independently identified business only where a valid Ownership Link and an explicit Main Portal-governed rule make that business eligible for the relevant owner-linked authority scope.
 
-The Organization's authority scope does **not** automatically pass through a Distributor to the Distributor's independently owned Shops. The fact that a Shop is mapped to or associated with a Distributor does not place that Shop within the Organization's authority scope.
-
-Where a Shop/Store has the same ownership as the Organization and forms part of the Organization's own business structure, it may fall within the Organization's scope as an Organization-owned operational unit.
+An Organization's scope does **not** automatically pass through a Distributor to every Independent Shop mapped to or associated with that Distributor. A mapping, network association, or structural proximity alone does not place an independently owned Shop within the Organization's scope. Where an owner-linked scope is permitted, eligibility must arise from the relevant Owner ID/Ownership Links and governing rules—not from the Distributor–Shop mapping—and must not be treated as Organization ownership or a merger of data boundaries.
 
 ### 7.5 Distributor scope
 
-A Distributor's own Business Authority Scope is limited to the Distributor itself. It does not extend to an Independent Shop mapped to it. A mapping or distribution relationship alone cannot give the Distributor authority over the Shop's business.
+A Distributor's Business Available Authority Scope always includes the Distributor's own business context.
+
+In addition, it may include an independently identified Shop that is associated with the Distributor's distribution context **only when** an Owner ID linked to that Shop through an Ownership Link is also linked through an Ownership Link to the Distributor, and the applicable Main Portal-governed rules permit that owner-linked scope.
+
+A Distributor's scope does not include other mapped Shops merely because they participate in its Distribution Network. A Shop owned by a different Owner ID remains outside the Distributor's ownership-based scope, even when mapped to the Distributor. Mapping enables only the expressly authorized relationship interactions; it does not create an Ownership Link or grant unrestricted administrative or data access.
+
+Where a Distributor has multiple Owners, owner-linked eligibility must be evaluated against the explicit Ownership Links and applicable governance rules. It must not be inferred from a shared name, contact detail, User account, or informal association.
 
 ### 7.6 Independent Shop scope
 
-An Independent Shop's business scope is its own business. It retains control over its own business context and data, subject to the higher-level Main Portal and applicable Sub-Portal governance that applies to the Shop's service-provider context.
+An Independent Shop's own business scope includes its own Business Identity and business context. Its ownership and data boundary remain independent.
 
-### 7.7 Scope inheritance is not ownership inheritance
+If the Shop shares an Owner ID with another business, that Ownership Link may be considered for an eligible owner-linked scope under the rules applicable to that other business. This does not make the Shop a structural child of that business, transfer its ownership, or merge its data boundary. Its association with a Distributor still permits only the explicitly authorized relationship interactions.
 
-A higher business's authority scope may include subordinate businesses as defined above without changing those businesses' owners. Authority-scope relationships must never be used to infer a transfer of legal or beneficial ownership.
+### 7.7 Scope relationships do not transfer ownership
 
-### 7.8 Scope check before permission check
+A Business Available Authority Scope may include an entity because of a valid structural relationship or an expressly permitted owner-linked eligibility rule. Neither basis changes the entity's Owner, Ownership Links, Business Identity, or data boundary. Authority scope must never be used to infer ownership transfer or ownership inheritance.
 
-An action may be authorized for a User only when:
+### 7.8 Business availability does not grant User access
 
-1. The target business is within the relevant business authority scope; and
-2. The User has the required action Permission in the applicable business context; and
-3. Any additional required approval and other mandatory controls have been satisfied.
+A business having an entity within its Business Available Authority Scope does not mean every User associated with that business may access the entity. A User receives access only to the scope explicitly assigned to that User, and only within a valid User–Business association and the applicable Permissions.
 
----
+### 7.9 Explicit User scope assignment
+
+User Assigned Authority Scope must be explicit. It may be assigned to one entity, selected multiple entities, or the full Business Available Authority Scope. A partial assignment may deliberately omit otherwise available entities. Where supported by the governing assignment rules, explicit exclusions may further narrow a selected scope.
+
+A User's organizational level, title, Role, Owner identity, User–Business association, or access to one entity does not automatically grant access to all entities available to that business. Full available scope must be an intentional, authorized assignment.
+
+A newly eligible or newly associated entity must not silently become accessible to existing Users. Future-entity inclusion is permitted only when an explicit, authorized assignment rule clearly defines that behaviour; otherwise a new or changed scope requires an explicit assignment.
+
+### 7.10 Authorization checks
+
+An action may be authorized only when all applicable conditions are satisfied:
+
+1. Main Portal governance and Stable Core constraints permit the access.
+2. The target entity is within the relevant Business Available Authority Scope.
+3. The User has a valid User–Business association for the target context.
+4. The target entity is within that User's explicitly assigned User Assigned Authority Scope.
+5. The User has the required action Permission in the applicable business context.
+6. Any required approval and other mandatory controls have been satisfied.
+
+Failure of any required condition means the action must be denied. A Business Relationship may permit a narrowly defined interaction, but it cannot bypass these checks or expand access beyond its explicit purpose.
 
 ## 8. Delegated Authority
 
@@ -584,26 +634,41 @@ Every Delegated Authority grant is defined by all five dimensions:
 
 ## 9. Users, Roles, Permissions, and action authorization
 
-### 9.1 Separation of business authority and user authorization
+### 9.1 Separate authorization dimensions
 
-Business Authority Scope belongs to the business/governance model. Permissions belong to Users and Roles within a defined business context.
+The CBM authorization model must answer three distinct questions:
 
-The two questions must be answered separately:
+- **Where may the business-level authority be made available?** — Business Available Authority Scope.
+- **Where may this individual User act?** — User Assigned Authority Scope.
+- **What may this User do there?** — Role-based or User-specific Permissions.
 
-- **Where may authority be assigned?** — Business Authority Scope.
-- **What may this User do there?** — User/Role Permission.
+A Role or Permission must not expand the User's assigned business scope. Business availability must not be treated as an individual User grant.
 
 ### 9.2 User-to-business association
 
-A User must have an explicit valid association with the target business context before business permissions can be applied. A User's access to one business does not automatically grant access to another business, even where the same person owns both businesses.
+A User must have an explicit, valid association with the target business context before business permissions can be applied. A User's access to one business does not automatically grant access to another business, even where the same person owns both businesses.
 
-### 9.3 Role-based and User-specific permissions
+A User's level or association with an Organization, Distributor, or other business does not automatically grant access to every subordinate or related entity. User Assigned Authority Scope must separately identify the entities or business areas that the User may access.
 
-Permissions must support assignment through Roles and direct User-specific rules. This allows different Users in the same business, or Users with different Roles, to perform different actions within the same business authority scope.
+### 9.3 Explicit scope assignment
 
-The model must support granular permission combinations at both Role and individual User level.
+The system must support explicit assignment of a User Assigned Authority Scope from the relevant Business Available Authority Scope. The assignment may cover:
 
-### 9.4 Action-oriented permission types
+- One specific Business Entity or operational unit.
+- A selected set of multiple entities.
+- The full available scope, only when explicitly and validly assigned.
+- A partial scope that intentionally excludes other available entities.
+- Explicit exclusions where permitted by the governing assignment model.
+
+The assignment must not exceed the assigner's own authority or the Business Available Authority Scope available to the assigning business. A User, Role, or lower-level administrator cannot assign a scope that they are not authorized to grant. Scope assignments, changes, and revocations must be auditable.
+
+### 9.4 Role-based and User-specific permissions
+
+Permissions must support assignment through Roles and direct User-specific rules. This allows different Users in the same business, or Users with different Roles, to perform different actions within their respective User Assigned Authority Scopes.
+
+Role assignment does not itself grant access to every entity available to the business. A Role's action permissions operate only within the User's valid assigned scope and business context.
+
+### 9.5 Action-oriented permission types
 
 Permissions represent actions, not business areas. Common action types include:
 
@@ -619,18 +684,22 @@ Permissions represent actions, not business areas. Common action types include:
 
 A permission to perform one action does not imply permission to perform another action.
 
-### 9.5 Example
+### 9.6 Example: different User scopes within one Organization
 
-An Organization may have authority scope over three Organization-owned Stores. Within that scope:
+Assume Organization A's Business Available Authority Scope includes Distributor D1 and Organization-owned Stores S1, S2, and S3.
 
-- An Organization Administrator may have View, Create, Update, and Delete permissions across all three Stores.
-- Store Manager A may have View, Create, and Update permissions only for Store A.
-- Store Manager B may have View and Create permissions only for Store B.
-- An Auditor may have View-only permission across the three Stores.
+- User U1 is associated with Organization A and is assigned only Organization A and Store S1. U1 cannot access D1, S2, or S3 merely because U1 is an Organization-level User.
+- User U2 is associated with Organization A and is assigned Distributor D1 and Store S2. U2 cannot access S1 or S3 unless those entities are also assigned.
+- User U3 is explicitly assigned the full available scope and may access D1, S1, S2, and S3, subject to Permissions and all other controls.
+- Independent Shops mapped to D1 but owned by unrelated Owners are not included in Organization A's scope merely because of the mapping, and cannot be added to these Users' assignments on that basis.
 
-The fact that the Organization has scope over all three Stores does not mean every User can perform every action in all three Stores.
+The same Role may therefore operate over different entity sets for different Users. The assigned scope and action Permissions must both be satisfied.
 
----
+### 9.7 Scope assignment governance
+
+The authority to create, modify, or revoke a User Assigned Authority Scope is itself subject to explicit Permission and Delegated Authority. An assigning User may grant only scope that is available to the assigning business and within the assigner's own authority. Scope assignment must not permit privilege escalation, upward authority, cross-business data access, or bypass of Main Portal governance.
+
+Scope assignments and their effective changes must be auditable. Revoking or narrowing a scope must prevent subsequent access outside the remaining assignment, subject to the platform's applicable security and audit requirements.
 
 ## 10. Configuration governance: defaults, inheritance, and overrides
 
@@ -938,32 +1007,35 @@ The following statements summarize rules that must remain true across all future
 4. A Service Provider does not become the owner of the customer business by providing software services.
 5. A customer's Business Identity and ownership remain unchanged when its Service Provider changes.
 6. Organization, Distributor, Independent Shop, and Organization-owned Store are not interchangeable entity types.
-7. An Organization-owned Store is an operational unit within the Organization; an Independent Shop is a separate business identity.
-8. Organization authority scope includes its own subordinate Distributors and its own Stores/Shops, but does not pass through a Distributor to that Distributor's independently owned Shops.
-9. Distributor authority scope is limited to the Distributor itself and does not automatically include mapped Independent Shops.
-10. A Sub-Portal's authority scope covers the relevant Organizations, Distribution operations, Distributors, Stores, and Shops associated with its authorized Sub-Portal domain.
-11. Business Authority Scope says where authority may be assigned; User/Role Permissions say what a User may do.
-12. A valid action requires the target business to be in scope and the User to have the relevant Permission.
-13. Delegated Authority is constrained by Who, What, Where, Limits, and Duration.
-14. Configuration defaults and inheritance flow downward. Overrides require explicit permission and must stay within system-defined bounds.
-15. Configuration overrides may be granted to one business and withheld from another.
-16. Approval requirements can vary by business, action, Role, and individual User.
-17. Approval workflows support single, multiple, sequential, and parallel approval patterns.
-18. Approval does not create an underlying action Permission.
-19. Distributor–Shop mapping is a relationship, not ownership and not unrestricted access.
-20. One Shop may map to multiple Distributors; each mapping is a separate relationship.
-21. Ending a mapping does not close the Shop or terminate its other mappings.
-22. Distribution closure does not automatically erase the identity or history of independent associated Shops.
-23. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
-24. Operational data may be removed after the applicable download period only after archival is verified.
-25. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it.
-26. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
-27. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
-28. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
-29. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
-30. A business-specific variation must remain within its authorized business context and must not silently affect another business.
-
----
+7. An Organization-owned Store is an operational unit within the Organization; an Independent Shop is a separate Business Identity.
+8. Organization authority scope includes its own subordinate Distributors and Organization-owned Stores. It does not automatically pass through a Distributor to all Independent Shops mapped to that Distributor. Any owner-linked eligibility must be separately established under Section 7 and must not be inferred from mapping.
+9. A Distributor's Business Available Authority Scope includes itself and may include only those associated Independent Shops whose Ownership Links establish an eligible shared Owner ID with the Distributor, subject to Main Portal-governed rules. Other mapped Shops remain outside that owner-linked scope.
+10. An Independent Shop retains its own Business Identity, ownership, and data boundary even when it has an owner-linked authority relationship with another business.
+11. Business Available Authority Scope determines which entities are eligible for business-level authority and User-scope assignment; it does not itself grant access to any User.
+12. Every User must have an explicit valid User–Business association and an explicit User Assigned Authority Scope for the target entity. User level, title, Role, Owner identity, structural position, or mapping does not automatically grant the full available scope.
+13. Role/Permission determines what actions a User may perform; it cannot expand the User's assigned entity scope.
+14. A valid action requires the target to be within the relevant Business Available Authority Scope and the User Assigned Authority Scope, together with the required Permission and any applicable approval/control.
+15. Delegated Authority is constrained by Who, What, Where, Limits, and Duration.
+16. Configuration defaults and inheritance flow downward. Overrides require explicit permission and must stay within system-defined bounds.
+17. Configuration overrides may be granted to one business and withheld from another.
+18. Approval requirements can vary by business, action, Role, and individual User.
+19. Approval workflows support single, multiple, sequential, and parallel approval patterns.
+20. Approval does not create an underlying action Permission.
+21. Distributor–Shop mapping is a Business Relationship, not ownership and not unrestricted access.
+22. One Shop may map to multiple Distributors; each mapping is a separate relationship.
+23. Ending a mapping does not close the Shop or terminate its other mappings.
+24. Distribution closure does not automatically erase the identity or history of independent associated Shops.
+25. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
+26. Operational data may be removed after the applicable download period only after archival is verified.
+27. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it. Access requires explicit valid association, assigned scope, and Permissions.
+28. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
+29. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
+30. Owner ID identifies an Owner; Ownership ID identifies one specific Ownership Link; neither is a User ID or Business ID.
+31. Ownership Links identify ownership for business-authority purposes, not equity percentages, financial shares, or economic interest.
+32. Ownership Links may inform Business Available Authority Scope only under explicit Main Portal-governed rules. They do not automatically grant User access or action Permissions.
+33. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
+34. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
+35. A business-specific variation must remain within its authorized business context and must not silently affect another business.
 
 ## 18. Illustrative scenarios
 
@@ -971,33 +1043,41 @@ These scenarios explain how the finalized rules work together. They do not creat
 
 ### 18.1 One owner, multiple businesses
 
-Person A owns Organization A, Distributor A, and Independent Shop A. These remain three independent Business Identities, with separate business data and service contexts. Shared ownership does not merge them.
+Person A owns Organization A, Distributor A, and Independent Shop A. The same Owner ID is linked to each independent Business Identity through a separate Ownership ID for each Owner-to-Business relationship. These remain three independent Business Identities, with separate business data and service contexts. Shared ownership does not merge them or automatically give every User access to all three.
 
 ### 18.2 Organization with directly owned Stores
 
-Organization A owns Store 1, Store 2, and Store 3 as operating units. The Organization's business authority scope includes these Stores. The Stores can have separate operational identifiers and different User/Role access, but they are not separate independent business identities solely because they are different locations.
+Organization A owns Store 1, Store 2, and Store 3 as operating units. The Organization's Business Available Authority Scope includes these Stores. The Stores can have separate operational identifiers and different User Assigned Authority Scopes and Role/Permission access, but they are not separate independent Business Identities solely because they are different locations.
 
-### 18.3 Organization and Distributor, with independent Shops under the Distributor
+### 18.3 Organization and Distributor, with independently owned Shops under the Distributor
 
-Organization A has Distributor A in its Distribution Network. Organization A's business authority scope may include Distributor A. Shop X is independently owned and mapped to Distributor A. The Organization's scope does not extend through Distributor A to Shop X, and Distributor A's own scope does not extend to Shop X. The mapping permits only the explicitly authorized relationship interactions.
+Organization A has Distributor D1 in its Distribution Network. Distributor D1 is linked to Owner B through an Ownership Link. Shop X is independently owned and mapped to D1. If Shop X is also linked to Owner B through its own Ownership Link, and Main Portal-governed rules permit the owner-linked scope, Shop X may be included in D1's Business Available Authority Scope. Shop Y is mapped to D1 but is linked to a different Owner ID; Shop Y is not included in D1's owner-linked scope merely because of the mapping. Neither mapping changes either Shop's Business Identity, Owner, or data boundary.
 
-### 18.4 Sub-Portal serving an Organization and related business network
+Organization A's scope does not automatically pass through D1 to Shop X or Shop Y. Any eligibility for Shop X must arise from the explicit Owner ID/Ownership Links and applicable governance rules, not from the Distributor–Shop mapping.
+
+### 18.4 Selective User scope within one business
+
+Organization A's Business Available Authority Scope includes Distributor D1 and Organization-owned Stores S1, S2, and S3. User U1 is assigned only S1; User U2 is assigned D1 and S2; User U3 is explicitly assigned the full available scope. Their Organization-level association does not automatically give them identical access. Each User's effective access is further limited by that User's Permissions and applicable approvals.
+
+### 18.5 Owner identity is not a User account
+
+Person A is linked as an Owner to Organization A and Independent Shop A. This does not automatically create a login account or grant operational access. If Person A uses CBM, a valid User account, User–Business association, User Assigned Authority Scope, and Permissions are still required.
+
+### 18.6 Sub-Portal serving an Organization and related business network
 
 Sub-Portal A serves Organization A and the relevant associated distribution, store, and shop entities within its authorized domain. Its service-provider authority scope covers those associated businesses under Main Portal governance. This does not make Sub-Portal A their owner or grant every Sub-Portal User unrestricted access to every record.
 
-### 18.5 Different approval rules for the same action
+### 18.7 Different approval rules for the same action
 
-Within one Organization, the same action may require approval for Role A, may not require approval for Role B, and may have a separate user-specific approval rule for User C. The Organization configures these rules within the governing limits. The initiating User must still possess the action Permission.
+Within one Organization, the same action may require approval for Role A, may not require approval for Role B, and may have a separate user-specific approval rule for User C. The Organization configures these rules within the governing limits. The initiating User must still possess the action Permission and the assigned scope for the target entity.
 
-### 18.6 Configuration override for one business only
+### 18.8 Configuration override for one business only
 
-Main Portal establishes a default setting. Organization A has explicit permission to override it and sets a permitted value within the system-defined range. Organization B has no override permission and continues to inherit the applicable higher-level value. Organization A's change does not silently change Organization B.
+Main Portal establishes a default setting. Organization A has explicit permission to override it and sets a permitted value within the system-defined range. Organization B has no override permission and continues to use the applicable higher-level value. Organization A's change does not silently change Organization B.
 
-### 18.7 Service Provider migration
+### 18.9 Service Provider migration
 
 Organization A moves from Sub-Portal A to Sub-Portal B under Main Portal governance. Organization A's Business Identity, ownership, internal structure, data rights, and valid historical relationships remain intact. The Service Provider relationship changes.
-
----
 
 ## 19. Documentation governance
 
@@ -1036,7 +1116,7 @@ A proposed change is not final merely because it has been suggested or documente
 This baseline consolidates:
 
 1. The user-provided project context document **CBM_Project_Context_and_Decisions_2026-11-17** (provided in the conversation as the CBM project context text), including its confirmed business, service-provider, ownership, mapping, continuity, migration, archival, and Stable Core principles.
-2. The subsequent project-owner confirmations and clarifications in the conversation through **17 November 2026**, especially the accepted Business Identity and Ownership model, the Service Provider explanation, the corrected Business Authority Scope model, the separation between scope and User/Role Permissions, hierarchical configuration inheritance and business-specific overrides, and fine-grained approval workflow configurability.
+2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, especially the accepted Business Identity and Ownership model, the Service Provider explanation, the corrected Business Authority Scope model, the separation between scope and User/Role Permissions, hierarchical configuration inheritance and business-specific overrides, and fine-grained approval workflow configurability.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
