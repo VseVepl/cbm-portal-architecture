@@ -28,7 +28,7 @@
 14. [Distribution closure and Shop continuity](#13-distribution-closure-and-independent-shop-continuity)
 15. [Sub-Portal migration](#14-sub-portal-migration-and-service-continuity)
 16. [Data archival](#15-data-archival-and-object-storage-principles)
-17. [Stable Core, Configurable, and Extensible classification](#16-stable-core-configurable-and-extensible-design-classification)
+17. [Stable Core, Configurable, Customizable, and Extensible design principles](#16-stable-core-configurable-customizable-and-extensible-design-principles)
 18. [Cross-concept invariants](#17-required-cross-concept-invariants)
 19. [Illustrative scenarios](#18-illustrative-scenarios)
 20. [Documentation governance](#19-documentation-governance)
@@ -288,7 +288,7 @@ Approval is a control layered on top of permission. Approval does not create a p
 
 **Key Hierarchy** is a strict, non-configurable Stable Core constraint identified by the project owner. No business, Service Provider, User, Role, delegated authority, configuration, customization, or override may weaken, bypass, or supersede the governing Key Hierarchy.
 
-This baseline records the mandatory status of the Key Hierarchy but does not infer or prescribe its technical key classes, levels, derivation, storage, rotation, or cryptographic implementation. Those details must be defined in the appropriate later security architecture without weakening this invariant.
+This baseline records the mandatory status of the Key Hierarchy but does not infer or prescribe its technical key classes, levels, derivation, storage, rotation, or cryptographic implementation. The phrase is retained as approved by the project owner; this document does not guess whether “key” refers to cryptographic keys, business identifiers, or another key structure. No more specific meaning or implementation may be inferred from this baseline. Any later definition must preserve the strict, non-overridable invariant.
 
 ---
 
