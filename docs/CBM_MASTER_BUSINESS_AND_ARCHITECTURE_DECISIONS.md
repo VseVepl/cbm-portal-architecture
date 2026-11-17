@@ -112,6 +112,9 @@ The CBM architecture must support:
 - Scalability.
 - Configurability.
 - Extensibility.
+- Customization.
+- Explicit applicability across different business types, business contexts, and operating conditions.
+- Controlled override capability, subject to explicit authority and immutable system boundaries.
 - Strong business-ownership boundaries.
 - Strict business and tenant isolation.
 - Centralized governance.
@@ -119,6 +122,37 @@ The CBM architecture must support:
 - Security.
 - User-friendliness.
 - Long-term maintainability.
+
+### 2.6 Architecture-wide design doctrine
+
+Every business concept, capability, module, workflow, integration, configuration model, and technical design must be evaluated deliberately against the following dimensions:
+
+1. **Scalability:** Can the capability support growth in businesses, users, records, transactions, workload, and service-provider participation without fundamental redesign?
+2. **Configurability:** Can legitimate differences in business policy and operation be expressed through governed settings rather than unnecessary code forks?
+3. **Extensibility:** Can new capabilities, business types, workflows, integrations, and rules be added through clear boundaries and contracts?
+4. **Customization:** Can a business adapt permitted behaviour, presentation, workflows, and operational choices to its own legitimate needs without changing another business's context?
+5. **Override capability:** Can an authorized level override an inherited default or policy where explicitly permitted, while remaining within higher-level authority and immutable system limits?
+6. **Applicability:** Can a feature, rule, configuration, workflow, or policy be applied to the correct business types, entities, users, roles, actions, locations, and circumstances—without unintentionally affecting contexts for which it is not intended?
+7. **Business-specific variation:** Can different businesses use different permitted settings and workflows within the same CBM platform, without requiring separate product forks?
+8. **Maintainability and operability:** Can these variations be understood, audited, tested, supported, and evolved without uncontrolled complexity?
+
+These dimensions are design obligations, not a requirement to make every feature configurable. For each capability, the architecture must deliberately decide what is invariant, what is configurable, what is customizable, what may be overridden, and where it applies. A capability may remain fixed when variation would create security, integrity, consistency, or disproportionate complexity risks.
+
+#### 2.6.1 Immutable boundary takes precedence
+
+Data Isolation and the Key Hierarchy are strict Stable Core constraints. They must not be weakened, bypassed, or made subject to business-level customization, configuration, delegation, or override. All flexibility elsewhere must operate within these constraints, as well as Main Portal's supreme governance and other Stable Core rules.
+
+An explicitly authorized business interaction does not merge the parties' data boundaries. It permits only the specific access or transaction allowed by the applicable relationship, authority, and permission rules.
+
+#### 2.6.2 One platform, many legitimate business needs
+
+CBM must be capable of supporting materially different business requirements through governed applicability, configuration, customization, and extension wherever appropriate. Differences between businesses must not automatically require separate product versions or code forks.
+
+This flexibility must be designed intentionally and independently at the relevant business scope. A setting or customization for one business must not silently affect another business. Higher-level governance may establish mandatory defaults, limits, and policies; lower-level variation is permitted only where expressly authorized.
+
+#### 2.6.3 No flexibility by implication
+
+The existence of a configuration facility, extension point, customization mechanism, or override capability does not grant permission to use it. Every variation remains subject to applicable authority scope, explicit permission, approval requirements where configured, system-defined bounds, auditability, and Stable Core constraints.
 
 ---
 
@@ -240,7 +274,21 @@ Approval is a control layered on top of permission. Approval does not create a p
 
 ### 3.22 Business Data Isolation
 
-**Business Data Isolation** means that business records and information are separated by their owning business/Tenant context and are accessible only through valid authority, User access, Permission, and relationship rules. A common owner, Service Provider, network membership, or mapping does not by itself merge separate data boundaries.
+**Business Data Isolation** means that business records and information are separated by their owning business/Tenant context and are accessible only through valid authority, User access, Permission, and relationship rules. A common owner, Service Provider, network membership, or mapping does not by itself merge separate data boundaries. Explicitly authorized access is limited to its approved purpose and scope; it does not merge the underlying businesses' data boundaries.
+
+### 3.23 Applicability
+
+**Applicability** defines the business contexts, entity types, scopes, conditions, actions, Users, Roles, or operating circumstances to which a feature, configuration, policy, permission, or workflow applies. Applicability must be explicit enough to prevent a rule intended for one business context from unintentionally affecting another.
+
+### 3.24 Customization
+
+**Customization** is an authorized adaptation of permitted product behaviour, presentation, workflow, or operational choices to meet a business's legitimate requirements. Customization must remain within Main Portal governance, the applicable authority and permission model, and all Stable Core constraints. It does not mean changing immutable platform rules or another business's data or settings.
+
+### 3.25 Key Hierarchy
+
+**Key Hierarchy** is a strict, non-configurable Stable Core constraint identified by the project owner. No business, Service Provider, User, Role, delegated authority, configuration, customization, or override may weaken, bypass, or supersede the governing Key Hierarchy.
+
+This baseline records the mandatory status of the Key Hierarchy but does not infer or prescribe its technical key classes, levels, derivation, storage, rotation, or cryptographic implementation. Those details must be defined in the appropriate later security architecture without weakening this invariant.
 
 ---
 
@@ -352,6 +400,14 @@ Distinct independently owned businesses retain their own identities and data bou
 ### 4.8 Integrity and auditability
 
 Business identity, ownership relationships, mapping relationships, authority delegation, permission changes, configuration changes, approvals, migration, archival, and other security-significant operations must preserve integrity and be auditable.
+
+### 4.9 Strict Business Data Isolation
+
+Business and Tenant data boundaries are immutable security constraints. No configuration, customization, extension, delegated authority, or override may merge independent business data contexts or weaken their isolation. Any permitted cross-business interaction must be explicit, purpose-limited, authorized, and auditable without changing the underlying ownership or isolation boundary.
+
+### 4.10 Strict Key Hierarchy
+
+The Key Hierarchy is an immutable Stable Core security constraint. It must not be configurable, customizable, overridden, bypassed, or weakened by any subordinate business, Service Provider, User, Role, or workflow. All later security and technical designs must preserve it.
 
 ---
 
@@ -805,9 +861,9 @@ Archival is preservation, not continuation of normal operations. Removing an ope
 
 ---
 
-## 16. Stable Core, Configurable, and Extensible design classification
+## 16. Stable Core, Configurable, Customizable, and Extensible design principles
 
-All architectural decisions and capabilities must be classified using these three principles.
+All architectural decisions and capabilities must be evaluated using the Stable Core, Configurable, and Extensible principles, together with the additional design dimensions of customization, override capability, and applicability defined in Section 2.6. These are complementary design lenses, not mutually exclusive labels.
 
 ### 16.1 Stable Core
 
@@ -818,7 +874,8 @@ Stable Core contains fundamental protections and invariants that must not be mad
 - No peer authority between Sub-Portals.
 - Business Identity integrity.
 - Ownership boundaries.
-- Business and Tenant isolation.
+- Strict Business and Tenant Data Isolation.
+- Strict Key Hierarchy.
 - Separation of Business Authority Scope from User/Role Permissions.
 - Authorization integrity.
 - Configuration guardrails and protection against unauthorized overrides.
@@ -843,7 +900,7 @@ The approved configurable approach includes:
 - Operational/business settings within system-defined bounds.
 - Applicable lifecycle and archival policy settings within the governance model.
 
-Configurability must not allow a lower level to weaken or bypass an immutable higher-level rule.
+Configurability must not allow a lower level to weaken or bypass an immutable higher-level rule. Data Isolation and the Key Hierarchy are never configurable or overridable. Customization and configuration must be limited to the applicable business context and must not silently affect another business.
 
 ### 16.3 Extensible
 
@@ -858,6 +915,14 @@ The architecture must allow new capabilities to be added without fundamental red
 - New operational capabilities that remain consistent with the CBM governance model.
 
 Extensibility must not become an excuse for unnecessary abstraction or overengineering.
+
+### 16.4 Customization, Override, and Applicability
+
+- Customization may adapt only those product behaviours and choices that the governing Stable Core and Main Portal policies permit.
+- Override is a controlled authority, not an inherent consequence of having access to a configuration screen. It requires explicit permission for the specific setting and business context.
+- Applicability must be defined for every policy, configuration, workflow, permission, and extension where different business contexts may require different treatment.
+- Business-specific customization and overrides must be isolated to their authorized context and must not propagate to sibling or unrelated businesses unless an explicit governing rule requires inheritance.
+- None of these capabilities may weaken Data Isolation, Key Hierarchy, ownership integrity, Main Portal supremacy, or other Stable Core constraints.
 
 ---
 
@@ -890,6 +955,11 @@ The following statements summarize rules that must remain true across all future
 23. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
 24. Operational data may be removed after the applicable download period only after archival is verified.
 25. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it.
+26. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
+27. The Key Hierarchy is a strict Stable Core constraint and cannot be weakened, bypassed, configured, customized, or overridden by subordinate actors.
+28. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
+29. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
+30. A business-specific variation must remain within its authorized business context and must not silently affect another business.
 
 ---
 
@@ -947,6 +1017,8 @@ Every later project document must:
 
 - Use the canonical definitions in this master document.
 - Preserve the ownership, authority-scope, permission, configuration, approval, and isolation distinctions.
+- Apply the architecture-wide design doctrine: evaluate scalability, configurability, extensibility, customization, override capability, and applicability.
+- Treat Data Isolation and the Key Hierarchy as strict, non-overridable Stable Core constraints.
 - Identify the master decisions on which it depends.
 - Avoid introducing contradictory or broader rights by implication.
 - Be updated when a governing master decision changes.
