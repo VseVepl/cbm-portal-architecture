@@ -10,6 +10,12 @@ The single authoritative source for finalized business and architectural decisio
 
 Read that document before drafting, reviewing, or implementing any project-specific architecture, security, data, API, user-experience, operational, or development document.
 
+## Architecture-wide design doctrine
+
+Every architecture and product decision must consider scalability, configurability, extensibility, customization, controlled override capability, and explicit applicability to the correct business contexts. Business-specific variation should be supported within one governed platform wherever appropriate.
+
+Business and Tenant Data Isolation and the Key Hierarchy are strict, non-configurable Stable Core constraints. No customization, configuration, delegation, extension, or override may weaken or bypass them. Flexibility must always remain within Main Portal governance and all other Stable Core rules.
+
 ## Documentation rule
 
 Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. Keep discussion history separate from the master source of truth.
