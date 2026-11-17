@@ -322,12 +322,13 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 |---|---|---|
 | **Platform/service-provider structure** | Who provides the CBM service to this customer business, and under whose platform governance does that provider operate? | Main Portal → Sub-Portal → served Organization/Tenant; or Main Portal → directly served Organization/Tenant. |
 | **Business structure** | Which operating units and business components belong within an Organization's own business structure? | Organization → its directly owned Retail Stores; Organization → its Distribution Network. |
-| **Ownership relationship** | Who owns each independent Business Identity? | One owner may own several separate businesses; each retains its own identity. |
+| **Ownership relationship** | Who owns each independent Business Identity? | Owner ID → Ownership ID → Business Identity; one Owner may be linked to several separate businesses. |
 | **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Independent Shop mapping. |
-| **Business Authority Scope** | Over which business entities may a business-level authority be assigned or exercised? | Organization scope includes its Network Distributor but does not automatically pass through it to the Distributor's independent Shops. |
-| **User authorization** | Which actions may a particular User perform in a particular business context? | A Store Manager may update records only for Store A. |
+| **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | A Distributor may include an associated Shop linked to the same Owner ID, only under Section 7; mapping alone is insufficient. |
+| **User Assigned Authority Scope** | Which of the business-available entities has been explicitly assigned to this User? | An Organization-level User may be assigned only Store A and Store C, not every Store. |
+| **Permission / Role** | Which actions may this User perform within the assigned entity scope? | A Store Manager may update records only for Store A. |
 
-These views may refer to the same businesses, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so. The Business Structure Hierarchy has its own strict valid-parent and valid-child constraints; it is not a freely rearrangeable universal tree.
+These views may refer to the same businesses, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so. Ownership Links may inform eligible Business Available Authority Scope under Section 7; they do not change Business Structure, create a Distributor–Shop mapping, or automatically grant a User access. The Business Structure Hierarchy has its own strict valid-parent and valid-child constraints; it is not a freely rearrangeable universal tree.
 
 ### 3A.1 Conceptual illustration
 
@@ -344,34 +345,56 @@ PLATFORM / SERVICE-PROVIDER VIEW
                           associated customer/business
                                   domain
 
-ORGANIZATION BUSINESS-STRUCTURE / AUTHORITY-SCOPE VIEW
 
-                 ORGANIZATION
-                  /        \
-      Distribution Network  Organization-owned Stores
+BUSINESS STRUCTURE / BUSINESS RELATIONSHIP VIEW
+
+                 ORGANIZATION A
+                  /          \
+      Distribution Network   Organization-owned Stores
                |
-          DISTRIBUTOR
+          DISTRIBUTOR D1
                |
-       - - mapping relationship - - INDEPENDENT SHOP
+       - - mapping relationship - - INDEPENDENT SHOP X
+       - - mapping relationship - - INDEPENDENT SHOP Y
 
-Important: the Organization's business authority scope includes the
-Distributor, but does not automatically pass through the Distributor
-along the mapping relationship to the Independent Shop.
-The Sub-Portal's authorized scope may include the associated Shop
-within its own service-provider domain. Main Portal's scope is global.
+Mapping connects the Distributor and each Shop for expressly
+authorized business interactions. Mapping does not establish ownership.
 
-OWNERSHIP VIEW (INDEPENDENT OF THE DIAGRAMS ABOVE)
 
-      Owner A                 Owner B
-         |                       |
-   Organization A           Independent Shop X
-         |
-   Organization-owned Store 1
+OWNERSHIP LINK VIEW (INDEPENDENT OF BUSINESS STRUCTURE AND MAPPING)
 
-The diagrams are conceptual views, not a database schema or a universal
+       OWNER ID B                         OWNER ID C
+           |                                  |
+      OWNERSHIP ID                       OWNERSHIP ID
+           |                                  |
+      DISTRIBUTOR D1                   INDEPENDENT SHOP Y
+           |
+      OWNERSHIP ID
+           |
+      INDEPENDENT SHOP X
+
+If Distributor D1 and Shop X are linked to the same Owner ID, Shop X
+may be eligible for D1's owner-linked Business Available Authority
+Scope under Section 7. Shop Y, linked to a different Owner ID, is not
+included in D1's scope merely because it is mapped to D1.
+
+
+USER AUTHORIZATION VIEW
+
+       BUSINESS AVAILABLE AUTHORITY SCOPE
+                     |
+          explicit User scope assignment
+                     |
+          USER ASSIGNED AUTHORITY SCOPE
+                     |
+             Role / Permissions
+                     |
+              Effective access
+
+These are conceptual views, not a database schema or a universal
 ownership hierarchy. They illustrate why service provision, ownership,
-business structure, mapping, authority scope, and user permission must
-remain separate.
+business structure, mapping, available authority scope, user scope
+assignment, and action permission must remain separate.
 ```
 
 ### 3A.2 Non-inference rule
@@ -379,13 +402,12 @@ remain separate.
 No one may infer any of the following solely from the existence of another relationship:
 
 - Service Provider status does not imply ownership.
-- Ownership does not automatically imply a User login or unrestricted operational permission.
-- Business-structure membership does not imply that every User can perform every action.
-- Distributor–Shop mapping does not imply ownership, Organization authority scope, or Distributor authority over the Shop.
+- Ownership does not automatically imply a User login, User Assigned Authority Scope, or unrestricted operational Permission.
+- Business-structure membership does not imply that every User can perform every action or access every subordinate entity.
+- A Distributor–Shop mapping alone does not imply ownership or ownership-based authority over the Shop. Any eligible owner-linked scope must arise separately under Section 7.
+- An Ownership Link may inform Business Available Authority Scope only under the explicit rules in Section 7; it does not automatically grant User access.
 - A Sub-Portal's authority scope over associated businesses does not imply unrestricted record access for every Sub-Portal User.
-- A business's authority scope does not itself define the action types available to a User.
-
----
+- A business's Business Available Authority Scope does not itself define the User Assigned Authority Scope or action types available to a User.
 
 ## 4. Stable Core principles
 
@@ -816,10 +838,10 @@ Knowing a Unique ID or Secret Code does not grant general access to the Distribu
 A mapping:
 
 - Establishes only the authorized business relationship.
-- Does not change either party's ownership.
+- Does not change either party's ownership or create an Ownership Link.
 - Does not convert an Independent Shop into a Distributor-owned child business.
-- Does not automatically expand the Distributor's business authority scope to include the Shop.
-- Does not automatically expand the Organization's business authority scope through the Distributor to the Shop.
+- Does not, by itself or solely because of the mapping, expand the Distributor's Business Available Authority Scope to include the Shop. Any separate owner-linked eligibility must be determined under Section 7.
+- Does not, by itself or solely because of the mapping, expand the Organization's Business Available Authority Scope through the Distributor to the Shop. Any separate owner-linked eligibility must be determined under Section 7 and must not be inferred from the mapping.
 - Does not grant unrestricted access to Accounting, Inventory, HR, Users, administration, or other business data.
 - May enable only the specific transactions and interactions expressly authorized for the relationship.
 
@@ -1123,7 +1145,7 @@ Where a later explicit project-owner clarification refined an earlier general de
 - Main Portal's ecosystem-wide authority scope;
 - Sub-Portal authority scope over associated businesses in its authorized domain;
 - Organization authority scope over its own subordinate Distributors and Organization-owned Stores/Shops, but not Independent Shops beneath a Distributor merely because of mapping; and
-- Distributor authority scope limited to itself.
+- Distributor Business Available Authority Scope includes the Distributor itself and may include associated Independent Shops linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7; mapping alone does not confer that scope.
 
 ---
 
