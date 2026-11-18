@@ -26,15 +26,14 @@
 12. [Approval Workflow governance](#11-approval-workflow-governance)
 13. [Distributor–Shop relationships and mapping](#12-distributor-shop-business-relationships-and-mapping)
 14. [GST Taxpayer Profile and GST Registration Architecture](#12a-gst-taxpayer-profile-and-gst-registration-architecture)
-15. [Distribution closure and Independent Shop continuity](#13-distribution-closure-and-independent-shop-continuity)
-16. [Sub-Portal migration and service continuity](#14-sub-portal-migration-and-service-continuity)
-17. [Data archival and object-storage principles](#15-data-archival-and-object-storage-principles)
-18. [Domain History and Audit Trail Management](#15a-domain-history-and-audit-trail-management)
-19. [Stable Core, Configurable, Customizable, and Extensible principles](#16-stable-core-configurable-customizable-and-extensible-design-principles)
-20. [Cross-concept invariants](#17-required-cross-concept-invariants)
-21. [Illustrative scenarios](#18-illustrative-scenarios)
-22. [Documentation governance](#19-documentation-governance)
-23. [Source basis and decision provenance](#20-source-basis-and-decision-provenance)
+15. [Sub-Portal migration and service continuity](#13-sub-portal-migration-and-service-continuity)
+16. [Data archival and object-storage principles](#14-data-archival-and-object-storage-principles)
+17. [Domain History and Audit Trail Management](#14a-domain-history-and-audit-trail-management)
+18. [Stable Core, Configurable, Customizable, and Extensible principles](#15-stable-core-configurable-customizable-and-extensible-design-principles)
+19. [Cross-concept invariants](#16-required-cross-concept-invariants)
+20. [Illustrative scenarios](#17-illustrative-scenarios)
+21. [Documentation governance](#18-documentation-governance)
+22. [Source basis and decision provenance](#19-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -187,7 +186,7 @@ Being a Service Provider does not make that provider the owner of the customer b
 
 An **Organization** is an independent customer business that uses CBM software services. It has its own Business Identity, ownership, business data, internal business structure, and associated users. It may receive services directly from Main Portal or through an authorized Sub-Portal.
 
-An Organization may operate distribution operations, retail operations, or both. Where it has multiple Distributor entities, they may be grouped as its **Distribution Network**. Where it has multiple Organization-owned Store/Shop operational units, they may be grouped as its **Retail Network**. The combined configuration containing both distribution and retail operations is called a **Hybrid Network**. These are Organization-level operating arrangements, not separate Business Identities, Owners, Service Providers, or customer businesses.
+An Organization may have multiple direct structural children of either or both permitted types: Distributor and Shop. Multiple Distributors may be grouped as a **Distribution Network**; multiple Shops may be grouped as a **Retail Network**. An Organization with both distribution and retail operations has a **Hybrid Network** configuration. These are operating configurations/groupings, not separate Business Identities, Owners, Service Providers, or customer businesses. The ownership of each Distributor and Shop is determined independently through Ownership Links.
 
 ### 3.6 Tenant
 
@@ -205,7 +204,7 @@ A **Professional Identity** represents how a business, service, location, branch
 
 Legal Identity and Professional Identity are separate but related. One Legal Identity may be associated with multiple distinct Professional Identities. For example, five stores may each have their own store name, location, contact details, and Professional Identity while operating under one legal taxpayer and one applicable GST Registration. The shared legal/tax identity does not merge the stores' distinct professional identities or operational records. Conversely, a Professional Identity must not be assumed to have a particular Legal Identity or GST Registration without an explicit, verified association.
 
-This two-dimensional identity model applies to all eligible CBM identity-bearing contexts, not only customer businesses. Main Portal and each Sub-Portal may each maintain their own Legal Identity and Professional Identity for their respective platform/service-provider business. Organizations, Distributors, Independent Shops, and eligible operational units such as Organization-owned Stores may likewise have the applicable identity dimensions. An operational unit may have its own Professional Identity without thereby becoming a separately owned legal person or a separate ownership-bearing business.
+This two-dimensional identity model applies to all eligible CBM identity-bearing contexts, not only customer businesses. Main Portal and each Sub-Portal may each maintain their own Legal Identity and Professional Identity for their respective platform/service-provider business. Organizations, Distributors, and Shops may each maintain the applicable Legal Identity and Professional Identity dimensions. A Shop's own Legal Identity is optional; its Professional Identity is required.
 
 A Business Identity must not be replaced merely because the business changes its Service Provider or enters or leaves a Business Relationship. Changes to Legal Identity particulars or Professional Identity particulars must be handled as changes to the relevant identity dimension, with appropriate domain history and audit records; they must not silently merge distinct identities. Closed identity records must not be recycled for a different business or operating context.
 
@@ -238,21 +237,23 @@ An **Ownership Link** is the explicit relationship connecting an Owner ID to a B
 
 ### 3.9 Distributor
 
-A **Distributor** is an identifiable distribution business entity within an Organization's business structure. An Organization may have multiple Distributors; collectively, those Distributor entities may be grouped as that Organization's **Distribution Network**. A Distributor may have its own distinct Professional Identity even where its Legal Identity is shared with the Organization or another business context. Its Business Identity dimensions must be represented explicitly; a distinct Professional Identity does not by itself prove a separate legal person, separate legal/tax identity, or separate Ownership Link. Business Identity, structural placement, and Ownership Links remain separate concepts. The fact that a Distributor is part of an Organization's Distribution Network does not, by itself, define or alter its Ownership Links.
+A **Distributor** is an identifiable distribution business entity whose direct structural parent is an Organization. An Organization may have multiple Distributor entities. A Distributor is a terminal structural entity under the currently approved Business Structure model: it cannot have a Shop, another Distributor, or any other business entity as a structural child. A Distributor must not exist as a standalone structural entity outside an Organization's Business Structure.
 
-A Distributor's Business Available Authority Scope includes the Distributor itself and may include an Independent Shop linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7. A Distributor does not acquire authority over another independently owned Shop merely because that Shop is mapped to it.
+A Distributor must have a Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable; it is not automatically inherited from its Organization or another entity. Structural placement does not determine ownership. The Owner or Owners of a Distributor are determined only through explicit Ownership Links.
 
-### 3.10 Independent Shop
+### 3.10 Shop
 
-An **Independent Shop** is a separately owned retail business with its own Business Identity, owner, business data, and operational responsibility. Its Professional Identity is distinct as a shop/business identity. Its Legal Identity may be its own or may be associated with a legal taxpayer identity that also supports other business contexts, subject to the actual legal facts and applicable law. It may establish one or more authorized business relationships with Distributors.
+A **Shop** is the unified CBM retail business entity. The previous two-category classification of Shops has been discontinued. CBM must not model Shops as separate entity types or separate Business Structure classifications based on ownership.
 
-A Distributor–Shop mapping does not make the Shop a child business owned by the Distributor and does not grant unrestricted access to the Shop.
+A Shop's direct structural parent is an Organization. A Shop is a terminal structural entity under the currently approved Business Structure model: it cannot have another Shop, a Distributor, or any other business entity as a structural child. An Organization may have multiple Shops and may have both Shops and Distributors at the same time.
 
-### 3.11 Organization-owned Store / Shop
+Every Shop must have its own Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable. A Shop may have its own Legal Identity or may be associated with another eligible Legal Identity, subject to verified legal facts and applicable law. A Shop's structural placement does not determine who owns it. Ownership is determined independently through explicit Ownership Links; therefore, a Shop structurally belonging to an Organization is not necessarily owned by that Organization or by the same Owner as the Organization.
 
-An **Organization-owned Store** (also described as a directly owned Shop or Retail Location) is an operational unit within an Organization's own business structure. It may and ordinarily should have its own distinct Professional Identity where it is separately presented or recognized in commercial activity, including its store/branch name, location, contact details, and branding. This distinct Professional Identity does not, by itself, make the Store a separate legal person, a separately owned business, or an independent ownership-bearing Business Identity. Its Legal Identity may be associated with the Organization's Legal Identity and applicable GST Registration(s), subject to verified legal and GST facts. An Organization may have multiple such Stores; collectively, those operational units may be grouped as its **Retail Network**.
+The Shop entity remains the same regardless of its ownership arrangement, Legal Identity, Professional Identity, or Business Relationships. Those are separate dimensions and must not create separate Shop structural classifications.
 
-Its ownership remains with the Owner or Owners linked to the Organization, and its operations remain within the Organization's business structure and authority scope. Separate Store identity, location, transactions, stock, staff, POS activity, reports, and User scope must be maintainable without falsely creating separate legal ownership.
+### 3.11 Business Structure
+
+**Business Structure** means the permitted structural placement and direct Parent–Child relationships among CBM's structural entities. The currently approved structure is Main Portal → Sub-Portal for Platform Structure, and Organization → Distributor / Shop for Customer Business Structure. Distributor and Shop are terminal structural entities. Service Provider relationships, Ownership Links, Business Identity associations, Business Relationships/Mapping, Authority Scope, User Scope Mapping, Roles, and Permissions are separate models and must not be inferred from structural placement.
 
 ### 3.12 Business Structure
 
@@ -260,7 +261,7 @@ Its ownership remains with the Owner or Owners linked to the Organization, and i
 
 ### 3.13 Business Relationship
 
-A **Business Relationship** is an explicitly established association between distinct business identities, such as a Distributor–Independent Shop mapping. A relationship enables only the interactions and permissions expressly allowed for that relationship. It does not transfer ownership or automatically grant broad administrative authority or data access.
+A **Business Relationship** is an explicitly established association between distinct business identities, such as a Distributor–Shop Mapping. A relationship enables only the interactions and permissions expressly allowed for that relationship. It does not transfer ownership or automatically grant broad administrative authority or data access.
 
 ### 3.14 Business Authority Scope
 
@@ -334,7 +335,7 @@ This is a business-structure rule only. It has no meaning or application in cryp
 
 **Mapping** is a typed, purpose-specific, explicitly established association between defined source and target entity types or contexts. The unqualified term does not imply a particular pair of entity types, direction, purpose, eligibility, authority, or effect. Every Mapping type must have its own definition of purpose, endpoints, direction, cardinality, eligibility, authorization, lifecycle, effective dates, applicable History, and access controls. Rules for one Mapping type must not be generalized to another.
 
-**Distributor–Shop Mapping** is one specific Business Relationship Mapping type defined in Section 12. It is not the universal Mapping model and does not limit Mapping or Assignment capabilities elsewhere in CBM. Other separately defined types may associate other eligible CBM entity types or contexts, including Main Portal, Sub-Portals, Organizations, Distributors, Independent Shops, Organization-owned Stores/Shops, Users, GST Registrations, and future approved entity types. This illustrative list does not itself authorize any association. Where ambiguity is possible, use a complete qualified term such as Distributor–Shop Mapping, User Scope Mapping, or GST Registration Assignment.
+**Distributor–Shop Mapping** is one specific Business Relationship Mapping type defined in Section 12. It is not the universal Mapping model and does not limit Mapping or Assignment capabilities elsewhere in CBM. Other separately defined types may associate other eligible CBM entity types or contexts, including Main Portal, Sub-Portals, Organizations, Distributors, Shops, Users, GST Registrations, and future approved entity types. This illustrative list does not itself authorize any association. Where ambiguity is possible, use a complete qualified term such as Distributor–Shop Mapping, User Scope Mapping, or GST Registration Assignment.
 
 ### 3.27 User Scope Mapping
 
@@ -362,7 +363,7 @@ A **GST Registration** is a specific registration granted to a taxpayer under ap
 
 ### 3.32 GST Registration Assignment
 
-A **GST Registration Assignment** is the explicit, typed association by which a specific GST Registration is associated with an eligible CBM entity, operational unit, location, or transaction context for a defined GST purpose, subject to verified taxpayer identity, lawful registration coverage, applicable tax rules, and Main Portal governance. Its target is not restricted to Distributor or Shop. It may be any CBM entity type or context enabled by Main Portal, including Main Portal, Sub-Portal, Organization, Distributor, Independent Shop, Organization-owned Store/Shop, or another approved current or future context. This list is illustrative, not an automatic eligibility grant.
+A **GST Registration Assignment** is the explicit, typed association by which a specific GST Registration is associated with an eligible CBM entity, operational unit, location, or transaction context for a defined GST purpose, subject to verified taxpayer identity, lawful registration coverage, applicable tax rules, and Main Portal governance. Its target is not restricted to Distributor or Shop. It may be any CBM entity type or context enabled by Main Portal, including Main Portal, Sub-Portal, Organization, Distributor, Shop, or another approved current or future context. This list is illustrative, not an automatic eligibility grant.
 
 ### 3.33 Place of Business
 
@@ -377,11 +378,11 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 | Relationship view | Question it answers | Example |
 |---|---|---|
 | **Platform/service-provider structure** | Who provides the CBM service to this customer business, and under whose platform governance does that provider operate? | Main Portal → Sub-Portal → served Organization/Tenant; or Main Portal → directly served Organization/Tenant. |
-| **Business structure** | Which operating units and business components belong within an Organization's own business structure? | Organization → its Distributor entities (grouped as a Distribution Network when multiple); Organization → its directly owned Stores (grouped as a Retail Network when multiple). |
+| **Business structure** | Which entities are direct structural children of an Organization? | Organization → Distributor entities and/or Shop entities. Both are terminal structural entities. |
 | **Identity relationship** | What legal person/entity is responsible, and how is each business or operating context professionally identified? | One Legal Identity may be associated with multiple distinct Professional Identities, such as five separately named Stores operating under one legal taxpayer. | 
 | **Ownership relationship** | Who owns each independently owned business? | Owner ID → Ownership ID → ownership-bearing Business Identity; one Owner may be linked to several separate businesses. |
-| **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Independent Shop through the specific Distributor–Shop Mapping type. |
-| **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | A Distributor may include an associated Shop linked to the same Owner ID, only under Section 7; mapping alone is insufficient. |
+| **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Shop through the specific Distributor–Shop Mapping type. |
+| **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | Eligibility is determined under explicit authority rules; neither structural placement nor Mapping automatically grants unrestricted scope. |
 | **User Assigned Authority Scope** | Which of the business-available entities has been explicitly assigned to this User? | An Organization-level User may be assigned only Store A and Store C, not every Store. |
 | **Permission / Role** | Which actions may this User perform within the assigned entity scope? | A Store Manager may update records only for Store A. |
 
@@ -402,42 +403,38 @@ PLATFORM / SERVICE-PROVIDER VIEW
                           associated customer/business
                                   domain
 
+BUSINESS STRUCTURE VIEW
 
-BUSINESS STRUCTURE / BUSINESS RELATIONSHIP VIEW
+                    ORGANIZATION A
+                      /        \
+              DISTRIBUTOR D1   SHOP S1
+                   (terminal)  (terminal)
 
-                 ORGANIZATION A
-                  /          \
-      Distribution Network   Retail Network
-      (multiple Distributors) (multiple owned Stores)
+              DISTRIBUTOR D2   SHOP S2
+                   (terminal)  (terminal)
 
-      A Hybrid Network is the Organization-level configuration containing both.
-               |
-          DISTRIBUTOR D1
-               |
-       - - mapping relationship - - INDEPENDENT SHOP X
-       - - mapping relationship - - INDEPENDENT SHOP Y
+Organization A may have multiple Distributors, multiple Shops, or both.
+A Distributor and a Shop are direct structural children of the Organization.
+Neither may have structural children under the currently approved model.
 
-The Distributor–Shop Mapping shown here is one specific Mapping type. It connects the Distributor and each Shop only for expressly
-authorized business interactions. It does not establish ownership or define the endpoints of other Mapping types.
+BUSINESS RELATIONSHIP / MAPPING VIEW
 
+          DISTRIBUTOR D1  - - - - -  SHOP S1
+          DISTRIBUTOR D2  - - - - -  SHOP S1
+
+These are separately configured Distributor–Shop Business Mappings.
+They do not change either entity's structural parent or ownership.
 
 OWNERSHIP LINK VIEW (INDEPENDENT OF BUSINESS STRUCTURE AND MAPPING)
 
-       OWNER ID B                         OWNER ID C
-           |                                  |
-      OWNERSHIP ID                       OWNERSHIP ID
-           |                                  |
-      DISTRIBUTOR D1                   INDEPENDENT SHOP Y
-           |
-      OWNERSHIP ID
-           |
-      INDEPENDENT SHOP X
+       OWNER ID A                 OWNER ID B
+           |                          |
+      OWNERSHIP ID               OWNERSHIP ID
+           |                          |
+      ORGANIZATION A                 SHOP S1
 
-If Distributor D1 and Shop X are linked to the same Owner ID, Shop X
-may be eligible for D1's owner-linked Business Available Authority
-Scope under Section 7. Shop Y, linked to a different Owner ID, is not
-included in D1's scope merely because it is mapped to D1.
-
+A Shop may have an Owner different from the Owner(s) of its structural
+Organization. Structural placement does not establish ownership.
 
 USER AUTHORIZATION VIEW
 
@@ -525,14 +522,28 @@ The following CBM contexts must be capable of maintaining the applicable Legal I
 - Each Sub-Portal as an independently operated service-provider business.
 - Each Organization as an independent customer business.
 - Each Distributor as an identifiable distribution business entity within an Organization's business structure.
-- Each Independent Shop as an independently owned retail business.
-- Each Organization-owned Store/Shop as an operational unit that may have its own distinct Professional Identity without becoming a separate legal person or independently owned business solely for that reason.
+- Each Shop as an independently owned retail business.
+- Each Shop as an operational unit that may have its own distinct Professional Identity without becoming a separate legal person or independently owned business solely for that reason.
 
 The fact that these contexts have different platform, service-provider, business, or operational roles does not make their roles interchangeable. Identity dimensions must not be used to infer ownership or structural placement.
 
-### 5.2 Organization-owned operational units
+### 5.2 Unified Shop entity and identity applicability
 
-A Store/Shop owned directly by an Organization is an internal operational unit of that Organization, not a separate independently owned legal business merely because it has a distinct location. It may and ordinarily should have its own distinct Professional Identity and unique operational Store/Location identifier to distinguish its name, presentation, transactions, stock, staff, POS activity, reports, and User scope. Its Legal Identity and ownership remain associated with the Organization as supported by the verified legal facts; a separate Professional Identity does not create a separate Owner ID or Ownership Link.
+The Shop is one unified entity type, regardless of who owns it or which Legal Identity is applicable. A Shop is a direct structural child of an Organization and is terminal in the currently approved Business Structure.
+
+The following Legal Identity and Professional Identity applicability matrix is finalized:
+
+| Entity | Legal Identity | Professional Identity |
+|---|---|---|
+| Main Portal | Required | Required |
+| Sub-Portal | Required | Required |
+| Organization | Required | Required |
+| Distributor | Optional | Required |
+| Shop | Optional | Required |
+
+For Distributor and Shop, an optional Legal Identity must be explicitly associated and validated where applicable. It must not be inherited automatically from an Organization, Owner, Service Provider, or another entity. Every Distributor and Shop must have a Professional Identity. A Shop may maintain a distinct Professional Identity while being associated with a Legal Identity shared with another eligible business context, subject to verified facts and applicable law.
+
+Ownership determines whose Distributor or Shop it is. Business Structure determines its permitted structural position. Legal Identity determines the relevant legal person/entity. Professional Identity determines how the business or operating context presents itself. These dimensions must not be conflated.
 
 ### 5.3 Ownership Links and ownership identity
 
@@ -543,34 +554,28 @@ A Store/Shop owned directly by an Organization is an internal operational unit o
 5. In this CBM model, ownership records identify who owns or holds ownership rights in a business for authority-scope purposes. They do not represent or calculate equity, financial shares, percentages, investment, profit entitlement, or economic interest.
 6. Owner identity and ownership are separate from User accounts, authentication credentials, Roles, Permissions, and operational assignments. An Owner does not automatically become a User, and an Owner's User account does not automatically receive access to every business linked to that Owner.
 7. Separate businesses linked to the same Owner ID remain separate Business Identities and separate data contexts.
-8. A Distributor does not own an Independent Shop merely because the Shop is in its Distribution Network or mapped to it.
+8. A Distributor does not own an Shop merely because the Shop is in its Distribution Network or mapped to it.
 9. An Organization's association with a Distributor does not itself change the Distributor's ownership or the ownership of any Shop associated with that Distributor.
-10. Organization-owned Stores remain operational units of the Organization; their ownership remains with the Owner or Owners linked to the Organization.
+10. Shops remain operational units of the Organization; their ownership remains with the Owner or Owners linked to the Organization.
 11. Ownership Links may be used as an eligibility input when determining Business Available Authority Scope, but only under the explicit rules in Section 7. They do not by themselves grant User access, User Assigned Authority Scope, or action Permissions.
 
-### 5.4 No in-place business ownership transfer
+### 5.4 Organization Network Configurations
 
-CBM does not provide an in-place Business Identity ownership-transfer process for a business whose ownership changes. The existing business is closed under its applicable lifecycle rules; the new owner establishes a new business with a new Business Identity. The closed business's identity and Domain History remain distinct. Domain History is preserved for the full lifetime of that Business Identity and may be removed only through its authorized permanent deletion process.
+An Organization may operate in one of three configurations:
 
-This rule is separate from Sub-Portal or customer Service Provider migration, which does not change business ownership.
-
-### 5.5 Organization configurations
-
-An Organization has one of the following three network configurations:
-
-| Organization network configuration | Distribution operations present | Retail operations present |
+| Organization Network Configuration | Distributor entities | Shop entities |
 |---|---:|---:|
-| **Hybrid Network** | Yes | Yes |
-| **Distribution Network** | Yes | No |
-| **Retail Network** | No | Yes |
+| **Distribution Network** | One or more | None required by this configuration |
+| **Retail Network** | None required by this configuration | One or more |
+| **Hybrid Network** | One or more | One or more |
 
-These are three configurations of one Organization's business operations. They do not create three Organization Entity Types or separate Business Identities.
+These configurations describe the Organization's operating arrangement. They do not create different Organization, Distributor, or Shop entity types, and they do not determine Ownership, Legal Identity, Professional Identity, Service Provider, or User Authority.
 
-- A **Hybrid Network** means that the Organization operates both distribution operations and its own retail operations. Multiple Distributors may be grouped as its Distribution Network, and multiple Organization-owned Stores may be grouped as its Retail Network. The Organization may also have Independent Shops associated with its distribution operations through separately governed Business Relationships.
-- A **Distribution Network** configuration means that the Organization operates distribution operations. Multiple Distributor entities within that Organization may be grouped as its Distribution Network. The Organization does not operate its own Organization-owned Retail Stores under this configuration, although Independent Shops may be associated with its Distributors through separately governed Business Relationships.
-- A **Retail Network** configuration means that the Organization operates its own Retail Stores. Multiple Organization-owned Store/Shop operational units may be grouped as its Retail Network. The Organization does not operate distribution operations under this configuration.
+- **Distribution Network** describes the Organization's distribution arrangement through its Distributor entities.
+- **Retail Network** describes the Organization's retail arrangement through its Shop entities.
+- **Hybrid Network** describes an Organization operating through both Distributor and Shop entities.
 
-**Terminology boundary:** A Distributor remains an individual entity; an Organization's Distribution Network is the collective grouping of its Distributor entities when multiple Distributors are present. An Organization-owned Store remains an individual operational unit; an Organization's Retail Network is the collective grouping of its Store/Shop operational units when multiple Stores are present. The labels **Distribution Network** and **Retail Network** may also be used as the Organization's configuration names in the table above; in prose, use **Distribution Network configuration** or **Retail Network configuration** when referring to the configuration choice, and **the Organization's Distribution Network/Retail Network** when referring to the grouped operating units. A **Hybrid Network** is the combined Organization-level operating configuration containing both distribution and retail operations, not a third kind of business entity. None of these network labels, by itself, creates or changes Business Identity, Ownership Links, Service Provider relationships, Distributor–Shop mappings, or authority scope.
+A Distributor remains an individual entity; Distribution Network describes the collective distribution arrangement. A Shop remains an individual entity; Retail Network describes the collective retail arrangement. Distributor and Shop are both direct structural children of the Organization and are both terminal structural entities.
 
 ## 6. Service-provider architecture
 
@@ -621,13 +626,13 @@ These are separate controls and must be evaluated independently.
 
 ### 7.2 Main Portal scope
 
-Main Portal's authority scope extends across the entire CBM Ecosystem without subordinate-imposed restriction. It covers all Sub-Portals, Organizations, Distributors, Stores, Independent Shops, and applicable business/service contexts within CBM.
+Main Portal's authority scope extends across the entire CBM Ecosystem without subordinate-imposed restriction. It covers all Sub-Portals, Organizations, Distributors, Stores, Shops, and applicable business/service contexts within CBM.
 
 No Sub-Portal, Organization, Distributor, Shop, User, or Role may narrow or constrain Main Portal's supreme authority scope.
 
 ### 7.3 Sub-Portal scope
 
-A Sub-Portal's business/service-provider authority scope extends to the businesses and operational entities associated with and served within its authorized Sub-Portal domain. This includes the relevant Organizations, Distribution operations, Distributors, Organization-owned Stores, and Independent Shops associated with that domain, subject to Main Portal governance.
+A Sub-Portal's business/service-provider authority scope extends to the businesses and operational entities associated with and served within its authorized Sub-Portal domain. This includes the relevant Organizations, Distribution operations, Distributors, Shops, and Shops associated with that domain, subject to Main Portal governance.
 
 This provider-level scope does not transfer ownership to the Sub-Portal and does not automatically grant every Sub-Portal User access to every associated entity or record. Each Sub-Portal User must have an explicit valid User–Business association, User Assigned Authority Scope, and required Permissions, subject to purpose limitation and Data Isolation.
 
@@ -641,7 +646,7 @@ An Organization's Business Available Authority Scope includes:
 - Other directly subordinate operational entities that remain within the Organization's own business and ownership structure.
 - An independently identified business only where a valid Ownership Link and an explicit Main Portal-governed rule make that business eligible for the relevant owner-linked authority scope.
 
-An Organization's scope does **not** automatically pass through a Distributor to every Independent Shop mapped to or associated with that Distributor. A mapping, network association, or structural proximity alone does not place an independently owned Shop within the Organization's scope. Where an owner-linked scope is permitted, eligibility must arise from the relevant Owner ID/Ownership Links and governing rules—not from the Distributor–Shop mapping—and must not be treated as Organization ownership or a merger of data boundaries.
+An Organization's scope does **not** automatically pass through a Distributor to every Shop mapped to or associated with that Distributor. A mapping, network association, or structural proximity alone does not place an Shop within the Organization's scope. Where an owner-linked scope is permitted, eligibility must arise from the relevant Owner ID/Ownership Links and governing rules—not from the Distributor–Shop mapping—and must not be treated as Organization ownership or a merger of data boundaries.
 
 ### 7.5 Distributor scope
 
@@ -653,9 +658,9 @@ A Distributor's scope does not include other mapped Shops merely because they pa
 
 Where a Distributor has multiple Owners, owner-linked eligibility must be evaluated against the explicit Ownership Links and applicable governance rules. It must not be inferred from a shared name, contact detail, User account, or informal association.
 
-### 7.6 Independent Shop scope
+### 7.6 Shop scope
 
-An Independent Shop's own business scope includes its own Business Identity and business context. Its ownership and data boundary remain independent.
+An Shop's own business scope includes its own Business Identity and business context. Its ownership and data boundary remain independent.
 
 If the Shop shares an Owner ID with another business, that Ownership Link may be considered for an eligible owner-linked scope under the rules applicable to that other business. This does not make the Shop a structural child of that business, transfer its ownership, or merge its data boundary. Its association with a Distributor still permits only the explicitly authorized relationship interactions.
 
@@ -771,12 +776,12 @@ A permission to perform one action does not imply permission to perform another 
 
 ### 9.6 Example: different User scopes within one Organization
 
-Assume Organization A's Business Available Authority Scope includes Distributor D1 and Organization-owned Stores S1, S2, and S3.
+Assume Organization A's Business Available Authority Scope includes Distributor D1 and Shops S1, S2, and S3.
 
 - User U1 is associated with Organization A and is assigned only Organization A and Store S1. U1 cannot access D1, S2, or S3 merely because U1 is an Organization-level User.
 - User U2 is associated with Organization A and is assigned Distributor D1 and Store S2. U2 cannot access S1 or S3 unless those entities are also assigned.
 - User U3 is explicitly assigned the full available scope and may access D1, S1, S2, and S3, subject to Permissions and all other controls.
-- Independent Shops mapped to D1 but owned by unrelated Owners are not included in Organization A's scope merely because of the mapping, and cannot be added to these Users' assignments on that basis.
+- Shops mapped to D1 but owned by unrelated Owners are not included in Organization A's scope merely because of the mapping, and cannot be added to these Users' assignments on that basis.
 
 The same Role may therefore operate over different entity sets for different Users. The assigned scope and action Permissions must both be satisfied.
 
@@ -873,12 +878,12 @@ Approval requests, approver identity, decision, decision time, approval stage, a
 
 Distributor–Shop mapping is a business relationship between separate identities, not an ownership hierarchy. The relationship is independent from both parties' ownership and does not merge their data contexts.
 
-The CBM Ecosystem must support authorized Distributor–Shop business mappings across the ecosystem. A Distributor must belong to an Organization's business structure and cannot exist as a standalone entity without an Organization. The Organization may receive CBM services directly from Main Portal or through a Sub-Portal; that service-provider relationship does not change the Distributor's structural placement. A Shop's mapping to a Distributor is a separate business relationship, not a change to either entity's structural parent.
+The CBM Ecosystem must support authorized Distributor–Shop business mappings across the ecosystem. A Distributor must belong to an Organization's business structure and cannot exist as a standalone entity without an Organization. The Organization may receive CBM services directly from Main Portal or through a Sub-Portal; that service-provider relationship does not change the Distributor's structural placement. A Shop's Mapping to a Distributor is a separate Business Relationship, not a change to either entity's structural parent.
 
 ### 12.2 Cardinality
 
-- One Distributor may be associated with multiple Independent Shops.
-- One Independent Shop may be associated with multiple Distributors.
+- One Distributor may be associated with multiple Shops.
+- One Shop may be associated with multiple Distributors.
 - Each Distributor–Shop Mapping is an independently identifiable relationship with its own lifecycle and its own Distributor–Shop Mapping History. Related system events are separately recorded in the Audit Trail; Mapping History and Audit Trail are not combined.
 
 ### 12.3 Mapping initiation and approval
@@ -902,7 +907,7 @@ A Distributor–Shop Mapping:
 
 - Establishes only the authorized business relationship.
 - Does not change either party's ownership or create an Ownership Link.
-- Does not convert an Independent Shop into a Distributor-owned child business.
+- Does not convert an Shop into a Distributor-owned child business.
 - Does not, by itself or solely because of the mapping, expand the Distributor's Business Available Authority Scope to include the Shop. Any separate owner-linked eligibility must be determined under Section 7.
 - Does not, by itself or solely because of the mapping, expand the Organization's Business Available Authority Scope through the Distributor to the Shop. Any separate owner-linked eligibility must be determined under Section 7 and must not be inferred from the mapping.
 - Does not grant unrestricted access to Accounting, Inventory, HR, Users, administration, or other business data.
@@ -943,8 +948,8 @@ The target is not restricted to Distributor or Shop. Subject to Main Portal appl
 - Sub-Portal / the legal person operating that Sub-Portal service-provider business.
 - Organization.
 - Distributor.
-- Independent Shop.
-- Organization-owned Store/Shop or another operational location.
+- Shop.
+- Shop or another operational location.
 - Any future CBM entity/context expressly enabled by Main Portal.
 
 This list is illustrative, not restrictive, and does not mean every registration may be assigned to every target. Each assignment must be supported by the registered taxpayer's legal identity, lawful business/place-of-business coverage, intended purpose, applicable GST law, and verified registration particulars.
@@ -995,38 +1000,7 @@ Official references:
 
 ---
 
-## 13. Distribution closure and Independent Shop continuity
-
-### 13.1 Continuity principle
-
-Closing an Organization's Distribution Network (the collective grouping/operation of its Distributor entities) must not automatically destroy or invalidate the Business Identity or historical data of independently owned Shops associated with any affected Distributor.
-
-### 13.2 Shop options after Distribution Network closure
-
-When an Organization's Distribution Network operation closes:
-
-1. The Distribution business is closed under its applicable lifecycle process.
-2. Each affected Independent Shop remains identifiable and independently owned.
-3. Each affected Shop may independently choose whether to subscribe to an Organization Plan.
-4. If the Shop accepts the Organization Plan, it continues as an independent Organization/Shop business with its own Business Identity and preserved applicable Domain History.
-5. The previous Distributor relationship does not become an ownership relationship.
-
-### 13.3 Shop that does not continue on an Organization Plan
-
-If the Shop owner does not accept an Organization Plan:
-
-- The Shop account becomes inactive.
-- Normal operations through that account cease.
-- The Shop's data remains preserved pending the archival process.
-- The owner receives a direct data-download window of six months from the effective Shop account deactivation date.
-- After the six-month download window, the operational copy is removed from the Main Portal operational environment only after successful archival.
-- The archived data is retained in external object storage according to the applicable Main Portal retention policy.
-
-The six-month download period is measured from the effective Shop account deactivation date.
-
----
-
-## 14. Sub-Portal migration and service continuity
+## 13. Sub-Portal migration and service continuity
 
 ### 14.1 Nature of migration
 
@@ -1069,7 +1043,7 @@ Migration is a controlled, complete, integrity-verified capability. It is not me
 
 ---
 
-## 15. Data archival and object-storage principles
+## 14. Data archival and object-storage principles
 
 ### 15.1 Provider-neutral abstraction
 
@@ -1096,7 +1070,7 @@ Archival is preservation, not continuation of normal operations. Removing an ope
 
 ---
 
-## 15A. Domain History and Audit Trail Management
+## 14A. Domain History and Audit Trail Management
 
 ### 15A.1 Mandatory separation
 
@@ -1158,7 +1132,7 @@ When a Distributor–Shop Mapping is created, changed, suspended, or ended, the 
 
 ---
 
-## 16. Stable Core, Configurable, Customizable, and Extensible design principles
+## 15. Stable Core, Configurable, Customizable, and Extensible design principles
 
 All architectural decisions and capabilities must be evaluated using the Stable Core, Configurable, and Extensible principles, together with the additional design dimensions of customization, override capability, and applicability defined in Section 2.6. These are complementary design lenses, not mutually exclusive labels.
 
@@ -1223,7 +1197,7 @@ Extensibility must not become an excuse for unnecessary abstraction or overengin
 
 ---
 
-## 17. Required cross-concept invariants
+## 16. Required cross-concept invariants
 
 The following statements summarize rules that must remain true across all future domain and technical designs.
 
@@ -1232,11 +1206,11 @@ The following statements summarize rules that must remain true across all future
 3. A Sub-Portal is an independently owned Service Provider, not a customer Tenant/Organization.
 4. A Service Provider does not become the owner of the customer business by providing software services.
 5. A customer's Business Identity and ownership remain unchanged when its Service Provider changes.
-6. Organization, Distributor, Independent Shop, and Organization-owned Store are not interchangeable entity types.
-7. An Organization-owned Store is an operational unit within the Organization; an Independent Shop is a separate Business Identity.
-8. Organization authority scope includes its own subordinate Distributors and Organization-owned Stores. It does not automatically pass through a Distributor to all Independent Shops mapped to that Distributor. Any owner-linked eligibility must be separately established under Section 7 and must not be inferred from mapping.
-9. A Distributor's Business Available Authority Scope includes itself and may include only those associated Independent Shops whose Ownership Links establish an eligible shared Owner ID with the Distributor, subject to Main Portal-governed rules. Other mapped Shops remain outside that owner-linked scope.
-10. An Independent Shop retains its own Business Identity, ownership, and data boundary even when it has an owner-linked authority relationship with another business.
+6. Organization, Distributor, and Shop are distinct entity types.
+7. An Shop is an operational unit within the Organization; an Shop is a separate Business Identity.
+8. Structural placement, Business Available Authority Scope, User Assigned Authority Scope, and Permissions are independent dimensions. A Distributor–Shop Mapping does not change structural placement or automatically grant additional authority.
+9. A Distributor's Business Available Authority Scope includes itself; any additional Shop scope requires an explicit, separately authorized rule and is never created by Mapping alone.
+10. An Shop retains its own Business Identity, ownership, and data boundary even when it has an owner-linked authority relationship with another business.
 11. Business Available Authority Scope determines the business-level authority boundary; it does not itself assign any specific entity or location to a User or grant that User access. The User's specific entity/location scope is determined through explicit User Scope Mapping.
 12. Every User must have an explicit valid User–Business association and explicit User Scope Mapping for the target entity. User level, title, Role, Owner identity, structural position, Business Available Authority Scope, or another Mapping does not automatically grant the full available scope.
 13. Role/Permission determines what actions a User may perform; it cannot expand the User's assigned entity scope.
@@ -1250,7 +1224,6 @@ The following statements summarize rules that must remain true across all future
 21. Distributor–Shop Mapping is one specific Business Relationship Mapping type, not a universal definition or boundary for Mapping across CBM; it is not ownership and does not grant unrestricted access.
 22. One Shop may map to multiple Distributors; each mapping is a separate relationship.
 23. Ending a mapping does not close the Shop or terminate its other mappings.
-24. Distribution closure does not automatically erase the identity or history of independent associated Shops.
 25. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
 26. Operational data may be removed after the applicable download period only after archival is verified.
 27. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it. Access requires explicit valid association, assigned scope, and Permissions.
@@ -1272,31 +1245,31 @@ The following statements summarize rules that must remain true across all future
 43. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
 44. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
 
-## 18. Illustrative scenarios
+## 17. Illustrative scenarios
 
 These scenarios explain how the finalized rules work together. They do not create additional authority or ownership rights beyond the rules above.
 
 ### 18.1 One owner, multiple businesses
 
-Person A owns Organization A and Independent Shop A, and may also hold ownership rights in Distributor A where the legal/ownership facts support it. The same Owner ID may be linked to each independently owned Business Identity through a separate Ownership ID for each Owner-to-Business relationship. Their Professional Identities remain separately maintainable. Where two or more of these business contexts share one Legal Identity, that shared Legal Identity does not merge their Professional Identities, business data, or service contexts. Shared ownership does not merge independent businesses or automatically give every User access to all of them.
+Person A may hold separate Ownership Links to Organization A, Distributor A, and Shop A where the ownership facts support each relationship. Each Owner-to-Business relationship has its own Ownership ID. Their Professional Identities remain separately maintainable. Where two or more of these business contexts share one Legal Identity, that shared Legal Identity does not merge their Professional Identities, business data, or service contexts. Shared ownership does not merge independent businesses or automatically give every User access to all of them.
 
-### 18.2 Organization with directly owned Stores
+### 18.2 Organization with Shop entities
 
 Organization A operates Store 1, Store 2, and Store 3 as Organization-owned operational units. Each Store has its own distinct Professional Identity (for example, its own Store Name and Location) and operational identifier. All three may be associated with the same Organization Legal Identity and applicable GST Taxpayer Profile/GST Registration(s), where verified legal and GST facts permit. They remain Organization-owned operational units, not separate independently owned legal businesses solely because they have distinct Professional Identities or locations. The Organization's Business Available Authority Scope includes these Stores; each Store may have a different User Assigned Authority Scope and Role/Permission access.
 
-### 18.3 Organization and Distributor, with independently owned Shops under the Distributor
+### 18.3 Organization and Distributor, with Shops under the Distributor
 
-Organization A has Distributor D1 as one Distributor entity within its distribution operations. Where the Organization has multiple Distributor entities, they are collectively grouped as its Distribution Network. Distributor D1 is linked to Owner B through an Ownership Link. Shop X is independently owned and mapped to D1. If Shop X is also linked to Owner B through its own Ownership Link, and Main Portal-governed rules permit the owner-linked scope, Shop X may be included in D1's Business Available Authority Scope. Shop Y is mapped to D1 but is linked to a different Owner ID; Shop Y is not included in D1's owner-linked scope merely because of the mapping. Neither mapping changes either Shop's Business Identity, Owner, or data boundary.
+Organization A has Distributor D1 and Shop S1 as direct structural children. Distributor D1 is linked to Owner A through an Ownership Link, while Shop S1 is linked to Owner B through a separate Ownership Link. Shop S1 also has a Business Mapping with D1. The Mapping does not make Shop S1 a structural child of D1, change its Owner, or merge their data boundaries. Any authority eligibility beyond the structural scope must be established independently under explicit Main Portal-governed rules.
 
-Organization A's scope does not automatically pass through D1 to Shop X or Shop Y. Any eligibility for Shop X must arise from the explicit Owner ID/Ownership Links and applicable governance rules, not from the Distributor–Shop mapping.
+The Organization's direct structural relationship with Shop S1 is independent of the Distributor–Shop Mapping. The Mapping itself does not enlarge either party's authority scope.
 
 ### 18.4 Selective User scope within one business
 
-Organization A's Business Available Authority Scope includes Distributor D1 and Organization-owned Stores S1, S2, and S3. User U1 is assigned only S1; User U2 is assigned D1 and S2; User U3 is explicitly assigned the full available scope. Their Organization-level association does not automatically give them identical access. Each User's effective access is further limited by that User's Permissions and applicable approvals.
+Organization A's Business Available Authority Scope includes Distributor D1 and Shops S1, S2, and S3. User U1 is assigned only S1; User U2 is assigned D1 and S2; User U3 is explicitly assigned the full available scope. Their Organization-level association does not automatically give them identical access. Each User's effective access is further limited by that User's Permissions and applicable approvals.
 
 ### 18.5 Owner identity is not a User account
 
-Person A is linked as an Owner to Organization A and Independent Shop A. This does not automatically create a login account or grant operational access. If Person A uses CBM, a valid User account, User–Business association, User Assigned Authority Scope, and Permissions are still required.
+Person A is linked as an Owner to Organization A and Shop A through separate Ownership Links. This does not automatically create a login account or grant operational access. If Person A uses CBM, a valid User account, User–Business association, User Assigned Authority Scope, and Permissions are still required.
 
 ### 18.6 Sub-Portal serving an Organization and related business network
 
@@ -1316,13 +1289,13 @@ Organization A moves from Sub-Portal A to Sub-Portal B under Main Portal governa
 
 ### 18.10 GST Registration Assignment at different CBM levels
 
-The GST Registration Assignment capability is not limited to Distributor–Shop relationships. Subject to legal eligibility and Main Portal policy, a GST Registration may be associated with the legal person/context operating Main Portal, a Sub-Portal service provider, an Organization, a Distributor, an Independent Shop, an Organization-owned Store/Shop, or another enabled CBM entity/context. The GST Registration always belongs to the actual registered taxpayer. The CBM association identifies an eligible operational or transaction context; it does not change the taxpayer or permit an unrelated entity to use that GSTIN. No Owner ID, Business Structure, service-provider relationship, or other Mapping automatically establishes GSTIN eligibility.
+The GST Registration Assignment capability is not limited to Distributor–Shop relationships. Subject to legal eligibility and Main Portal policy, a GST Registration may be associated with the legal person/context operating Main Portal, a Sub-Portal service provider, an Organization, a Distributor, an Shop, an Shop, or another enabled CBM entity/context. The GST Registration always belongs to the actual registered taxpayer. The CBM association identifies an eligible operational or transaction context; it does not change the taxpayer or permit an unrelated entity to use that GSTIN. No Owner ID, Business Structure, service-provider relationship, or other Mapping automatically establishes GSTIN eligibility.
 
 ### 18.11 Domain History and Audit Trail are separate
 
 When a GSTIN is changed, GST Registration History records only the GST Registration-domain change, including previous and new registration/assignment, effective date, recorded date, reason, actor, and approver where applicable. A User ID change is not inserted into GST Registration History. The User ID change and GSTIN change may both appear as separate events in the comprehensive Audit Trail, in chronological order. Authorized business Users may view GST Registration History without being permitted to view Audit Trail.
 
-## 19. Documentation governance
+## 18. Documentation governance
 
 ### 19.1 Documentation completeness
 
@@ -1354,20 +1327,20 @@ A proposed change is not final merely because it has been suggested or documente
 
 ---
 
-## 20. Source basis and decision provenance
+## 19. Source basis and decision provenance
 
 This baseline consolidates:
 
 1. The user-provided project context document **CBM_Project_Context_and_Decisions_2026-11-17** (provided in the conversation as the CBM project context text), including its confirmed business, service-provider, ownership, mapping, continuity, migration, archival, and Stable Core principles.
-2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the approved GST Taxpayer Profile and GST Registration architecture, typed and purpose-specific Mapping, explicit User Scope Mapping, and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
+2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the finalized unified Shop entity and simplified Business Structure (Organization → Distributor / Shop), the Legal Identity and Professional Identity applicability matrix, Organization Network Configurations, GSTIN eligibility independence, generic GST Registration Assignment, typed and purpose-specific Mapping, explicit User Scope Mapping, and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
 3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
 - Main Portal's ecosystem-wide authority scope;
 - Sub-Portal authority scope over associated businesses in its authorized domain;
-- Organization authority scope over its own subordinate Distributors and Organization-owned Stores/Shops, but not Independent Shops beneath a Distributor merely because of mapping; and
-- Distributor Business Available Authority Scope includes the Distributor itself and may include associated Independent Shops linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7; Distributor–Shop Mapping alone does not confer that scope.
+- Organization authority scope over its own subordinate Distributors and Shops/Shops, but not Shops beneath a Distributor merely because of mapping; and
+- Distributor Business Available Authority Scope includes the Distributor itself and may include associated Shops linked to the same Owner ID only under the explicit owner-linked eligibility rules in Section 7; Distributor–Shop Mapping alone does not confer that scope.
 - GST Registration Assignment is a separate typed association that may target any CBM entity/context enabled by Main Portal; it is not limited to Distributor–Shop Mapping and is never inferred from Owner ID or another Mapping.
 - User Scope Mapping determines the specific entities/locations assigned to an individual User; business-level authority availability alone does not assign that User's scope.
 - Domain History and Audit Trail are separate records with separate contents, purposes, permissions, and retention rules.
