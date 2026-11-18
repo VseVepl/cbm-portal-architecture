@@ -20,6 +20,7 @@
 6. [Business entity and ownership model](#5-business-entity-and-ownership-model)
 7. [Service-provider architecture](#6-service-provider-architecture)
 8. [Platform-wide Services Architecture](#6a-platform-wide-services-architecture)
+9. [Global Business Settings](#6b-global-business-settings)
 9. [Business Authority Scope](#7-business-authority-scope)
 10. [Delegated Authority](#8-delegated-authority)
 11. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
@@ -519,6 +520,10 @@ A **Platform-wide Service** is a defined shared responsibility or cohesive servi
 
 A **Service Capability** is a specific function or operation made available by a Platform-wide Service to its authorized consumers under the applicable service contract, Service Scope, and authorization controls.
 
+### 3.54 Global Business Settings
+
+**Global Business Settings** is the governed set of shared India-specific business and regional defaults, preferences, and reference settings made available across eligible CBM contexts. It provides common defaults and presentation/reference conventions; it does not take ownership of domain-specific business rules, statutory determinations, or authoritative records belonging to Business Modules.
+
 ## 3A. How the CBM relationship model must be read
 
 CBM must not be interpreted as one universal Parent–Child tree. It contains several distinct, overlapping relationship views. Each view answers a different question and must be modelled and evaluated independently.
@@ -969,6 +974,141 @@ Every proposed Platform-wide Service, Service, and Capability must define, as ap
 - Its service contract, versioning, and compatibility expectations where relevant.
 
 These are architecture-definition obligations, not an approval of a specific technical implementation. The detailed design of any individual service remains subject to the relevant domain decisions and explicit project authorization.
+
+## 6B. Global Business Settings
+
+### 6B.1 Purpose and architectural position
+
+**Global Business Settings** provides common, governed Indian business-context defaults, preferences, and reference settings across CBM. It is a shared configuration responsibility governed by Section 6A (Platform-wide Services), Section 10 (Configuration governance), the Stable Core principles, and Business Module responsibility boundaries.
+
+It provides shared defaults and reference conventions. It does not own Accounting, Tax/GST, Inventory, HR/Payroll, Finance/Payment, POS, or other domain-specific rules, calculations, statutory determinations, or authoritative business records.
+
+### 6B.2 India-only product and regional scope
+
+CBM is designed exclusively for businesses operating in the Indian business and regional context. The approved product scope is India-only; CBM is not a multi-country or international business platform.
+
+The fixed platform-wide boundaries are:
+
+1. **Country and business market:** India.
+2. **Platform default language:** English.
+3. **Supported languages:** Indian languages only. Main Portal governs which Indian languages are enabled and available; the principle of Indian-language support does not require every language to be enabled at launch.
+4. **Currency:** Indian Rupee (INR) only, represented by ₹. No selectable foreign currencies or multi-currency business operation.
+5. **Time zone:** Indian Standard Time (IST), using Asia/Kolkata, is the sole platform time zone. No multi-time-zone operation or user-selectable time zones.
+6. **Number presentation:** Indian number grouping, including thousand, lakh, and crore conventions where applicable.
+7. **Measurement baseline:** Metric conventions, with additional India-relevant business units supported where required by legitimate business contexts.
+8. **Regional references and addresses:** Indian address conventions and Indian administrative references, including States, Union Territories, Districts, PIN Codes, and other relevant India-specific reference data.
+
+No multi-country, multi-currency, multi-time-zone, or international-localization framework is part of the approved product scope. A future change requires explicit project-owner approval and a corresponding Master update; extensibility does not imply such approval.
+
+### 6B.3 Approved Global Business Settings domains
+
+Global Business Settings contains the following six approved setting domains. These are responsibility groupings, not a requirement for six separate applications, services, databases, or deployment units.
+
+#### A. Language and Regional Language Settings
+
+This domain governs English as the platform default; Main Portal-governed availability of supported Indian languages; applicable business-scope default language; individual User language preference where supported; language applicability; and translation resources and language-specific presentation.
+
+A User's display-language preference does not change Business Identity, Legal Identity, Professional Identity, statutory names, source-language business records, or authoritative business content. It does not grant access or change transaction meaning.
+
+#### B. Date, Time, and Calendar Settings
+
+This domain governs IST / Asia/Kolkata as the sole time-zone reference; permitted date display formats; 12-hour or 24-hour time display; week-start convention; Gregorian as the core System Calendar; general business-calendar and working-day defaults; and Indian public, festival, and State/UT-specific holiday references where maintained and enabled.
+
+There is no configurable time zone at platform, Service Provider, Tenant, Business, or User level. Display preferences do not alter authoritative timestamps, transaction dates, effective dates, or recorded dates. Holiday and working-day references do not automatically determine statutory, payroll, banking, accounting, or module-specific obligations.
+
+#### C. Indian Number and Currency Settings
+
+This domain governs INR and ₹ presentation; Indian digit grouping and lakh/crore presentation; permitted amount-display conventions; decimal-place presentation within the applicable domain's monetary precision rules; negative-amount presentation; and common number formatting.
+
+Foreign-currency selection, foreign-currency transactions, exchange-rate management, and multi-currency accounting are outside the approved scope. Monetary precision, rounding, tax treatment, accounting calculations, and authoritative transaction values remain governed by the relevant Business Module and applicable law. Display preferences must not change stored amounts or financial results.
+
+#### D. Indian Measurement and Units Settings
+
+This domain governs shared Metric references such as kilogram, gram, metric tonne, metre, centimetre, millimetre, litre, and millilitre; India-relevant business units such as square metre, square foot, and acre where applicable; shared unit references and explicitly defined conversions; and permitted default unit preferences.
+
+A shared unit reference does not make that unit applicable to every module or transaction. Product-, inventory-, accounting-, logistics-, and other domain-specific permitted units, conversion precision, and authoritative quantity calculations remain owned by the relevant Business Module. Presentation conversion must not silently alter a transaction's source quantity or source unit.
+
+#### E. Indian Regional and Address Settings
+
+This domain governs India as the fixed country context; Indian States and Union Territories; Districts and relevant administrative references; PIN Code references and validation support where available; Indian address structure and presentation; and regionally applicable shared reference data.
+
+Reference data does not itself prove residence, a Business Identity's legal address, a GST Place of Business, or legal eligibility. Address ownership and verification remain with the relevant identity or business domain.
+
+#### F. Indian Business Defaults
+
+This domain governs common Indian business-context defaults, including Financial Year defaults, general business-calendar defaults, general working-day defaults, common business-operating preferences not owned by a specific Business Module, and other expressly governed shared India-specific business defaults.
+
+The default Financial Year is **1 April through 31 March**. An alternative may be used only where permitted for the relevant business and purpose, supported by applicable domain rules, and explicitly authorized at the appropriate governance level. This default is not a universal legal requirement for every business, entity, report, or statutory purpose.
+
+General defaults do not replace Accounting, Tax/GST, HR/Payroll, Inventory, POS, Finance/Payment, or other domain rules. Statutory accounting treatment, tax periods and returns, payroll periods, inventory valuation periods, and domain-specific calendars remain governed by their respective Business Modules and applicable law.
+
+### 6B.4 Governance paths and configuration authority
+
+Global Business Settings respects distinct platform/service-provider and customer-business governance paths. These are not one universal structural hierarchy.
+
+**Path A — Platform and Service Provider governance**
+
+1. **Main Portal** establishes mandatory India-only product boundaries, platform defaults, approved language availability, shared Indian reference-data governance, and mandatory platform policies.
+2. **Sub-Portal** may configure or administer only Service Provider-scoped settings and operational preferences expressly delegated by Main Portal. A Sub-Portal is not a structural parent of an Organization and does not automatically control or override that customer's business settings.
+3. A Sub-Portal's settings remain separate from customer-business settings and another Sub-Portal's private settings.
+
+**Path B — Customer Business governance**
+
+1. **Organization** governs its eligible business settings and establishes applicable defaults for its direct structural Distributor and Shop children.
+2. **Distributor and Shop** may maintain independently applicable settings only where the setting permits it and the entity has explicit authority to override or customize the inherited value.
+3. Organization → Distributor / Shop may govern inheritance for customer-business settings. It does not create a relationship to a Sub-Portal's service-provider configuration.
+4. Settings must not propagate to sibling Organizations, Distributors, Shops, or unrelated contexts unless an explicit approved inheritance rule applies.
+
+**Path C — User preferences**
+
+1. A User may maintain individual presentation preferences only where the setting supports User-level preference.
+2. User preferences are subordinate to mandatory platform policy and applicable business settings.
+3. User preferences cannot change authoritative business settings, business records, legal particulars, financial calculations, transaction values, time-zone rules, or domain-owned policy.
+4. There is no User-selectable time zone or foreign currency.
+
+These paths do not grant authority by role name, structural position, service-provider association, or access to a settings interface. The actor requires explicit Permission and any required Delegated Authority or approval.
+
+### 6B.5 Configuration, inheritance, applicability, and override
+
+All Global Business Settings are subject to Section 10. Each setting must identify its purpose, owning domain, eligible contexts, governing authority, default, inheritance path, permitted override levels, allowed values, effective date, version/change history, and audit requirements as applicable.
+
+Main Portal's mandatory India-only boundaries are non-overridable through Sub-Portal, Tenant, Organization, Distributor, Shop, or User configuration. This includes India-only country scope, INR-only currency, IST-only time zone, and Indian-languages-only language scope.
+
+Within those fixed boundaries, Main Portal may establish platform defaults and mandatory policies; Sub-Portals may manage only delegated Service Provider-scoped settings; Organizations may configure eligible customer-business settings and defaults for their direct children; Distributors and Shops may override inherited settings only where explicitly permitted; and Users may set only supported personal presentation preferences. No lower-level setting may change a higher-level value or affect a sibling/unrelated context. Applicability must be explicit.
+
+### 6B.6 Separation from Business Module ownership
+
+Global Business Settings must not take ownership of:
+
+- GSTIN, GST Taxpayer Profile, GST Registration, GST Registration Assignment, GST applicability, taxpayer eligibility, or statutory GST determinations.
+- GST rates, tax classification, tax calculation, tax liability, returns, or tax-period rules.
+- Invoice numbering, invoice lifecycle, or domain-specific document numbering.
+- Accounting policies, chart of accounts, ledger rules, accounting treatment, financial statements, or authoritative accounting calculations.
+- Payroll, salary, employee statutory benefits, attendance, leave, or HR-specific calendar rules.
+- Product-specific units, product master data, inventory quantity rules, stock valuation, or inventory conversion calculations.
+- Business Identity, Legal Identity, Professional Identity, statutory particulars, or verified business addresses.
+- Bank accounts, payment instruments, payment-provider configuration, settlement, or Finance/Payment rules.
+
+Global Business Settings may provide a shared default, display convention, or reference dataset only where the relevant Business Module explicitly consumes it and retains ownership of its rules and authoritative records. A shared default never establishes statutory eligibility or legal compliance by itself.
+
+### 6B.7 Data integrity, audit, and cross-service safeguards
+
+1. Stored timestamps and authoritative transaction dates remain independent of date/time display preferences.
+2. Language preferences do not translate, replace, or alter authoritative legal names, source records, or transaction meaning.
+3. Number and currency display preferences do not change stored amounts, calculations, or accounting results.
+4. Unit presentation or conversion does not silently change source quantities or source units.
+5. Shared regional reference data is not proof of legal identity, address, registration, or eligibility.
+6. Every read or change preserves applicable Service Scope, business context, User Assigned Authority Scope, Permission, purpose limitation, and strict Business/Tenant Data Isolation.
+7. Configuration changes, overrides, effective dates, and their authorizing authority are auditable under the applicable Audit Trail rules.
+8. Localization & Reference Data Services under Section 6A may provide infrastructure and reference datasets; Global Business Settings governs approved CBM defaults and applicability. Neither takes ownership of domain-specific business rules.
+
+### 6B.8 Relationship to Platform-wide Services
+
+Global Business Settings is a governed configuration/business-settings responsibility that may use Platform-wide Services, particularly Configuration & Policy Management Services and Localization & Reference Data Services. Those services provide infrastructure and common capabilities; they do not determine a setting's business meaning, authority, or domain ownership.
+
+The India-only scope is a product/business boundary, not a technical localization implementation specification. Language-resource implementation, formatting libraries, reference-data storage, and service decomposition remain outside this business and logical-architecture decision.
+
+---
 
 ## 7. Business Authority Scope
 
@@ -2010,6 +2150,19 @@ The following statements summarize rules that must remain true across all future
 77. A service's shared or ecosystem-wide availability does not grant unrestricted access to its operations or data. Service Scope never substitutes for explicit authorization.
 78. Platform-wide Services do not alter Main Portal's permanent supreme authority, downward-only delegation, ownership boundaries, business structure, or any other Stable Core constraint.
 
+79. CBM's approved product and business market scope is India-only. Multi-country operation and international localization are not part of the approved scope.
+80. English is the platform default language. Only Indian languages may be supported, and Main Portal governs which Indian languages are enabled and available.
+81. INR is the only supported currency; IST / Asia/Kolkata is the only supported time zone. No lower-level configuration or User preference may introduce foreign currency or another time zone.
+82. Indian number grouping, Indian regional/address references, and the approved Metric baseline with relevant India-use units govern shared presentation and reference conventions.
+83. Global Business Settings provides shared defaults, preferences, and reference conventions; it does not take ownership of statutory determinations, authoritative business records, or domain-specific rules belonging to Business Modules.
+84. Main Portal's mandatory India-only boundaries are non-overridable. Other eligible settings inherit through their expressly defined governance path and may be overridden only with explicit authority, applicability, and Permission.
+85. Main Portal and Sub-Portal Service Provider settings form a governance path separate from the customer-business path. A Sub-Portal is not a structural parent of an Organization and has no automatic authority to override customer-business settings.
+86. Organization may establish eligible defaults for its direct Distributor and Shop children. Child-level overrides and User presentation preferences are allowed only where explicitly applicable and authorized; neither may change authoritative business settings or affect unrelated contexts.
+87. The default Financial Year is 1 April through 31 March. An alternative is permitted only where supported by applicable domain rules and explicitly authorized; the default is not a universal legal assertion.
+88. Gregorian is the core System Calendar. Indian public, festival, and State/UT holiday references are separate shared calendar data and do not automatically determine statutory or module-specific obligations.
+89. Date/time, language, number/currency, and unit display preferences must not alter authoritative timestamps, legal identity particulars, stored amounts, calculations, source quantities, or source units.
+90. GST/Tax, Accounting, HR/Payroll, Inventory/Product, Finance/Payment, Business Identity, and other domain-specific responsibilities remain owned by their respective Business Modules. Global Business Settings may provide defaults/reference data without assuming domain ownership.
+
 
 ## 20. Illustrative scenarios
 
@@ -2093,6 +2246,11 @@ Organization A configures OTP Password Setup. A new User Account under Organizat
 
 Two separate User Accounts are provisioned for the same natural person in two different Organizations. The system allocates two different six-character User Codes, each having two uppercase English letters followed by four digits. Both codes are globally unique across CBM, are generated by the system, are read-only and immutable, and are never reused. The User Code identifies an account; it is not a secret or a Permission.
 
+### 20.19 India-only Global Business Settings and separate governance paths
+
+Main Portal establishes English as the platform default, enables selected Indian languages, and enforces INR-only and IST-only platform boundaries. Organization A receives service through Sub-Portal SP1, but SP1's delegated service-provider settings do not make SP1 the structural parent of Organization A or permit SP1 to override Organization A's business settings. Organization A establishes its permitted business-calendar and working-day defaults; its Distributor D1 and Shop S1 inherit those defaults unless an explicit Permission allows a context-specific override. A User may select an available Indian-language display preference but cannot select another time zone or currency. Accounting and HR/Payroll continue to own their respective authoritative financial-year, statutory, payroll, and domain-calendar rules.
+
+
 ## 21. Documentation governance
 
 ### 21.1 Documentation completeness
@@ -2133,6 +2291,7 @@ This baseline consolidates:
 2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the unified Shop entity and simplified Business Structure (Organization → Distributor / Shop); exactly one mandatory Parent Organization for every Distributor and Shop; identical Owner ID sets for an Organization and all of its direct Distributor/Shop children within the Customer Business Architecture, while Service Provider ownership remains independent; the Legal Identity and Professional Identity applicability matrix; Organization Network Configurations; GSTIN eligibility independence; generic GST Registration Assignment; two-way Distributor–Shop Secret Code verification with expiry, one-time use, rate limiting, and revocation; Mapping-Type-limited transactions and information exchange; Business Entity Lifecycle parent-child cascades and immutable restoration snapshots; separate Subscription, Plan, Add-on, Entitlement, Coverage, Usage Limit, Invoice, and Payment concepts; separate User Account, User–Business Association, and Credential/Authenticator lifecycles; Organization-configurable initial credential establishment; one Organization-scoped Customer Business User Account per account; immutable portal-wide User Code; the absolute no-URL/no-link outbound communication rule; explicit User Scope Mapping; and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
 3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
 4. The project owner's explicit approval on 18 November 2026 of the Platform-wide Services Architecture Layer, its four Service Scopes, three Category Groups, fifteen Categories, and the Category → Service → Capability conceptual hierarchy, including the responsibility boundaries and cross-category safeguards recorded in Section 6A.
+5. The project owner's explicit approval on 18 November 2026 of the India-only Global Business Settings scope, its six approved setting domains, three distinct governance paths, non-overridable India-specific platform boundaries, and the separation between shared defaults/reference settings and Business Module-owned rules recorded in Section 6B.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
