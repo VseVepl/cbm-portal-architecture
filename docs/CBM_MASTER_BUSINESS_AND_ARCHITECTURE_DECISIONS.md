@@ -239,15 +239,15 @@ An **Ownership Link** is the explicit relationship connecting an Owner ID to a B
 
 A **Distributor** is an identifiable distribution business entity whose direct structural parent is an Organization. An Organization may have multiple Distributor entities. A Distributor is a terminal structural entity under the currently approved Business Structure model: it cannot have a Shop, another Distributor, or any other business entity as a structural child. A Distributor must not exist as a standalone structural entity outside an Organization's Business Structure.
 
-A Distributor must have exactly one direct Parent Organization as part of its Business Structure. That Parent Organization is mandatory when the Distributor is created; a Distributor must not be created as unassigned, standalone, or with multiple structural parents. The Parent Organization relationship establishes structural membership only and does not determine ownership, Legal Identity, Professional Identity, or the Distributor's Business Relationships. A Distributor must have a Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable; it is not automatically inherited from its Organization or another entity. Structural placement does not determine ownership. The Owner or Owners of a Distributor are determined only through explicit Ownership Links.
+A Distributor must have exactly one direct Parent Organization as part of its Business Structure. That Parent Organization is mandatory when the Distributor is created; a Distributor must not be created as unassigned, standalone, or with multiple structural parents. Within the Customer Business Architecture, the Distributor's set of Owner IDs must be exactly the same as the set of Owner IDs linked to its Parent Organization. The ownership relationships are still represented separately for each Business Identity through distinct Ownership Links and Ownership IDs; the Organization entity itself is not the legal Owner. A Distributor must not have a different, additional, or partial Owner ID set from its Parent Organization. The Parent Organization relationship establishes structural membership and the mandatory ownership-consistency constraint; it does not determine Legal Identity, Professional Identity, or the Distributor's Business Relationships. A Distributor must have a Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable; it is not automatically inherited from its Organization or another entity.
 
 ### 3.10 Shop
 
 A **Shop** is the unified CBM retail business entity. The previous two-category classification of Shops has been discontinued. CBM must not model Shops as separate entity types or separate Business Structure classifications based on ownership.
 
-A Shop must have exactly one direct Parent Organization as part of its Business Structure. That Parent Organization is mandatory when the Shop is created; a Shop must not be created as unassigned, standalone, or with multiple structural parents. The Parent Organization relationship establishes structural membership only and does not determine ownership, Legal Identity, Professional Identity, or the Shop's Business Relationships. A Shop is a terminal structural entity under the currently approved Business Structure model: it cannot have another Shop, a Distributor, or any other business entity as a structural child. An Organization may have multiple Shops and may have both Shops and Distributors at the same time.
+A Shop must have exactly one direct Parent Organization as part of its Business Structure. That Parent Organization is mandatory when the Shop is created; a Shop must not be created as unassigned, standalone, or with multiple structural parents. Within the Customer Business Architecture, the Shop's set of Owner IDs must be exactly the same as the set of Owner IDs linked to its Parent Organization. The ownership relationships are still represented separately for each Business Identity through distinct Ownership Links and Ownership IDs; the Organization entity itself is not the legal Owner. A Shop must not have a different, additional, or partial Owner ID set from its Parent Organization. The Parent Organization relationship establishes structural membership and the mandatory ownership-consistency constraint; it does not determine Legal Identity, Professional Identity, or the Shop's Business Relationships. A Shop is a terminal structural entity under the currently approved Business Structure model: it cannot have another Shop, a Distributor, or any other business entity as a structural child. An Organization may have multiple Shops and may have both Shops and Distributors at the same time.
 
-Every Shop must have its own Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable. A Shop may have its own Legal Identity or may be associated with another eligible Legal Identity, subject to verified legal facts and applicable law. A Shop's structural placement does not determine who owns it. Ownership is determined independently through explicit Ownership Links; therefore, a Shop structurally belonging to an Organization is not necessarily owned by that Organization or by the same Owner as the Organization.
+Every Shop must have its own Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable. A Shop may have its own Legal Identity or may be associated with another eligible Legal Identity, subject to verified legal facts and applicable law. A Shop's Legal Identity may differ where legally appropriate, but its Owner ID set must remain consistent with its Parent Organization's Owner ID set.
 
 The Shop entity remains the same regardless of its ownership arrangement, Legal Identity, Professional Identity, or Business Relationships. Those are separate dimensions and must not create separate Shop structural classifications.
 
@@ -255,9 +255,11 @@ The Shop entity remains the same regardless of its ownership arrangement, Legal 
 
 **Business Structure** means the permitted structural placement and direct Parent–Child relationships among CBM's structural entities. The currently approved structure is Main Portal → Sub-Portal for Platform Structure, and Organization → Distributor / Shop for Customer Business Structure. Distributor and Shop are terminal structural entities. Service Provider relationships, Ownership Links, Business Identity associations, Business Relationships/Mapping, Authority Scope, User Scope Mapping, Roles, and Permissions are separate models and must not be inferred from structural placement.
 
-### 3.12 Business Structure
+### 3.12 Customer Business Ownership Consistency
 
-**Business Structure** means the internal arrangement of a business and its directly subordinate operational or business components. It is distinct from a relationship between two independently owned businesses.
+**Customer Business Ownership Consistency** is the mandatory rule that an Organization and every Distributor and Shop directly within that Organization's Customer Business Structure must have exactly the same set of Owner IDs. Each Business Identity retains its own explicit Ownership Links and distinct Ownership IDs. The same Owner ID set is therefore recorded separately against the Organization, each Distributor, and each Shop. Different, additional, or partial Owner ID sets among these entities are not permitted within one Organization's Business Structure.
+
+This rule applies only to the Customer Business Architecture. Main Portal and Sub-Portal remain separate Service Provider businesses and may have different ownership from one another and from customer Organizations. Service Provider ownership is not inherited from, and does not impose ownership on, a customer business.
 
 ### 3.13 Business Relationship
 
@@ -510,6 +512,10 @@ Business and Tenant data boundaries are immutable security constraints. No confi
 
 The permitted Business Structure Hierarchy is an immutable Stable Core business-structure constraint. The valid entity levels and parent–child placements must be preserved in every domain, logical, data, and technical design. The invalid arrangements defined in Section 3.25 must never be supported. No subordinate business, Service Provider, User, Role, workflow, configuration, customization, delegation, or override may invert, bypass, or weaken these structural rules.
 
+### 4.11 Absolute prohibition on outbound URLs and links
+
+CBM must not send any URL, hyperlink, clickable link, URL-bearing button, or QR code that resolves to a URL to any person, through any channel, for any purpose. This includes account creation, invitation-like communication, verification, authentication, password establishment, password recovery, notifications, documents, and all future CBM-generated communications. The prohibition is a non-overridable Stable Core and White-label rule. Required actions must be completed by the User inside the CBM application after independently opening it; CBM must use approved in-application verification methods rather than sending links.
+
 ---
 
 ## 5. Business entity and ownership model
@@ -563,8 +569,18 @@ A Distributor–Shop Mapping does not require either party to select, disclose, 
 7. Separate businesses linked to the same Owner ID remain separate Business Identities and separate data contexts.
 8. A Distributor does not own a Shop merely because the Shop is in its Distribution Network or mapped to it.
 9. An Organization's association with a Distributor does not itself change the Distributor's ownership or the ownership of any Shop associated with that Distributor.
-10. Shops are direct structural children of an Organization, but their ownership is determined independently through explicit Ownership Links. A Shop's structural placement does not establish that it is owned by the Organization or by the Organization's Owner(s).
+10. Shops are direct structural children of an Organization. Within that Customer Business Architecture, each Shop's Owner ID set must exactly match its Parent Organization's Owner ID set, while each Shop retains its own explicit Ownership Links and Ownership ID records. The same ownership-consistency rule applies to every Distributor under that Organization.
 11. Ownership Links may be used as an eligibility input when determining Business Available Authority Scope, but only under the explicit rules in Section 7. They do not by themselves grant User access, User Assigned Authority Scope, or action Permissions.
+
+### 5.3.1 Mandatory ownership consistency within a Customer Business Architecture
+
+For a given Organization, the set of Owner IDs linked to the Organization must exactly match the set of Owner IDs linked to every Distributor and every Shop that is a direct structural child of that Organization. This equality is mandatory throughout the Customer Business Architecture. A child Distributor or Shop must not have a different, additional, or partial Owner ID set.
+
+Each Organization, Distributor, and Shop remains a separate Business Identity and must have its own explicit Ownership Links, with a distinct Ownership ID for each Owner-to-Business relationship. The rule does not merge Business Identities, Legal Identities, Professional Identities, transaction records, or data boundaries. It ensures that ownership does not vary between an Organization and the Distributors/Shops within that Organization's one Customer Business Architecture.
+
+This Customer Business ownership-consistency rule does not apply to the Service Provider Architecture. Main Portal and each Sub-Portal are separate Service Provider businesses and may have different Owner IDs from one another and from customer Organizations. A Sub-Portal's ownership does not become the ownership of its customer Organization.
+
+A change to an Organization's Owner ID set cannot be applied while leaving its direct structural Distributor or Shop children with a different Owner ID set. Ownership Transfer workflows remain subject to the existing deferral and must not be inferred or implemented from this consistency rule alone.
 
 ### 5.4 Organization Network Configurations
 
@@ -649,10 +665,10 @@ An Organization's Business Available Authority Scope may include:
 
 - The Organization's own business context.
 - Distributor entities belonging to its Business Structure, grouped as its Distribution Network when multiple, where and to the extent permitted by applicable Main Portal-governed authority rules.
-- Shop entities that are direct structural children of the Organization, where and to the extent expressly included by applicable Main Portal-governed authority rules. Their structural placement does not itself grant authority or determine ownership.
+- Shop entities that are direct structural children of the Organization, where and to the extent expressly included by applicable Main Portal-governed authority rules. Their Owner ID sets must match the Organization's Owner ID set under Section 5.3.1; this ownership-consistency constraint does not itself assign User scope or grant every action Permission.
 - An independently identified business only where a valid Ownership Link and an explicit Main Portal-governed rule make that business eligible for the relevant owner-linked authority scope.
 
-An Organization's Business Available Authority Scope must be determined under explicit Main Portal-governed authority rules. A Shop's structural placement under an Organization does not itself establish ownership or unrestricted authority. A Distributor–Shop Mapping does not, by itself, expand the Organization's authority scope through the Distributor to another business context. Any additional authority must be expressly authorized and must preserve independent ownership and Business Data Isolation.
+An Organization's Business Available Authority Scope must be determined under explicit Main Portal-governed authority rules. The mandatory ownership-consistency rule in Section 5.3.1 does not itself grant every User access or every action Permission. A Distributor–Shop Mapping does not, by itself, expand the Organization's authority scope through the Distributor to a Shop belonging to another Organization. Any additional owner-linked authority must be expressly authorized under the applicable Section 7 rules and must preserve the separate Business Identities and Business Data Isolation.
 
 ### 7.5 Distributor scope
 
