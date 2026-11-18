@@ -22,23 +22,25 @@
 8. [Platform-wide Services Architecture](#6a-platform-wide-services-architecture)
 9. [Global Business Settings](#6b-global-business-settings)
 10. [Accounting Management](#6c-accounting-management)
-11. [Business Authority Scope](#7-business-authority-scope)
-12. [Delegated Authority](#8-delegated-authority)
-13. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-14. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-15. [Approval Workflow governance](#11-approval-workflow-governance)
-16. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-17. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-18. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-19. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-20. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-21. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-22. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-23. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-24. [Cross-concept invariants](#19-required-cross-concept-invariants)
-25. [Illustrative scenarios](#20-illustrative-scenarios)
-26. [Documentation governance](#21-documentation-governance)
-27. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+11. [Business Module Boundaries, Shared Models, and Connectivity Architecture](#6d-business-module-boundaries-shared-models-and-connectivity-architecture)
+12. [Inventory Management and Warehouse Management Boundaries](#6e-inventory-management-and-warehouse-management-boundaries)
+13. [Business Authority Scope](#7-business-authority-scope)
+14. [Delegated Authority](#8-delegated-authority)
+15. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
+16. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+17. [Approval Workflow governance](#11-approval-workflow-governance)
+18. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+19. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+20. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+21. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+22. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+23. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+24. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+25. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+26. [Cross-concept invariants](#19-required-cross-concept-invariants)
+27. [Illustrative scenarios](#20-illustrative-scenarios)
+28. [Documentation governance](#21-documentation-governance)
+29. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -95,10 +97,13 @@ The product vision includes:
 
 - Accounting Management.
 - Inventory Management.
+- Warehouse Management.
 - Human Resource Management.
 - Reports and Analytics.
 - Point of Sale (POS).
 - Additional practical business-management capabilities introduced in the future under Main Portal governance.
+
+These are initial product capability areas, not a declaration that every named capability is automatically an independent Business Module. The distinction between Business Modules, Shared Domain Models, Internal Platform Capabilities, Application Client Channels, and External Connectivity Capabilities is governed by Sections 6D and 6E. Reports and Analytics infrastructure is shared, while the business meaning and authoritative calculations of each domain's reports remain with that domain.
 
 ### 2.4 Explicit current-scope exclusions
 
@@ -629,7 +634,89 @@ A **Tally Compatibility Adapter** is the governed integration component that rea
 
 ### 3.80 Management Accounting
 
-**Management Accounting** comprises internal planning, budgeting, forecasting, cost/profit analysis, and actual-versus-budget reporting capabilities within the approved Accounting scope. Management reports do not replace statutory Books, and budgets or forecasts do not become posted Accounting Transactions merely by being created.
+**Management Accounting** is the use of authoritative accounting and relevant operational information for internal cost, margin, profitability, and financial-performance analysis and decision support. Accounting owns the integrity and meaning of the accounting actuals it supplies. Enterprise planning, budget creation, forecasts, targets, and their approval workflows remain with the appropriate planning responsibility/module; they do not become Accounting records merely because they are compared with actuals.
+
+
+
+### 3.81 Business Module Catalogue
+
+The **Business Module Catalogue** is the governed, authoritative classification of independent Business Modules in CBM. Each entry identifies its independent business responsibility, domain rules, authoritative data ownership, functional boundaries, operational responsibility, contracts, dependencies, applicability, and extensibility. A capability, feature, menu, report, screen, integration, application client, or shared data model does not qualify as a Business Module merely because it is sizeable or separately named.
+
+### 3.82 Shared Domain Model
+
+A **Shared Domain Model** is a canonical conceptual model, reference structure, or data contract reused by two or more Business Modules or platform capabilities. It defines common meaning and interoperability without automatically becoming a separate Business Module, shared database, universal master-data owner, or unrestricted data-access layer. Every Shared Domain Model must identify the authoritative owner of each source entity or field, permitted consumers, allowed operations, provenance, and applicable context/security boundaries.
+
+### 3.83 Shared Model Contract
+
+A **Shared Model Contract** is the governed agreement defining the meaning, identity, references, permitted state changes, validation, versioning, compatibility, and ownership rules for a Shared Domain Model or cross-Module interaction. A contract must prevent consumers from silently redefining or taking ownership of source-domain data.
+
+### 3.84 Internal Platform Capability
+
+An **Internal Platform Capability** is a reusable capability provided within the CBM Platform-wide Services Architecture for use by multiple Business Modules, portals, or authorized contexts. Examples include User/Identity lifecycle support, Authentication, Role and Permission evaluation, Configuration, Approval execution, Notification, Audit/History infrastructure, Event & Messaging, and shared API execution. An Internal Platform Capability is not automatically a Business Module and does not take ownership of the consuming Business Module's domain rules or records.
+
+### 3.85 External Connectivity Capability
+
+An **External Connectivity Capability** enables authorized interaction between CBM and an application, device, independent system, external service, or separately governed portal. It includes adapters, application-client interfaces, data exchange, synchronization, federation, and integration contracts. It is provided through the existing Platform-wide Integration & API and Event & Messaging categories, while each Business Module retains its domain-specific transformation, validation, and data ownership.
+
+### 3.86 Application Client
+
+An **Application Client** is a user-facing or system-facing application that accesses CBM capabilities through authorized interfaces. Examples include the CBM Web Portal, a first-party desktop application, a first-party mobile application, a warehouse handheld application, or an authorized third-party client. An Application Client is an access/presentation channel, not a Business Module or independent source of truth for CBM business data.
+
+### 3.87 External System
+
+An **External System** is an application, service, platform, device-management system, Accounting System, partner portal, or other system that is outside the authoritative CBM application/domain boundary for the interaction in question. A first-party CBM desktop/mobile client is an Application Client; it is not automatically an independent External System merely because it runs on a separate device.
+
+### 3.88 Portal Interoperability
+
+**Portal Interoperability** is the governed exchange, federation, or synchronization of selected data and events between separately operated portal instances or portal ecosystems. It does not merge their identity, authority, Tenant boundaries, source records, or ownership. Each exchanged data set must have a designated source of truth, permitted purpose, direction, recipient, mapping, synchronization policy, provenance, and conflict-resolution rule.
+
+### 3.89 Product/Item Reference Model
+
+The **Product/Item Reference Model** is the shared canonical reference for identifying and describing products or items consumed by Sales, Purchase, POS, Inventory, Warehouse Management, and other eligible domains. Product/Item Management owns authoritative product definitions where that domain is provided. Inventory and Warehouse Management own their own stock-specific and physical-handling facts and must not redefine the product's core identity.
+
+### 3.90 Inventory Position Model
+
+The **Inventory Position Model** is the governed representation of stock held or controlled for an accountable Business Context, including the relevant product/item reference, quantity, unit, stock status, ownership/custody distinction where applicable, and permitted batch, serial, expiry, condition, reservation, and location references. Inventory Management owns the authoritative stock ledger, quantities, stock states, and valuation rules. Warehouse Management contributes authoritative physical placement and execution references through an explicit contract.
+
+### 3.91 Warehouse Management
+
+**Warehouse Management** is an independent Business Module responsible for the governed physical and operational management of warehouse facilities and warehouse work. It owns the warehouse layout and location hierarchy, storage areas, racks, shelves, bins, handling-unit placement, warehouse work queues/tasks, receiving, putaway, replenishment, picking, packing, staging, dispatch, returns handling, and related execution records within its authorized scope. It does not own Product Master definitions, enterprise-wide stock valuation, or the authoritative Inventory Ledger.
+
+### 3.92 Warehouse Facility
+
+A **Warehouse Facility** is a defined physical or authorized third-party facility or operating site used for receiving, storing, handling, or dispatching goods. Its location, operational controller/operator, property/occupancy relationship, and stock ownership/custody arrangements are separate attributes and must not be collapsed into one internal/external flag.
+
+### 3.93 Storage Location and Storage Bin
+
+A **Storage Location** is a defined physical or logical place at which inventory may be held or handled, such as a warehouse, storage area, zone, rack, shelf, cabinet, or bin. A **Storage Bin** is the smallest independently addressable storage position where the model requires bin-level control. The physical hierarchy is configurable and may omit levels not relevant to a particular facility.
+
+### 3.94 Handling Unit
+
+A **Handling Unit** is a uniquely identifiable physical grouping or carrier of goods, such as a pallet, carton, tote, container, or other permitted handling package, whose contents and movements may be tracked as a unit. A Handling Unit is not itself a product, stock owner, warehouse location, or accounting ledger.
+
+### 3.95 Warehouse Workstation / Counter
+
+A **Warehouse Workstation** or **Warehouse Counter** is a defined operational work point used for activities such as receiving, inspection, picking, packing, returns, issuance, or dispatch. A counter is not automatically a storage bin or inventory location. Where stock is physically held at a counter, the relevant temporary or fixed stock-holding position must be separately identified and linked.
+
+### 3.96 Warehouse Custody
+
+**Warehouse Custody** identifies which party physically controls, stores, or handles goods at a particular time and facility. Custody is distinct from Legal Ownership of the goods, Inventory valuation ownership, facility property ownership, and the right to access or manage the warehouse. External/third-party storage does not by itself transfer stock ownership or grant access to another business's data.
+
+### 3.97 Source Transaction Reference
+
+A **Source Transaction Reference** is a stable, typed reference from one Business Module's record to an originating record owned by another Module or External System. It preserves source identity, provenance, context, and traceability without copying or transferring the source record's ownership.
+
+### 3.98 External Identifier Mapping
+
+An **External Identifier Mapping** links a CBM identifier to an identifier used by a specified External System, portal, data source, or exchange version. It must identify the source/target system and context, object type, mapping validity, and lifecycle. An external identifier must not be treated as a CBM primary identity or as an authorization grant.
+
+### 3.99 Synchronization Contract
+
+A **Synchronization Contract** defines how selected records or events are shared between systems, including the source of truth, permitted data scope, direction, initial/full and incremental exchange, frequency or trigger, versioning, duplicate handling, idempotency, ordering where required, conflict resolution, deletion/retention propagation, reconciliation, and failure recovery. Synchronization does not imply unrestricted two-way write access.
+
+### 3.100 Business Location Reference
+
+A **Business Location Reference** is a reusable reference to a business operating location, address, site, branch, or facility. It does not automatically represent a Warehouse Storage Location, Storage Bin, POS Counter, User Scope, Legal Identity, or Business Entity. Domain-specific location models may specialize the reference while retaining their own authoritative location semantics.
 
 ## 3A. How the CBM relationship model must be read
 
@@ -1300,19 +1387,21 @@ This Section establishes Business and Logical Architecture responsibilities. It 
 5. A Cost Centre or Accounting Dimension is not a Business Entity, Legal Identity, Ownership Link, structural parent-child relationship, Tenant, User Scope, or Permission. Mapping an Accounting Dimension to a Shop, Distributor, branch, or department does not create or modify those separate relationships.
 6. Allocation rules must be traceable, effective-dated where applicable, and reconcilable to the original posted amount. They must not duplicate the underlying financial transaction.
 
-### 6C.9 Management Accounting and Budgeting
+### 6C.9 Management Accounting Information and Planning Boundary
 
-1. Accounting may provide Management Accounting capabilities for internal budgets, forecasts, cost/profit analysis, and actual-versus-budget reporting.
-2. Budgets and forecasts are planning records; creating or changing them does not itself create a posted financial transaction or alter the General Ledger.
-3. Budget structures may use approved Accounting Dimensions, periods, accounts, and business scopes. Their approval and availability remain subject to authority, Permissions, and any applicable Approval Workflow.
-4. Budgeting and forecasting capabilities must be configurable and extensible. Their existence does not preclude a future separately justified Business Module, but no separate module is created by this statement.
+1. Accounting may provide management-accounting information derived from its authoritative posted records, including cost analysis, profitability analysis, margin analysis, financial performance analysis, and actual-versus-plan comparisons where an authorized planning source exists.
+2. Accounting owns the accounting classifications, actual financial amounts, accounting calculations, and accounting-originated analytical results. It does not thereby own enterprise-wide business planning, operational plans, workforce plans, sales plans, procurement plans, or the creation and approval of all budgets and forecasts.
+3. Budgets, forecasts, targets, and plans are planning records. Their creation, revision, or approval does not itself create a posted financial transaction or alter the General Ledger.
+4. A business-planning or budget-management capability/module, where provided, owns its planning records, planning workflow, versions, targets, and approved budget baselines. It consumes Accounting actuals through explicit contracts; Accounting consumes approved budget/plan references needed for financial comparison without becoming their source of truth.
+5. A budget or forecast may be financially structured and may use approved Accounts, Accounting Periods, and Accounting Dimensions, but those references do not transfer planning ownership to Accounting.
 
-### 6C.10 Fixed Asset Accounting
+### 6C.10 Fixed Asset Accounting Boundary
 
-1. Accounting owns the financial accounting treatment and records for fixed assets, including acquisition cost, capitalization, depreciation, impairment, revaluation where applicable, disposal, and related ledger balances and disclosures.
-2. The financial fixed-asset register must retain the information required to support its accounting treatment and traceability.
-3. Physical asset custody, location operations, assignment, maintenance, repair, insurance administration, and operational asset lifecycle are not automatically Accounting responsibilities. They remain with the relevant Business Module or capability, if established.
-4. Fixed Asset Accounting must follow the Accounting Framework applicable to the Book and must not hard-code one depreciation, useful-life, or valuation rule for every asset and business.
+1. Accounting owns the financial accounting treatment and records for fixed assets, including acquisition cost, capitalization, depreciation, impairment, revaluation where applicable, disposal, and related disclosures and ledger treatment, under the Accounting Framework applicable to the Book.
+2. Accounting may maintain the financial fixed-asset register and accounting attributes needed to support capitalization, depreciation, impairment, disposal, ledger balances, and financial reporting. This register is not a substitute for a full operational Asset Management record.
+3. Physical asset master administration, custody, location, assignment, maintenance, repair, inspection, insurance administration, utilization, and operational asset lifecycle belong to a separate Asset Management responsibility/module where that capability is provided. Accounting receives approved asset events and references and records their financial effects.
+4. Asset Management and Accounting must use explicit shared Asset Identity and Asset Event references, with Accounting retaining ownership of financial values and postings and Asset Management retaining ownership of operational asset facts.
+5. Fixed Asset Accounting must follow the Accounting Framework applicable to the Book and must not hard-code one depreciation, useful-life, or valuation rule for every asset and business.
 
 ### 6C.11 Accounting Periods and Closing
 
@@ -1340,7 +1429,7 @@ This Section establishes Business and Logical Architecture responsibilities. It 
 
 ### 6C.14 Integration with other Business Modules
 
-1. Accounting receives authorized source transactions or domain facts from Sales, Purchase, POS, Inventory, GST/Tax, Finance/Payment, HR/Payroll, Subscription/Billing, and other eligible Business Modules through explicit contracts.
+1. Accounting receives authorized source transactions or domain facts from Sales, Purchase, POS, Inventory, Warehouse Management, GST/Tax, Finance/Payment, Human Resource Management, Payroll Management, Subscription/Billing, and other eligible Business Modules through explicit contracts.
 2. The originating Business Module retains ownership of the original transaction, source document, operational lifecycle, and domain rules. Accounting owns only its accounting interpretation, Voucher, Journal Entries, Ledger Postings, balances, and accounting history.
 3. Each source-to-accounting mapping must identify the source event/record, eligible Book, Voucher Type, Ledger mapping, tax/valuation/payment references where applicable, effective Accounting Policy, posting status, and correction behaviour.
 4. Mapping and posting rules must be versioned and effective-dated. A change in a source module or a mapping must not silently rewrite already posted accounting records.
@@ -1358,9 +1447,12 @@ Accounting Management owns accounting treatment and accounting records, not the 
 - **Finance/Payment:** Bank Account ownership/administration, payment instruments, payment initiation/execution, collection, settlement, payment-provider configuration, and authoritative payment records.
 - **Sales:** Customer-facing sales lifecycle, commercial sales terms, sales order, original Sales Invoice, delivery, and Sales Returns.
 - **Purchase:** Supplier-facing purchase lifecycle, purchase terms, purchase order, original Purchase Invoice, goods receipt ownership where assigned, and Purchase Returns.
-- **Inventory/Product:** Product Master, stock quantity, stock movement, stock location, and inventory valuation determination.
+- **Product/Item Management:** Product and item master definitions, variants, product attributes, product classifications, and commercial product identity.
+- **Inventory Management:** Authoritative stock quantities, stock ledger, reservations/availability, stock states, batch/serial/expiry-controlled stock facts, and inventory valuation determination.
+- **Warehouse Management:** Warehouse facilities, zones, aisles, racks, shelves, bins, handling-unit placement, warehouse work, and physical warehouse execution.
 - **POS:** Checkout, sales capture, POS operational transaction, and POS-specific lifecycle.
-- **HR/Payroll:** Employee identity and employment records, attendance, leave, payroll calculation, and authoritative payroll obligations.
+- **Human Resource Management:** Employee identity and employment records, recruitment, employment relationships, attendance, leave, workforce administration, and HR policies.
+- **Payroll Management:** Payroll calculations, payroll runs, payslips, statutory payroll deductions/obligations, and authoritative payroll records.
 - **Subscription/Billing:** Commercial Account, Subscription, Plan, Entitlement, subscription invoice, and commercial billing lifecycle as defined by Section 14.
 - **Platform-wide Services:** Shared authorization, security, approval execution, messaging, integration infrastructure, file/document infrastructure, and reporting infrastructure.
 
@@ -1371,7 +1463,7 @@ Accounting may maintain corresponding Ledger Accounts, accounting references, po
 1. The External Accounting Data Exchange Model is separate from the canonical Accounting Domain Model. The Tally Data Exchange Model is a Tally-specific specialization of that exchange boundary.
 2. Tally Data Exchange must not be embedded as the internal Accounting data model, and Tally-specific object names, fields, formats, numbering behaviour, or version-specific rules must not become authoritative Accounting rules merely for compatibility.
 3. The Tally Compatibility Adapter must use the governed Platform-wide Integration & API, Security, Authorization, and Audit capabilities. Accounting supplies the approved accounting mappings and validation contracts for records within its domain; other Business Modules supply the rules for their own domains.
-4. Tally Masters, Groups, Ledgers, Voucher Types, Vouchers, Cost Centres, Cost Categories, bill-wise details, and other supported representations must be mapped to their appropriate CBM domain concepts. Tally Inventory, Payroll, Tax, and other domain records must be routed to their corresponding owner Modules rather than being absorbed into Accounting.
+4. Tally Masters, Groups, Ledgers, Voucher Types, Vouchers, Cost Centres, Cost Categories, bill-wise details, and other supported representations must be mapped to their appropriate CBM domain concepts. Tally Stock Items and stock classifications must be routed to the Product/Item and Inventory domain contracts; Godowns/Locations must be mapped to the appropriate Inventory Storage Location or Warehouse Management facility/location concepts according to the actual source semantics and available detail. Tally Inventory, Payroll, Tax, and other domain records must be routed to their corresponding owner Modules rather than being absorbed into Accounting. A Tally Godown is not automatically equivalent to a fully modelled CBM Warehouse Management facility, zone, rack, bin, or warehouse-work process.
 5. Format and feature compatibility must be version-aware and maintained against the documented capabilities of the supported Tally product/release. XML, Excel, JSON, and other formats may be supported only to the extent that the selected Tally release and documented exchange workflow support them. Human-readable report formats must not be represented as import formats unless the target product explicitly supports them.
 6. A native or proprietary Tally company backup is distinct from a documented data-exchange export. CBM must not claim that it can directly read or recreate a native Tally backup unless an officially supported and validated exchange capability exists.
 7. Tally compatibility is an initial external integration target, not a vendor lock-in. The same canonical CBM Accounting Model must support additional Accounting System adapters through explicit exchange contracts.
@@ -1381,7 +1473,7 @@ Accounting may maintain corresponding Ledger Accounts, accounting references, po
 
 1. Accounting must support complete historical migration, opening-balance migration, and selective migration for eligible source systems and approved scopes.
 2. Migration may include Chart of Accounts, Account Groups, Ledgers, opening balances, Accounting Vouchers, Journal Entries, Ledger balances, bill-wise/sub-ledger references, Cost Centres, Cost Categories, Accounting Period references, narrations, and supporting references to the extent available and valid.
-3. Data owned by Inventory, GST/Tax, HR/Payroll, Finance/Payment, Sales, Purchase, POS, or another domain must be routed to and accepted by that domain under its own rules. An accounting migration must not silently absorb source records owned by another Module.
+3. Data owned by Product/Item Management, Inventory, Warehouse Management, GST/Tax, Human Resource Management, Payroll Management, Finance/Payment, Sales, Purchase, POS, or another domain must be routed to and accepted by that domain under its own rules. An accounting migration must not silently absorb source records owned by another Module.
 4. Every migration must identify the source system/company, source period, extraction method, source version where known, selected scope, accountable Business Identity/Legal Identity, mapping version, and import batch.
 5. Migration must use controlled stages: source inspection, mapping, staging, validation, duplicate detection, exception handling, preview, reconciliation, authorized approval, acceptance, and post-migration verification.
 6. Imported records must preserve available source identifiers, source voucher numbers, original dates, narrations, references, and provenance. Missing or transformed information must be identified; the system must not invent source facts.
@@ -2493,6 +2585,63 @@ The following statements summarize rules that must remain true across all future
 88. Gregorian is the core System Calendar. Indian public, festival, and State/UT holiday references are separate shared calendar data and do not automatically determine statutory or module-specific obligations.
 89. Date/time, language, number/currency, and unit display preferences must not alter authoritative timestamps, legal identity particulars, stored amounts, calculations, source quantities, or source units.
 90. GST/Tax, Accounting, HR/Payroll, Inventory/Product, Finance/Payment, Business Identity, and other domain-specific responsibilities remain owned by their respective Business Modules. Global Business Settings may provide defaults/reference data without assuming domain ownership.
+91. Accounting Management is an independent Business Module with authoritative ownership of its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, and Book-specific accounting records. It does not own the originating transactions or domain rules of other Business Modules.
+92. CBM's default Accounting model is Double-entry. Every posted Accounting Entry set must have equal total debit and credit. Accrual basis is the default for general-purpose Books; alternative recognition bases may be used only where applicable law and the relevant Accounting Framework permit them and an authorized policy enables them.
+93. Every statutory Book of Accounts has exactly one accountable Legal Identity. Separate Legal Identities maintain separate authoritative statutory Books. Common Owner IDs, structural hierarchy, Service Provider association, shared Professional Identity branding, or Business Mapping never merges Books.
+94. Multiple Professional Identities, branches, Shops, or operating locations under the same Legal Identity may be attributed within shared statutory Books through authorized Accounting Dimensions; a separate Professional Identity alone does not require a separate statutory Book.
+95. Multiple Books under one Legal Identity require explicit accounting purposes, policies, ownership, scope, and reconciliation relationships. They must not create competing or ambiguous authoritative statutory records.
+96. Consolidated reporting across eligible Books or Legal Identities is allowed only under applicable accounting/reporting rules and explicit authority. It does not merge underlying Books, Legal Identities, ownership, or Business/Tenant Data Boundaries.
+97. Accounting Context, Book applicability, access, and posting authority are not inferred from Organization, Distributor, Shop, Tenant, Owner, User Role, Subscription Coverage, Service Provider association, or Distributor–Shop Mapping.
+98. The applicable Accounting Framework is selected according to actual legal/entity classification, regulatory status, sector, reporting purpose, and effective authoritative requirements. Accounting framework or policy configuration cannot override mandatory requirements.
+99. The default Financial Year remains 1 April through 31 March, subject to Section 6B and applicable domain requirements. Accounting Periods and closing controls are owned by Accounting.
+100. The Chart of Accounts is hierarchical and includes Account Groups and Ledger Accounts. Protected foundational classifications and authorized business-specific extensions must coexist without undermining reporting or framework integrity.
+101. Voucher Types classify Accounting Vouchers and govern numbering, structure, validation, approval, and posting. Authorized custom Voucher Types cannot bypass system controls, applicable Accounting Framework requirements, or source-domain ownership.
+102. Every posted Accounting Voucher has a balanced set of debit and credit entries and a clear Book, period, source/provenance, and authorized posting reference. Voucher, Journal Entry, and Ledger Posting are related but distinct concepts.
+103. Posted Accounting records must not be silently overwritten or destructively edited. Corrections require traceable, authorized reversal, adjustment, or correction records linked to the original record.
+104. General Ledger balances are authoritative within a Book. Sub-ledger and bill-wise/outstanding detail must reconcile to the corresponding control Ledger Accounts. Original Customer/Supplier identities and commercial invoices remain owned by their source domains.
+105. Cost Centres, Cost Categories, and other Accounting Dimensions are analytical accounting constructs. They do not create or alter Business Entities, Legal Identities, Business Structure, Ownership Links, User Scope, or Permissions.
+106. Budgets and forecasts are planning records. Their creation or approval does not itself post a financial transaction or change the General Ledger; Accounting supplies actuals and accounting analysis but does not become the owner of enterprise-wide planning.
+107. Accounting owns fixed-asset financial recognition and treatment, including capitalization, depreciation, impairment, revaluation where applicable, and disposal records. Physical asset custody and operational lifecycle remain separate Asset Management responsibilities.
+108. Accounting owns its financial statement calculations and accounting reports. Shared Reporting Infrastructure may distribute or analyse them but does not assume accounting data or calculation ownership.
+109. Sales, Purchase, POS, Product/Item, Inventory, Warehouse, GST/Tax, Finance/Payment, HR, Payroll, Subscription/Billing, and other domains retain ownership of their originating transactions, documents, operational states, statutory determinations, and source records. Accounting owns only the resulting accounting interpretation and accounting records.
+110. A source transaction, Event Message, API response, invoice issuance, payment success, stock movement, warehouse task completion, payroll calculation, or POS checkout does not by itself prove that the corresponding Accounting Voucher has been validated and posted.
+111. Source-to-accounting mappings and posting rules must be authorized, versioned, effective-dated, idempotent, and traceable. Corrections to source transactions must not silently rewrite previously posted accounting records.
+112. The External Accounting Data Exchange Model, including the Tally Data Exchange Model, is separate from the canonical Accounting Domain Model. Tally-specific structures, fields, formats, and version behaviour are not authoritative CBM Accounting concepts.
+113. The Tally Compatibility Adapter uses documented, version-supported exchange capabilities and the Platform-wide Integration & API and security controls. Tally compatibility does not make CBM dependent on Tally or transfer other domain records to Accounting.
+114. A native/proprietary Tally company backup is distinct from a documented Tally data-exchange export. CBM must not claim direct backup-file compatibility without an officially supported and validated capability.
+115. Accounting Data Migration must identify its source, accountable identity, Book, period, mapping, and batch; stage, validate, detect duplicates, handle exceptions, reconcile, obtain authorization, preserve provenance, and verify accepted records.
+116. Imported historical data is not authoritative posted accounting merely because it was uploaded. It becomes accepted/posted only after required validation, reconciliation, and approval. Unsupported or ambiguous records remain explicit exceptions.
+117. Migration retries must be duplicate-safe and idempotent within their defined source and batch identity. Source identifiers, voucher references, dates, narrations, and available provenance must be preserved.
+118. CA/Auditor access and Audit Data Package creation require explicit, purpose-limited, Business/Legal Identity, Book, period, and record scope, with read-only access by default. A CA/Auditor title alone grants no access.
+119. An Audit Data Package is a scoped data/report export, not an audit opinion, certification, statutory return, or assurance of compliance. Cross-domain supporting records are included only through their owning Module's authorized contract and Permissions.
+120. Accounting record retention follows the applicable law for the accountable entity and record category plus authorized platform policy. No single retention period is presumed to apply to every CBM business or record.
+121. Accounting operates within the fixed India-only and INR-only product boundaries. Foreign-currency accounting and multi-currency operation are outside the approved scope; source data containing foreign-currency transactions must not be silently converted to INR.
+122. Business/Tenant Data Isolation, Legal Identity ownership, Book ownership, Double-entry integrity, posting traceability, and protected Accounting controls are non-overridable.
+123. Business Modules, Shared Domain Models, Internal Platform Capabilities, Application Client Channels, External Connectivity Capabilities, and Cross-cutting Functions are distinct architectural classes. A Shared Model, Platform Service, client application, connector, or report is not automatically a Business Module.
+124. Accounting Management, Inventory Management, Warehouse Management, Human Resource Management, and Payroll Management are separate domain owners. HR owns employment/personnel facts, Payroll owns payroll calculations/results, Finance/Payment owns payment execution/settlement, and Accounting owns financial postings.
+125. Inventory Management owns authoritative stock quantities, stock states, reservations/availability, inventory movements, and valuation. Warehouse Management owns warehouse facilities/layout, storage locations, physical placement, handling units, and warehouse execution. Neither Module may replace the other's authoritative records.
+126. Product/Item definitions, Inventory Position, and Warehouse physical placement are distinct concepts. Inventory and Warehouse consume the Product/Item reference but retain their own domain-specific stock and handling facts.
+127. A simple Inventory Storage Location/godown is not automatically a fully configured Warehouse Management facility. Advanced WMS capabilities are optional by business applicability and must not be forced on every Organization, Distributor, or Shop.
+128. The Warehouse Location hierarchy may include optional facility, warehouse, zone, storage type/section, aisle, rack, shelf/level, bin/slot, dock, and staging area levels. A Bin is the smallest independently addressable storage position where bin-level control is enabled; facilities need not use every level.
+129. A Warehouse Counter/Workstation is an operational work point, not automatically a Storage Bin or stock location. A POS Counter is a separate POS responsibility. Stock physically held at a counter must have an explicit stock-holding location reference.
+130. Internal/external warehouse classification must distinguish facility operator/control, physical/geographic relationship, property/occupancy relationship, inventory ownership, physical custody, and operational access. No single internal/external flag may be used to infer all these relationships.
+131. External/third-party warehouse custody does not transfer stock ownership or confer access to the business's full Inventory or other Tenant data. Stock owner, custodian, facility operator, and authorized Users are separately identified.
+132. Inventory quantity and valuation remain authoritative in Inventory Management. Warehouse physical placement and task execution remain authoritative in Warehouse Management. Shared Inventory Position and Warehouse Location contracts reconcile the respective views without creating duplicate stock ledgers.
+133. Warehouse physical count or task completion is not itself an Inventory adjustment or proof of stock-ledger posting. Inventory changes require Inventory validation and authorization; warehouse execution evidence must be traceable.
+134. User Account is distinct from Employee; HR job title is distinct from CBM Role; Role is distinct from Permission; Authentication is distinct from Authorization; Approval is distinct from Permission; Subscription Entitlement is distinct from User Permission.
+135. User/Identity, Role, Permission, Approval, Configuration, Notification, Event, API, Audit, Search/Reporting, File/Document, and Background Processing functions are Internal Platform Capabilities under Section 6A and relevant governance sections. They must not be duplicated as independent Business Modules without a separate domain-owner justification.
+136. Reports and Analytics infrastructure is shared Platform-wide capability. The domain meaning, rules, authoritative calculations, and source data for each report remain with its Business Module.
+137. Web, desktop, mobile, handheld, and other Application Clients are access/presentation channels. They must use authorized CBM interfaces and may not bypass Business Module contracts or access authoritative storage directly.
+138. External connectors, Tally Data Exchange, device integrations, and Portal-to-Portal interoperability use shared Integration & API/Event & Messaging capabilities but retain domain-specific adapters, mappings, validation, and authorization.
+139. The Tally Data Exchange Model remains separate from the canonical CBM Accounting, Inventory, Warehouse, Payroll, and other domain models. Tally-specific structures are translated to the appropriate owner Module; a Tally Godown is mapped only to the CBM storage semantics supported by its source data.
+140. Portal-to-Portal exchange or central aggregation must preserve the source portal's authoritative ownership. Every dataset/field requires a source of truth, purpose, recipient, scope, mapping, provenance, synchronization policy, conflict rule, retention treatment, and revocation control. Portal federation does not merge Tenant, Business Identity, User, ownership, or authority boundaries.
+141. Shared Domain Models are contracts and common concepts, not universal data stores or permission grants. Every shared model identifies field/entity ownership, authorized consumers, permitted operations, versioning, provenance, and applicable context.
+142. A Source Transaction Reference, External Identifier, API credential, event subscription, Application Client registration, device identity, or synchronization relationship does not itself grant Business Authority, User Scope, Role, Permission, ownership, or unrestricted data access.
+143. Inventory, Warehouse, HR, Payroll, Product, Sales, Purchase, POS, GST/Tax, Finance/Payment, Asset, Planning, and other distinct domain responsibilities must not be merged merely because they share a workflow, data reference, report, application client, or integration.
+144. A cross-Module process must preserve each Module's separate state, source record, validation, authorization, and correction lifecycle. Event/API delivery does not prove a domain transaction or downstream posting has completed.
+145. Shared Product/Item, Unit/Packaging, Location/Facility, Inventory Position, Source Transaction, Accounting Posting, Workforce, External Identifier, Event, and Document references must have explicit authoritative owners and contracts; shared use never implies shared write authority.
+146. Business Data Isolation, Tenant Data Isolation, Main Portal governance, explicit authority, domain ownership, and Stable Core rules apply to all internal and external integrations, client applications, warehouse operators, third-party providers, and portal synchronization.
+
 
 91. Accounting Management is an independent Business Module with authoritative ownership of its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, and Book-specific accounting records. It does not own the originating transactions or domain rules of other Business Modules.
 92. CBM's default Accounting model is Double-entry. Every posted Accounting Entry set must have equal total debit and credit. Accrual basis is the default for general-purpose Books; alternative recognition bases may be used only where applicable law and the relevant Accounting Framework permit them and an authorized policy enables them.
@@ -2659,6 +2808,7 @@ This baseline consolidates:
 5. The project owner's explicit approval on 18 November 2026 of the India-only Global Business Settings scope, its six approved setting domains, three distinct governance paths, non-overridable India-specific platform boundaries, and the separation between shared defaults/reference settings and Business Module-owned rules recorded in Section 6B.
 6. The project owner's explicit approval on 19 November 2026 of Accounting Management as an independent Business Module and its complete business/logical architecture scope recorded in Section 6C, together with the owner's delegation to make and document the necessary subordinate accounting-architecture decisions. Under that delegation, accrual was selected as the default recognition basis for general-purpose Books, subject to legal and Accounting Framework applicability. The approved scope includes Double-entry by default, Accounting Contexts and Books of Accounts, Tally-similar canonical accounting concepts, Accounting Controls, Reconciliation, Financial Reporting, Management Accounting, Fixed Asset Accounting, source-domain ownership boundaries, and governed migration/export and auditor support.
 7. The project owner's explicit approval on 19 November 2026 that the Tally Data Exchange Model and Tally Compatibility Adapter remain separate from the canonical CBM Accounting Domain Model, with version-aware, documented external data-exchange compatibility and no assumption of native Tally backup-file compatibility.
+8. The project owner's explicit direction on 19 November 2026 to separate Business Modules such as Accounting, Inventory, Human Resource, and Warehouse Management; distinguish Shared Domain Models from Internal Platform Capabilities and External Connectivity; preserve independent Tally/desktop/mobile/portal interoperability models; and define warehouse facilities, storage hierarchy, counters, and internal/external custody boundaries. The project owner delegated the necessary subordinate architecture analysis and decisions, subject to previously approved Stable Core, governance, and documentation rules.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
@@ -2698,6 +2848,26 @@ Official accounting and interoperability references consulted for Section 6C:
 - [TallyHelp — Import Data FAQ](https://help.tallysolutions.com/import-data-faq/): full-data exchange workflows and Masters-before-Transactions guidance.
 
 These sources support the logical accounting concepts and interoperability boundaries. Tally documentation is used as a compatibility reference, not as authority for CBM's internal Accounting Model. Accounting standards, legal applicability, statutory retention, and exchange-format compatibility must be revalidated against current authoritative sources before implementation or compliance use.
+
+Official references consulted for Business Module separation, warehouse structure, and interoperability in Sections 6D–6E:
+
+- [Microsoft Learn — Warehouse management overview](https://learn.microsoft.com/en-us/dynamics365/supply-chain/warehousing/warehouse-management-overview): distinguishes Warehouse Management processes from lighter Inventory Management capabilities and describes facility movement, location-level tracking, and warehouse work.
+- [Microsoft Learn — Warehouse configuration overview](https://learn.microsoft.com/en-gb/dynamics365/supply-chain/warehousing/warehouse-configuration): describes configurable warehouse layout, zones, and location levels including aisle, rack, shelf, and bin.
+- [SAP Help — Warehouse Structure in the Warehouse Management System](https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/b2dee5e83e2446149294f9860a7c08f0/008bbd534f22b44ce10000000a174cb4.html?locale=en-US): describes warehouse hierarchy and storage types/sections/bins.
+- [SAP Help — Storage Type](https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/b2dee5e83e2446149294f9860a7c08f0/f78abd534f22b44ce10000000a174cb4.html): explains physical/logical storage areas and their relationship with storage bins.
+- [SAP Help — Storage Bin](https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/9905622a5c1f49ba84e9076fc83a9c2c/c5dd5c540fe1033de10000000a441470.html): defines storage bins as independently identifiable storage positions.
+- [TallyHelp — Inventory Management with Godowns in TallyPrime](https://help.tallysolutions.com/godowns/): documents location-based stock, godown hierarchy and stock movement.
+- [TallyHelp — Manage Inventory Storage Using Godowns/Locations](https://help.tallysolutions.com/knowledgebase/inventory-storage-using-godowns-locations-tally/): describes godown/location hierarchies including shelves, bins, and warehouse sections.
+- [OpenAPI Specification 3.2.1](https://spec.openapis.org/oas/v3.2.1.html): standard description of HTTP API interfaces; referenced as a possible interoperability contract standard, not a mandated implementation.
+- [AsyncAPI Documentation](https://www.asyncapi.com/docs): standard description of message-driven/event-driven API interfaces; referenced as a possible contract standard, not a mandated event platform.
+- [CloudEvents Specification](https://github.com/cloudevents/spec): vendor-neutral event data format and metadata for interoperability across services, platforms, and systems.
+- [GS1 EPCIS / CBV Standards Repository](https://ref.gs1.org/standards/): EPCIS enables applications to share visibility event data within and across enterprises; relevant where supply-chain traceability use cases justify it, not a universal mandatory standard.
+- [IETF RFC 8252 — OAuth 2.0 for Native Apps](https://www.rfc-editor.org/rfc/rfc8252.html): best current practice for native application authorization using an external user-agent.
+- [IETF RFC 9700 — Best Current Practice for OAuth 2.0 Security](https://www.rfc-editor.org/rfc/rfc9700.html): current OAuth security recommendations, including PKCE and redirect protection.
+- [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html): identity layer on OAuth 2.0 for interoperable user authentication.
+- [Microsoft Learn — Principle of least privilege](https://learn.microsoft.com/en-us/entra/id-governance/scenarios/least-privileged): supports minimum necessary access for users, applications, and agents; referenced as a security design principle rather than a required vendor product.
+
+These references inform logical boundaries and interoperable contracts. They do not mandate Microsoft Dynamics, SAP, Tally, GS1, OAuth/OIDC, or a particular deployment design. Exact protocol profiles, product versions, legal requirements, and device integration methods must be validated during the authorized technical design stage.
 
 Official technical references consulted for security and SaaS architecture boundaries:
 
