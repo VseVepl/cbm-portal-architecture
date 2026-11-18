@@ -47,6 +47,33 @@ The **External Accounting Data Exchange Model**, including the **Tally Data Exch
 
 The complete approved scope, ownership boundaries, Accounting Context/Books rules, migration and exchange safeguards, and applicable framework boundaries are defined in Section 6C of the Master document.
 
+
+## Business Module Boundaries, Shared Models, and Connectivity
+
+CBM distinguishes independent **Business Modules**, **Shared Domain Models/Contracts**, **Internal Platform Capabilities**, **Application Client Channels**, **External Connectivity Capabilities**, and **Cross-cutting Functions**. These are separate architecture classes. A shared model, platform service, report, client application, or connector does not automatically become a Business Module or acquire authority over a domain's records.
+
+The currently established independent module responsibilities include **Accounting Management**, **Inventory Management**, **Warehouse Management**, **Human Resource Management**, and **Payroll Management**, each with its own authoritative business scope. Product/Item, Sales, Purchase/Procurement, POS, GST/Tax, Finance/Payment, Asset Management, enterprise planning/budgeting, and counterparty-management responsibilities remain distinct domain areas for their respective catalogue/classification work; they must not be absorbed by the established modules merely because they share workflows or data.
+
+### Internal Platform Capabilities
+
+User/Identity lifecycle support, Authentication, User–Business association and scope support, Role Management, Permission Management, Delegated Authority evaluation, Approval execution, Configuration, Notification/Communication, Event & Messaging, API/Integration infrastructure, Audit/History infrastructure, Search/Reporting infrastructure, File/Document infrastructure, Background Processing, and Platform/Service Provider administration are provided through the existing approved Platform-wide Services Architecture in Section 6A and its governing sections. They are not duplicate Business Modules. User Account is not Employee; job title is not CBM Role; Role is not Permission; Authentication is not Authorization; Approval is not Permission.
+
+### Shared Domain Models
+
+Shared contracts include Business Identity references, User/Actor references, Product/Item references, units and packaging, Business Location, Inventory Position, Warehouse Location and Handling, Source Transaction/Document references, Accounting Posting, Workforce/Employment, External Identifier/Provenance, Event/Change, and File/Supporting Document references. Each identifies authoritative owner, permitted consumers and operations, versioning, provenance, and applicable context. Shared use does not create universal ownership, shared write access, or a competing source of truth.
+
+### Inventory and Warehouse separation
+
+Inventory Management owns authoritative stock quantities, stock states, reservations/availability, stock movements, reconciliation, and inventory valuation. Warehouse Management owns warehouse facilities/layout, storage locations, racks, shelves, bins, Handling Unit placement, warehouse tasks, and physical warehouse execution. A simple Inventory Godown/Storage Location is distinct from advanced Warehouse Management. Advanced WMS is optional by business applicability.
+
+Warehouse facility relationships do not use one ambiguous internal/external flag. Operational control/operator, geographic relationship, property/occupancy, inventory ownership, physical custody, and operational access are separate dimensions. Warehouse Counters/Workstations are operational work points, not automatically Storage Bins or POS Counters. Inventory and Warehouse cooperate through explicit Shared Models and contracts without duplicating the Inventory Ledger or transferring stock ownership.
+
+### External Connectivity and Application Clients
+
+External connectivity uses the existing Integration & API and Event & Messaging categories. It includes Tally Data Exchange, other external business systems, approved devices/peripherals, first-party desktop/mobile/handheld Application Clients, authorized third-party clients, and future Portal-to-Portal interoperability. A first-party desktop/mobile app is an Application Client, not a Business Module. Portal-to-Portal exchange or central aggregation must preserve each source portal's authoritative records, identity, Tenant boundaries, permissions, purpose limitation, synchronization and conflict rules, provenance, retention, and revocation controls. Two-way unrestricted synchronization is never implied.
+
+The full ownership boundaries, Shared Model contracts, Inventory/Warehouse rules, internal capabilities, and connectivity safeguards are defined in Sections 6D and 6E of the Master document.
+
 ## Documentation rule
 
 Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. Keep discussion history separate from the master source of truth.
