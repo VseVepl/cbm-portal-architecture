@@ -626,7 +626,7 @@ The **Tally Data Exchange Model** is the Tally-specific specialization of the Ex
 
 ### 3.78 Tally Compatibility Adapter
 
-A **Tally Compatibility Adapter** is the governed integration component that reads or produces supported Tally Data Exchange representations and transforms them to or from CBM's canonical domain contracts. It is version-aware and subject to Platform-wide Integration & API, Security, Authorization, and Audit safeguards. It does not bypass the ownership or validation rules of Accounting, Inventory, GST/Tax, HR/Payroll, or any other receiving Business Module.
+A **Tally Compatibility Adapter** is the governed integration component that reads or produces supported Tally Data Exchange representations and transforms them to or from CBM's canonical domain contracts. It is version-aware and subject to Platform-wide Integration & API, Security, Authorization, and Audit safeguards. It does not bypass the ownership or validation rules of Accounting, Inventory, GST/Tax, Human Resource Management and Payroll Management, or any other receiving Business Module.
 
 ### 3.79 Fixed Asset Accounting
 
@@ -1204,7 +1204,7 @@ These are architecture-definition obligations, not an approval of a specific tec
 
 **Global Business Settings** provides common, governed Indian business-context defaults, preferences, and reference settings across CBM. It is a shared configuration responsibility governed by Section 6A (Platform-wide Services), Section 10 (Configuration governance), the Stable Core principles, and Business Module responsibility boundaries.
 
-It provides shared defaults and reference conventions. It does not own Accounting, Tax/GST, Inventory, HR/Payroll, Finance/Payment, POS, or other domain-specific rules, calculations, statutory determinations, or authoritative business records.
+It provides shared defaults and reference conventions. It does not own Accounting, Tax/GST, Inventory, Human Resource Management and Payroll Management, Finance/Payment, POS, or other domain-specific rules, calculations, statutory determinations, or authoritative business records.
 
 ### 6B.2 India-only product and regional scope
 
@@ -1263,7 +1263,7 @@ This domain governs common Indian business-context defaults, including Financial
 
 The default Financial Year is **1 April through 31 March**. An alternative may be used only where permitted for the relevant business and purpose, supported by applicable domain rules, and explicitly authorized at the appropriate governance level. This default is not a universal legal requirement for every business, entity, report, or statutory purpose.
 
-General defaults do not replace Accounting, Tax/GST, HR/Payroll, Inventory, POS, Finance/Payment, or other domain rules. Statutory accounting treatment, tax periods and returns, payroll periods, inventory valuation periods, and domain-specific calendars remain governed by their respective Business Modules and applicable law.
+General defaults do not replace Accounting, Tax/GST, Human Resource Management and Payroll Management, Inventory, POS, Finance/Payment, or other domain rules. Statutory accounting treatment, tax periods and returns, payroll periods, inventory valuation periods, and domain-specific calendars remain governed by their respective Business Modules and applicable law.
 
 ### 6B.4 Governance paths and configuration authority
 
@@ -1341,7 +1341,7 @@ The India-only scope is a product/business boundary, not a technical localizatio
 
 Accounting Management is responsible for the governed recognition, classification, recording, posting, control, reconciliation, and financial reporting of the financial effects of business activities within its authorized Accounting Contexts and Books of Accounts. It owns its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, Accounting Period controls, and authoritative Accounting records.
 
-The Module is not merely a data-entry facility or a collection of financial reports. It is the authoritative accounting domain for the Books of Accounts it governs. It must support the full accounting lifecycle while preserving the source-domain ownership of Sales, Purchase, Inventory, POS, GST/Tax, Finance/Payment, HR/Payroll, Business Identity, and other Business Modules.
+The Module is not merely a data-entry facility or a collection of financial reports. It is the authoritative accounting domain for the Books of Accounts it governs. It must support the full accounting lifecycle while preserving the source-domain ownership of Sales, Purchase, Inventory, POS, GST/Tax, Finance/Payment, Human Resource Management and Payroll Management, Business Identity, and other Business Modules.
 
 This Section establishes Business and Logical Architecture responsibilities. It does not prescribe database schemas, API endpoints, application screens, software packages, deployment units, or implementation technologies.
 
@@ -1933,7 +1933,7 @@ Contracts must define producer/consumer, ownership, data fields, permitted opera
 | Accounting Management | Financial ledgers, accounting treatment and financial statements | Inventory supplies approved valuation/accounting facts; Warehouse task completion alone does not post Accounting entries. |
 | GST/Tax | Tax classification, applicability, determination, liability and statutory records | Tax facts come from GST/Tax; warehouse location does not itself determine GST registration or tax liability. |
 | Human Resource Management | Employee and employment records | Warehouse tasks may be assigned to authorized Users/Employees; Employee and User Account remain distinct. |
-| Payroll Management | Payroll calculations and authoritative payroll records | Permitted work/time facts may be supplied through authorized HR/Payroll contracts; Warehouse does not own payroll calculations. |
+| Payroll Management | Payroll calculations and authoritative payroll records | Permitted work/time facts may be supplied through authorized Human Resource Management and Payroll Management contracts; Warehouse does not own payroll calculations. |
 | Asset Management | Physical asset custody, maintenance, assignment and operational lifecycle | Warehouse may provide location/handling references; warehouse bins and equipment are not automatically fixed-asset accounting records. |
 
 ### 6E.12 Simple storage versus advanced Warehouse Management
@@ -3019,7 +3019,7 @@ The following statements summarize rules that must remain true across all future
 87. The default Financial Year is 1 April through 31 March. An alternative is permitted only where supported by applicable domain rules and explicitly authorized; the default is not a universal legal assertion.
 88. Gregorian is the core System Calendar. Indian public, festival, and State/UT holiday references are separate shared calendar data and do not automatically determine statutory or module-specific obligations.
 89. Date/time, language, number/currency, and unit display preferences must not alter authoritative timestamps, legal identity particulars, stored amounts, calculations, source quantities, or source units.
-90. GST/Tax, Accounting, HR/Payroll, Inventory/Product, Finance/Payment, Business Identity, and other domain-specific responsibilities remain owned by their respective Business Modules. Global Business Settings may provide defaults/reference data without assuming domain ownership.
+90. GST/Tax, Accounting, Human Resource Management, Payroll Management, Product/Item Management, Inventory Management, Finance/Payment, Business Identity, and other domain-specific responsibilities remain owned by their respective Business Modules. Global Business Settings may provide defaults/reference data without assuming domain ownership.
 91. Accounting Management is an independent Business Module with authoritative ownership of its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, and Book-specific accounting records. It does not own the originating transactions or domain rules of other Business Modules.
 92. CBM's default Accounting model is Double-entry. Every posted Accounting Entry set must have equal total debit and credit. Accrual basis is the default for general-purpose Books; alternative recognition bases may be used only where applicable law and the relevant Accounting Framework permit them and an authorized policy enables them.
 93. Every statutory Book of Accounts has exactly one accountable Legal Identity. Separate Legal Identities maintain separate authoritative statutory Books. Common Owner IDs, structural hierarchy, Service Provider association, shared Professional Identity branding, or Business Mapping never merges Books.
@@ -3096,7 +3096,7 @@ The following statements summarize rules that must remain true across all future
 106. Budgets and forecasts are Management Accounting/planning records. Their creation or approval does not itself post a financial transaction or change the General Ledger.
 107. Accounting owns fixed-asset financial recognition and treatment, including capitalization, depreciation, impairment, revaluation where applicable, and disposal records. Physical asset custody and operational lifecycle remain separate responsibilities.
 108. Accounting owns its financial statement calculations and accounting reports. Shared Reporting Infrastructure may distribute or analyse them but does not assume accounting data or calculation ownership.
-109. Sales, Purchase, POS, Inventory, GST/Tax, Finance/Payment, HR/Payroll, Subscription/Billing, and other domains retain ownership of their originating transactions, documents, operational states, statutory determinations, and source records. Accounting owns only the resulting accounting interpretation and accounting records.
+109. Sales, Purchase, POS, Inventory, GST/Tax, Finance/Payment, Human Resource Management and Payroll Management, Subscription/Billing, and other domains retain ownership of their originating transactions, documents, operational states, statutory determinations, and source records. Accounting owns only the resulting accounting interpretation and accounting records.
 110. A source transaction, Event Message, API response, invoice issuance, payment success, stock movement, payroll calculation, or POS checkout does not by itself prove that the corresponding Accounting Voucher has been validated and posted.
 111. Source-to-accounting mappings and posting rules must be authorized, versioned, effective-dated, idempotent, and traceable. Corrections to source transactions must not silently rewrite previously posted accounting records.
 112. The External Accounting Data Exchange Model, including the Tally Data Exchange Model, is separate from the canonical Accounting Domain Model. Tally-specific structures, fields, formats, and version behaviour are not authoritative CBM Accounting concepts.
@@ -3197,7 +3197,7 @@ Two separate User Accounts are provisioned for the same natural person in two di
 
 ### 20.19 India-only Global Business Settings and separate governance paths
 
-Main Portal establishes English as the platform default, enables selected Indian languages, and enforces INR-only and IST-only platform boundaries. Organization A receives service through Sub-Portal SP1, but SP1's delegated service-provider settings do not make SP1 the structural parent of Organization A or permit SP1 to override Organization A's business settings. Organization A establishes its permitted business-calendar and working-day defaults; its Distributor D1 and Shop S1 inherit those defaults unless an explicit Permission allows a context-specific override. A User may select an available Indian-language display preference but cannot select another time zone or currency. Accounting and HR/Payroll continue to own their respective authoritative financial-year, statutory, payroll, and domain-calendar rules.
+Main Portal establishes English as the platform default, enables selected Indian languages, and enforces INR-only and IST-only platform boundaries. Organization A receives service through Sub-Portal SP1, but SP1's delegated service-provider settings do not make SP1 the structural parent of Organization A or permit SP1 to override Organization A's business settings. Organization A establishes its permitted business-calendar and working-day defaults; its Distributor D1 and Shop S1 inherit those defaults unless an explicit Permission allows a context-specific override. A User may select an available Indian-language display preference but cannot select another time zone or currency. Accounting and Human Resource Management and Payroll Management continue to own their respective authoritative financial-year, statutory, payroll, and domain-calendar rules.
 
 
 ## 21. Documentation governance
