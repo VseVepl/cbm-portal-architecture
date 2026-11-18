@@ -25,15 +25,17 @@
 11. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
 12. [Approval Workflow governance](#11-approval-workflow-governance)
 13. [Distributor–Shop relationships and mapping](#12-distributor-shop-business-relationships-and-mapping)
-14. [GST Taxpayer Profile and GST Registration Architecture](#12a-gst-taxpayer-profile-and-gst-registration-architecture)
-15. [Sub-Portal migration and service continuity](#13-sub-portal-migration-and-service-continuity)
-16. [Data archival and object-storage principles](#14-data-archival-and-object-storage-principles)
-17. [Domain History and Audit Trail Management](#14a-domain-history-and-audit-trail-management)
-18. [Stable Core, Configurable, Customizable, and Extensible principles](#15-stable-core-configurable-customizable-and-extensible-design-principles)
-19. [Cross-concept invariants](#16-required-cross-concept-invariants)
-20. [Illustrative scenarios](#17-illustrative-scenarios)
-21. [Documentation governance](#18-documentation-governance)
-22. [Source basis and decision provenance](#19-source-basis-and-decision-provenance)
+14. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+15. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+16. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+17. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+18. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+19. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+20. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+21. [Cross-concept invariants](#19-required-cross-concept-invariants)
+22. [Illustrative scenarios](#20-illustrative-scenarios)
+23. [Documentation governance](#21-documentation-governance)
+24. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -673,7 +675,7 @@ Ownership determines whose Distributor or Shop it is. Business Structure determi
 
 Every Distributor and every Shop must be assigned exactly one direct Parent Organization when it is created. Parent Organization is a mandatory structural relationship, not an optional mapping attribute. A Distributor or Shop must not be created without a Parent Organization or assigned to multiple Organizations.
 
-The Parent Organization relationship identifies the entity's place in the Customer Business Structure. It does not establish ownership, determine Legal Identity or Professional Identity, create a Distributor–Shop Business Relationship, or by itself grant every User access or every possible management action. Authority availability and individual User access continue to be determined by Sections 7, 8, and 9.
+The Parent Organization relationship identifies the entity's place in the Customer Business Structure. The Distributor's or Shop's Owner ID set must also match the Parent Organization's Owner ID set under Section 5.3.1, with separate Ownership Links and Ownership IDs recorded for each Business Identity. This ownership-consistency rule does not determine Legal Identity or Professional Identity, create a Distributor–Shop Business Relationship, or by itself grant every User access or every possible management action. Authority availability and individual User access continue to be determined by Sections 7, 8, and 9.
 
 A Distributor–Shop Mapping does not require either party to select, disclose, or know the other party's Parent Organization. Each party's Parent Organization remains part of its own structural and authorized administration context; it is not a mapping credential, mapping prerequisite, or information that must be exposed to the other mapping party.
 
@@ -1784,7 +1786,7 @@ The following statements summarize rules that must remain true across all future
 
 These scenarios explain how the finalized rules work together. They do not create additional authority or ownership rights beyond the rules above.
 
-### 20.1 One owner, multiple businesses
+### 20.1 One owner, multiple independent business architectures
 
 Person A and Person B own Organization A. The same Owner ID set—Person A and Person B—must be linked separately to every Distributor and Shop directly under Organization A, with separate Ownership IDs for each Business Identity. Person A may also own a different Organization B as a separate Customer Business Architecture, with its own internally consistent Owner ID set. Separate Business Identities and Data Boundaries remain independent even when some Owner IDs are shared.
 
@@ -1792,7 +1794,7 @@ Person A and Person B own Organization A. The same Owner ID set—Person A and P
 
 Organization A has Shop S1, Shop S2, and Shop S3 as direct structural children. Each Shop has its own Professional Identity and operational context. The Owner ID set linked to each Shop must exactly match the Owner ID set linked to Organization A, while each Shop retains its own Ownership Links and distinct Ownership IDs. Its own Legal Identity is optional and must be explicitly associated and validated where applicable. Matching ownership does not merge the Shops' Professional Identities or operational records. The Organization's Business Available Authority Scope and each User's assigned scope are determined independently under the applicable authority rules.
 
-### 20.3 Organization, Distributor, and mapped Shops
+### 20.3 Organization, Distributor, and mapped Shop in another Organization
 
 Organization A has Distributor D1 and Shop S1 as direct structural children. Organization A, D1, and S1 have the same Owner ID set, with separate Ownership Links and Ownership IDs for each Business Identity. Organization B has Shop S2 under its own Customer Business Architecture and its own internally consistent Owner ID set. D1 and S2 may establish a Distributor–Shop Mapping through the approved two-way verification process. The Mapping does not make S2 a structural child of D1 or Organization A, does not change either Organization's ownership-consistency rule, and does not merge the businesses' data boundaries. Neither D1 nor S2 needs to select, know, or disclose the other party's Parent Organization to establish the Mapping. Any authority eligibility beyond the expressly permitted Mapping interaction must be established under the existing Main Portal-governed Authority Scope rules.
 
