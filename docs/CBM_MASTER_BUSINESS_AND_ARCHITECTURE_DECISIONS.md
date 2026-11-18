@@ -1511,15 +1511,15 @@ When a User Account is Terminated:
 
 Detailed Login Architecture, login channels, session policy, and the full User Scope/Permissions design remain governed by their separate discussions and must not be inferred from this account-lifecycle baseline.
 
-## 13. Sub-Portal migration and service continuity
+## 16. Sub-Portal migration and service continuity
 
-### 14.1 Nature of migration
+### 16.1 Nature of migration
 
 Sub-Portal migration is a complete service-provider migration. It is not a transfer of Tenant ownership, Business Identity, or data rights.
 
 A Sub-Portal and its associated customer/business structure may be migrated to another Sub-Portal or directly under Main Portal, under Main Portal governance.
 
-### 14.2 Migration boundary
+### 16.2 Migration boundary
 
 Migration must include the complete Sub-Portal scope and all information required to preserve its existing internal structure and service continuity, including as applicable:
 
@@ -1533,7 +1533,7 @@ Migration must include the complete Sub-Portal scope and all information require
 - Relevant domain-specific History records and Audit Trail records, preserved separately and according to their respective retention rules.
 - Other associated information necessary for complete continuity and integrity.
 
-### 14.3 Invariants during migration
+### 16.3 Invariants during migration
 
 Migration must preserve:
 
@@ -1546,7 +1546,7 @@ Migration must preserve:
 
 Only the applicable Service Provider relationship changes. Migration must not silently reassign ownership, merge businesses, or alter Tenant data rights.
 
-### 14.4 Sub-Portal closure or ownership change
+### 16.4 Sub-Portal closure or ownership change
 
 If a Sub-Portal closes or its ownership changes, its complete associated business structure and data must be capable of migration to another Sub-Portal or directly to Main Portal while preserving the invariants above.
 
@@ -1554,13 +1554,13 @@ Migration is a controlled, complete, integrity-verified capability. It is not me
 
 ---
 
-## 14. Data archival and object-storage principles
+## 17. Data archival and object-storage principles
 
-### 15.1 Provider-neutral abstraction
+### 17.1 Provider-neutral abstraction
 
 Long-term archival must be designed around an independent Object Storage Abstraction so that the archival system is not locked to a single object-storage provider. The architecture must support changing providers without redesigning the archival domain.
 
-### 15.2 Archival requirements
+### 17.2 Archival requirements
 
 The archival capability must support:
 
@@ -1575,19 +1575,19 @@ The archival capability must support:
 - Domain-specific History records and Audit Trail records, preserved separately according to their respective retention rules.
 - Verification of successful archival before deletion of the operational copy.
 
-### 15.3 Separation from operational data
+### 17.3 Separation from operational data
 
 Archival is preservation, not continuation of normal operations. Removing an operational copy after the required download window and successful archival does not mean that the archived business history is erased or that ownership is transferred.
 
 ---
 
-## 14A. Domain History and Audit Trail Management
+## 17A. Domain History and Audit Trail Management
 
-### 15A.1 Mandatory separation
+### 17A.1 Mandatory separation
 
 **Domain History** and **Audit Trail** are separate and independent record categories. They have different purposes, contents, structures, retention rules, and access permissions. They must not be merged into one table, one undifferentiated log, one combined domain History, or one permission domain. An event may create both records, but each is maintained independently for its own purpose.
 
-### 15A.2 Domain-specific History and approved History domains
+### 17A.2 Domain-specific History and approved History domains
 
 A History record set belongs to one clearly defined domain object, entity, or relationship. Each approved History domain must have its own dedicated domain-specific table/record set; a shared mixed-domain History table is not permitted. It records meaningful business changes and events that authorized business Users need to understand. It must contain only events and information belonging to that domain.
 
@@ -1596,10 +1596,11 @@ The History domains established in this baseline are:
 2. **Distributor–Shop Mapping History:** events concerning the specific Distributor–Shop relationship only.
 3. **Ownership History:** events concerning the relevant Owner ID, Ownership ID, and Ownership Link only.
 4. **User Scope Mapping History:** events concerning the relevant User-to-entity/location scope assignment only.
+5. **Business Entity Lifecycle History:** lifecycle state changes for one Organization, Distributor, or Shop, including the causal Lifecycle Operation and associated Snapshot reference. It contains only that entity's lifecycle events.
 
 A User ID or User profile change must never be inserted into GST Registration History, Ownership History, or Mapping History. A separate User account/profile History may be introduced only if a distinct business need is established and approved. Other History domains must not be assumed merely because Audit Trail records exist; each requires an explicit business requirement and a definition of scope, contents, permissions, and retention.
 
-### 15A.3 History contents, integrity, and retention
+### 17A.3 History contents, integrity, and retention
 
 Each History record set records only fields relevant to its own domain. As applicable, it may include affected domain object/relationship, event type, previous and new domain values/states, effective date/time, recorded date/time, reason, responsible actor, approver, and supporting reference. A significant domain change must not silently overwrite the only record of its previous state. Corrections must preserve the original entry and identify the correction or superseding event.
 
@@ -1607,7 +1608,7 @@ History must be preserved throughout the existence of the relevant Business Iden
 
 History may be available to multiple appropriately authorized Users. Its visibility is controlled by separate History permissions and applicable business scope. Permission to view History does not grant permission to perform the underlying action or to view the Audit Trail.
 
-### 15A.4 Comprehensive system-wide Audit Trail
+### 17A.4 Comprehensive system-wide Audit Trail
 
 Audit Trail must capture all relevant system events and activities across CBM in chronological order. Its coverage is not limited to the History domains above or to security events alone.
 
@@ -1615,7 +1616,7 @@ As applicable, Audit Trail includes successful and failed actions, creation and 
 
 Audit Trail must capture sufficient context to reconstruct what happened, when, in which business/entity context, by whom or by what system process, and with what outcome. It may contain events from multiple domains in one chronological sequence. It does not replace any domain-specific History.
 
-### 15A.5 Separate access permissions
+### 17A.5 Separate access permissions
 
 1. History and Audit Trail must have separate access permissions.
 2. A User may view relevant domain History without being allowed to view Audit Trail.
@@ -1625,7 +1626,7 @@ Audit Trail must capture sufficient context to reconstruct what happened, when, 
 6. Audit Trail permission does not automatically grant access to all business History.
 7. Viewing or exporting either record category is itself an activity captured in the Audit Trail, subject to applicable policy.
 
-### 15A.6 Retention, archival, and deletion
+### 17A.6 Retention, archival, and deletion
 
 Domain History is retained for the full lifetime of the relevant business context and may be removed only through authorized permanent deletion of that business. It must not be purged according to an Audit Trail retention schedule.
 
@@ -1633,7 +1634,7 @@ Audit Trail has a separate retention and archival policy. It is not required to 
 
 Business archival must preserve Domain History and Audit Trail separately where each remains within its applicable retention period. Their integrity, provenance, and access controls remain independently enforceable after archival or migration.
 
-### 15A.7 Paired-record examples
+### 17A.7 Paired-record examples
 
 When a GSTIN is changed, GST Registration History records only the previous and new GST registration/assignment, effective date, recorded date, reason, actor, and approver where applicable. The Audit Trail separately records relevant system events, including actor/session, request and outcome, verification, authorization, and approval events.
 
@@ -1643,11 +1644,11 @@ When a Distributor–Shop Mapping is created, changed, suspended, or ended, the 
 
 ---
 
-## 15. Stable Core, Configurable, Customizable, and Extensible design principles
+## 18. Stable Core, Configurable, Customizable, and Extensible design principles
 
 All architectural decisions and capabilities must be evaluated using the Stable Core, Configurable, and Extensible principles, together with the additional design dimensions of customization, override capability, and applicability defined in Section 2.6. These are complementary design lenses, not mutually exclusive labels.
 
-### 16.1 Stable Core
+### 18.1 Stable Core
 
 Stable Core contains fundamental protections and invariants that must not be made ordinary user-configurable options. It includes:
 
@@ -1668,7 +1669,7 @@ Stable Core contains fundamental protections and invariants that must not be mad
 - Audit integrity.
 - Preservation of identity, ownership, and data rights during Service Provider migration.
 
-### 16.2 Configurable
+### 18.2 Configurable
 
 Configuration is allowed where a business requirement legitimately varies, provided the change remains within Main Portal governance, explicit permissions, and Stable Core boundaries.
 
@@ -1684,7 +1685,7 @@ The approved configurable approach includes:
 
 Configurability must not allow a lower level to weaken or bypass an immutable higher-level rule. Data Isolation and Business Structure Hierarchy and Structural Integrity are never configurable or overridable. Customization and configuration must be limited to the applicable business context and must not silently affect another business.
 
-### 16.3 Extensible
+### 18.3 Extensible
 
 The architecture must allow new capabilities to be added without fundamental redesign, using clear business boundaries and contracts. Extensibility includes the ability to introduce:
 
@@ -1698,7 +1699,7 @@ The architecture must allow new capabilities to be added without fundamental red
 
 Extensibility must not become an excuse for unnecessary abstraction or overengineering.
 
-### 16.4 Customization, Override, and Applicability
+### 18.4 Customization, Override, and Applicability
 
 - Customization may adapt only those product behaviours and choices that the governing Stable Core and Main Portal policies permit.
 - Override is a controlled authority, not an inherent consequence of having access to a configuration screen. It requires explicit permission for the specific setting and business context.
@@ -1708,7 +1709,7 @@ Extensibility must not become an excuse for unnecessary abstraction or overengin
 
 ---
 
-## 16. Required cross-concept invariants
+## 19. Required cross-concept invariants
 
 The following statements summarize rules that must remain true across all future domain and technical designs.
 
@@ -1760,78 +1761,122 @@ The following statements summarize rules that must remain true across all future
 46. Audit Trail is the comprehensive chronological record of relevant system events across all domains. It is separate from Domain History and follows its own retention policy; permanent retention is not universally required.
 47. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
 48. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
+49. Within one Customer Business Architecture, the Owner ID set of the Organization must exactly match the Owner ID set of every direct structural Distributor and Shop. Each entity has its own explicit Ownership Links and Ownership IDs. Main Portal and Sub-Portal Service Provider ownership remains independent.
+50. An Organization's suspension and deactivation apply the expressly defined Parent-Caused Cascade to its direct Distributor and Shop children. Child suspension or deactivation never changes the Parent Organization or sibling entity states.
+51. Suspending or deactivating a Distributor or Shop affects only that entity and the applicable Mappings involving that endpoint. A remote mapping counterparty and its other relationships are not automatically suspended or deactivated.
+52. Every multi-entity Parent-Caused Lifecycle Operation requires an immutable pre-operation Snapshot. Restoration is tied to the exact operation and restores only objects changed by that operation to their recorded previous states. Previously Deactivated/Closed objects and later independent state changes must not be overwritten.
+53. Business Entity Lifecycle, Parent–Child Cascade, Mapping Lifecycle, Subscription Lifecycle, User Account Lifecycle, User–Business Association Lifecycle, and Credential/Authenticator Lifecycle remain separate, with only explicitly defined interactions between them.
+54. Archived is an archival lifecycle status, not a normal Business Entity operational state. Business Entity Closure and Archival are separate.
+55. A Subscription is attached to a Commercial Account in one Service Provider commercial context. Subscription Coverage must be explicitly assigned; ownership, structural membership, Service Provider association, or Mapping alone does not create coverage.
+56. Plan and Add-on definitions are configurable and versioned, not hard-coded. Published Plan Versions preserve their contractual meaning; changes that alter that meaning require a new version.
+57. Entitlements and Usage Limits govern commercial feature availability and capacity. They do not grant User Scope, Role, Permission, or action authorization.
+58. Invoice, Payment, and Subscription statuses are independent. Past Due is a billing/Invoice condition, not a Subscription operational state. Subscription suspension, cancellation, or expiry does not itself deactivate a Business Entity or terminate a User Account.
+59. Each Customer Business User Account belongs to exactly one Organization's Business Architecture. The same natural person may have separate accounts in multiple Organizations, each with different verified email and mobile details, credentials, and User Code; one account cannot cross Organization boundaries.
+60. Every CBM User Account has one portal-wide unique, system-generated, immutable six-character User Code formed by two uppercase English letters followed by four digits. It is read-only, never reused, and is not a secret or authorization grant.
+61. The Organization chooses one of three initial credential-establishment modes for new Customer Business User Accounts: Email Temporary Password, OTP Password Setup, or Both Required. In Both Required mode, both methods must succeed.
+62. A Temporary Password is a restricted, single-purpose bootstrap credential. Failed password storage does not by itself revoke it; it remains usable only for the restricted password-establishment process until success, expiry, or revocation.
+63. OTP is a one-time, short-lived verification secret. Email, SMS, and WhatsApp are supported delivery channels under the approved account-establishment process; OTP is not treated as compromise-proof.
+64. CBM must never send any URL, hyperlink, URL-bearing button, or URL-resolving QR code to any person for any purpose or through any outbound communication channel. Account establishment and recovery must be completed without URL-based actions.
+65. Invited is not a User Account state and the CBM account model does not use invitation links. Authorized User provisioning and the approved initial credential-establishment process are used instead.
 
-## 17. Illustrative scenarios
+
+## 20. Illustrative scenarios
 
 These scenarios explain how the finalized rules work together. They do not create additional authority or ownership rights beyond the rules above.
 
-### 17.1 One owner, multiple businesses
+### 20.1 One owner, multiple businesses
 
-Person A may hold separate Ownership Links to Organization A, Distributor A, and Shop A where the ownership facts support each relationship. Each Owner-to-Business relationship has its own Ownership ID. Their Professional Identities remain separately maintainable. Where two or more of these business contexts share one Legal Identity, that shared Legal Identity does not merge their Professional Identities, business data, or service contexts. Shared ownership does not merge independent businesses or automatically give every User access to all of them.
+Person A and Person B own Organization A. The same Owner ID set—Person A and Person B—must be linked separately to every Distributor and Shop directly under Organization A, with separate Ownership IDs for each Business Identity. Person A may also own a different Organization B as a separate Customer Business Architecture, with its own internally consistent Owner ID set. Separate Business Identities and Data Boundaries remain independent even when some Owner IDs are shared.
 
-### 17.2 Organization with multiple Shops
+### 20.2 Organization with multiple Shops
 
-Organization A has Shop S1, Shop S2, and Shop S3 as direct structural children. Each Shop has its own Professional Identity and operational context. Each Shop's ownership is determined independently through its Ownership Links; a Shop may be owned by the same Owner(s) as the Organization or by another Owner. Its own Legal Identity is optional and must be explicitly associated and validated where applicable. A shared Legal Identity does not merge the Shops' Professional Identities or operational records. The Organization's Business Available Authority Scope and each User's assigned scope are determined independently under the applicable authority rules.
+Organization A has Shop S1, Shop S2, and Shop S3 as direct structural children. Each Shop has its own Professional Identity and operational context. The Owner ID set linked to each Shop must exactly match the Owner ID set linked to Organization A, while each Shop retains its own Ownership Links and distinct Ownership IDs. Its own Legal Identity is optional and must be explicitly associated and validated where applicable. Matching ownership does not merge the Shops' Professional Identities or operational records. The Organization's Business Available Authority Scope and each User's assigned scope are determined independently under the applicable authority rules.
 
-### 17.3 Organization, Distributor, and mapped Shops
+### 20.3 Organization, Distributor, and mapped Shops
 
-Organization A has Distributor D1 and Shop S1 as direct structural children. Distributor D1 is linked to Owner A through an Ownership Link, while Shop S1 is linked to Owner B through a separate Ownership Link. Shop S1 also has a Business Mapping with D1. The Mapping does not make Shop S1 a structural child of D1, change its Owner, or merge their data boundaries. Neither D1 nor S1 needs to select, know, or disclose the other party's Parent Organization to establish the Mapping. Any authority eligibility beyond the structural scope must be established independently under explicit Main Portal-governed rules.
+Organization A has Distributor D1 and Shop S1 as direct structural children. Organization A, D1, and S1 have the same Owner ID set, with separate Ownership Links and Ownership IDs for each Business Identity. Organization B has Shop S2 under its own Customer Business Architecture and its own internally consistent Owner ID set. D1 and S2 may establish a Distributor–Shop Mapping through the approved two-way verification process. The Mapping does not make S2 a structural child of D1 or Organization A, does not change either Organization's ownership-consistency rule, and does not merge the businesses' data boundaries. Neither D1 nor S2 needs to select, know, or disclose the other party's Parent Organization to establish the Mapping. Any authority eligibility beyond the expressly permitted Mapping interaction must be established under the existing Main Portal-governed Authority Scope rules.
 
 The Organization's direct structural relationship with Shop S1 is independent of the Distributor–Shop Mapping. The Mapping itself does not enlarge either party's authority scope.
 
-### 17.4 Selective User scope within one business
+### 20.4 Selective User scope within one business
 
 Organization A's Business Available Authority Scope includes Distributor D1 and Shops S1, S2, and S3. User U1 is assigned only S1; User U2 is assigned D1 and S2; User U3 is explicitly assigned the full available scope. Their Organization-level association does not automatically give them identical access. Each User's effective access is further limited by that User's Permissions and applicable approvals.
 
-### 17.5 Owner identity is not a User account
+### 20.5 Owner identity is not a User account
 
-Person A is linked as an Owner to Organization A and Shop A through separate Ownership Links. This does not automatically create a login account or grant operational access. If Person A uses CBM, a valid User account, User–Business association, User Assigned Authority Scope, and Permissions are still required.
+Person A is linked as an Owner to Organization A and Shop A through separate Ownership Links, and the Shop's Owner ID set matches Organization A's Owner ID set. This does not automatically create a login account or grant operational access. If Person A uses CBM, a valid Organization-scoped User Account, User–Business association, User Assigned Authority Scope, and Permissions are still required.
 
-### 17.6 Sub-Portal serving an Organization and related business network
+### 20.6 Sub-Portal serving an Organization and related business network
 
 Sub-Portal A serves Organization A and the relevant associated Distributor and Shop entities within its authorized domain. Its service-provider authority scope covers those associated businesses under Main Portal governance. This does not make Sub-Portal A their owner or grant every Sub-Portal User unrestricted access to every record.
 
-### 17.7 Different approval rules for the same action
+### 20.7 Different approval rules for the same action
 
 Within one Organization, the same action may require approval for Role A, may not require approval for Role B, and may have a separate user-specific approval rule for User C. The Organization configures these rules within the governing limits. The initiating User must still possess the action Permission and the assigned scope for the target entity.
 
-### 17.8 Configuration override for one business only
+### 20.8 Configuration override for one business only
 
 Main Portal establishes a default setting. Organization A has explicit permission to override it and sets a permitted value within the system-defined range. Organization B has no override permission and continues to use the applicable higher-level value. Organization A's change does not silently change Organization B.
 
-### 17.9 Service Provider migration
+### 20.9 Service Provider migration
 
 Organization A moves from Sub-Portal A to Sub-Portal B under Main Portal governance. Organization A's Business Identity, ownership, internal structure, data rights, and valid historical relationships remain intact. The Service Provider relationship changes.
 
-### 17.10 GST Registration Assignment at different CBM levels
+### 20.10 GST Registration Assignment at different CBM levels
 
 The GST Registration Assignment capability is not limited to Distributor–Shop relationships. Subject to legal eligibility and Main Portal policy, a GST Registration may be associated with the legal person/context operating Main Portal, a Sub-Portal service provider, an Organization, a Distributor, a Shop, or another enabled CBM entity/context. The GST Registration always belongs to the actual registered taxpayer. The CBM association identifies an eligible operational or transaction context; it does not change the taxpayer or permit an unrelated entity to use that GSTIN. No Owner ID, Business Structure, service-provider relationship, or other Mapping automatically establishes GSTIN eligibility.
 
-### 17.11 Domain History and Audit Trail are separate
+### 20.11 Domain History and Audit Trail are separate
 
 When a GSTIN is changed, GST Registration History records only the GST Registration-domain change, including previous and new registration/assignment, effective date, recorded date, reason, actor, and approver where applicable. A User ID change is not inserted into GST Registration History. The User ID change and GSTIN change may both appear as separate events in the comprehensive Audit Trail, in chronological order. Authorized business Users may view GST Registration History without being permitted to view Audit Trail.
 
-### 17.12 Two-way Distributor–Shop Mapping verification
+### 20.12 Two-way Distributor–Shop Mapping verification
 
 Shop S1 already exists in CBM under its own Parent Organization and has its own Shop Unique ID. Distributor D1 also already exists in CBM under its own Parent Organization and has its own Distributor Unique ID. S1 generates a Shop Secret Code and shares its Shop Unique ID and code with D1. An authorized D1 User enters them in D1's CBM context, and CBM verifies the first stage. D1 then generates a separate Distributor Confirmation Code for that pending mapping and shares it with S1. An authorized S1 User enters that confirmation code in S1's CBM context. Only after this second verification succeeds does the mapping become Active.
 
 Neither party needs to select, know, or disclose the other party's Parent Organization. Both codes are subject to expiry, one-time use, rate limiting, and revocation. Once Active, the mapping enables only the business transactions and necessary information exchange authorized for its Mapping Type; it does not change either party's ownership, structural membership, Parent Organization, or independent data boundary.
 
-## 18. Documentation governance
+### 20.13 Parent Organization deactivation and exact child restoration
 
-### 19.1 Documentation completeness
+Organization A has Shop S1, Shop S2, and Distributor D1. Before Organization A is deactivated, S1 is already Deactivated, while S2 and D1 are Active. Organization A's deactivation operation captures a Lifecycle Operation Snapshot. S1 remains Deactivated and is recorded as unchanged by that operation. S2 and D1 are changed to Deactivated by the Parent-Caused Cascade. Any Active Distributor–Shop Mappings involving the affected children are also deactivated, with their prior states captured.
+
+When Organization A is later reactivated, CBM restores only the child entities and Mappings changed by that exact deactivation operation. S2 and D1 return to their recorded pre-operation states. S1 remains Deactivated because it was already Deactivated before the Parent operation. A Mapping that was already Deactivated before the Parent operation is not reactivated. A cross-Organization counterparty remains operational; only the Mapping involving the deactivated endpoint changes.
+
+### 20.14 Child Deactivation does not affect its Parent or siblings
+
+Organization A has Distributor D1, Shop S1, and Shop S2. Deactivating Shop S1 changes only S1 and the Distributor–Shop Mappings involving S1. Organization A, D1, and S2 remain in their existing states. A different Mapping between D1 and S2 is unaffected. Reactivating S1 can restore only the Mappings changed by S1's deactivation operation, subject to the current state of the other endpoints.
+
+### 20.15 Subscription suspension does not deactivate a Business Entity
+
+Organization A has an Active Subscription that covers Organization A and Shop S1. The Subscription enters Grace Period and is later Suspended under its billing policy. Organization A and S1 retain their Business Entity lifecycle states; they are not automatically Suspended, Deactivated, or Closed. The applicable Entitlements become unavailable or restricted as defined by the Subscription policy. User Accounts, ownership, Business Structure, and historical business data remain separate and intact.
+
+### 20.16 One natural person with two Organization-specific User Accounts
+
+A natural person works for Organization A and Organization B. Organization A provisions User Account UA with its own verified email, mobile number, credentials, and portal-wide unique User Code. Organization B independently provisions User Account UB with different email and mobile details and a different portal-wide unique User Code. UA belongs only to Organization A's Customer Business Architecture; UB belongs only to Organization B's Customer Business Architecture. Neither account can be used to access the other Organization. Terminating UA does not terminate UB.
+
+### 20.17 Organization-configured initial credential methods
+
+Organization A configures OTP Password Setup. A new User Account under Organization A completes OTP verification using an enabled verified channel and sets a permanent password inside the CBM application. Organization B configures Both Required. Its new User must successfully complete both the Email Temporary Password bootstrap process and the OTP verification process before normal account use is enabled. Neither process sends a URL or link. If a Temporary Password password-change save attempt fails, the Temporary Password remains valid only for the restricted password-establishment process until success, expiry, or revocation.
+
+### 20.18 Immutable portal-wide User Code
+
+Two separate User Accounts are provisioned for the same natural person in two different Organizations. The system allocates two different six-character User Codes, each having two uppercase English letters followed by four digits. Both codes are globally unique across CBM, are generated by the system, are read-only and immutable, and are never reused. The User Code identifies an account; it is not a secret or a Permission.
+
+## 21. Documentation governance
+
+### 21.1 Documentation completeness
 
 Project documentation must be sufficiently precise that a reader can understand each included concept without relying on undocumented assumptions. As applicable, definitions, purpose, scope, ownership, authority, constraints, relationships, behaviour, exceptions, and examples must be stated explicitly.
 
-### 19.2 No unresolved matters in the master decision record
+### 21.2 No unresolved matters in the master decision record
 
 The master decision record contains finalized decisions only. An unresolved matter must be discussed and explicitly finalized before it is added. It must not be represented as a decision, and it must not be silently filled by an AI recommendation or an assumed technical convention.
 
-### 19.3 Separate Project Discussion History from domain records and decisions
+### 21.3 Separate Project Discussion History from domain records and decisions
 
 Chronological project discussions, reasoning, rejected approaches, and superseded wording belong in a separate **Project Discussion History** record if one is maintained. Project Discussion History is not Domain History and is not the Audit Trail. Neither Domain History nor Audit Trail belongs in the authoritative decision text as a substitute for project discussion history.
 
-### 19.4 Downstream documentation consistency
+### 21.4 Downstream documentation consistency
 
 Every later project document must:
 
@@ -1843,18 +1888,18 @@ Every later project document must:
 - Avoid introducing contradictory or broader rights by implication.
 - Be updated when a governing master decision changes.
 
-### 19.5 Change control
+### 21.5 Change control
 
 A proposed change is not final merely because it has been suggested or documented in a discussion. The project owner must explicitly approve it. After approval, the master source of truth is updated first, and dependent documents are reconciled.
 
 ---
 
-## 19. Source basis and decision provenance
+## 22. Source basis and decision provenance
 
 This baseline consolidates:
 
 1. The user-provided project context document **CBM_Project_Context_and_Decisions_2026-11-17** (provided in the conversation as the CBM project context text), including its confirmed business, service-provider, ownership, mapping, continuity, migration, archival, and Stable Core principles.
-2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the finalized unified Shop entity and simplified Business Structure (Organization → Distributor / Shop), exactly one mandatory Parent Organization for every Distributor and Shop, the Legal Identity and Professional Identity applicability matrix, Organization Network Configurations, GSTIN eligibility independence, generic GST Registration Assignment, typed and purpose-specific Mapping, two-way Distributor–Shop Secret Code verification with expiry, one-time use, rate limiting and revocation, mapping-type-limited business transactions and information exchange, explicit User Scope Mapping, and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
+2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the unified Shop entity and simplified Business Structure (Organization → Distributor / Shop); exactly one mandatory Parent Organization for every Distributor and Shop; identical Owner ID sets for an Organization and all of its direct Distributor/Shop children within the Customer Business Architecture, while Service Provider ownership remains independent; the Legal Identity and Professional Identity applicability matrix; Organization Network Configurations; GSTIN eligibility independence; generic GST Registration Assignment; two-way Distributor–Shop Secret Code verification with expiry, one-time use, rate limiting, and revocation; Mapping-Type-limited transactions and information exchange; Business Entity Lifecycle parent-child cascades and immutable restoration snapshots; separate Subscription, Plan, Add-on, Entitlement, Coverage, Usage Limit, Invoice, and Payment concepts; separate User Account, User–Business Association, and Credential/Authenticator lifecycles; Organization-configurable initial credential establishment; one Organization-scoped Customer Business User Account per account; immutable portal-wide User Code; the absolute no-URL/no-link outbound communication rule; explicit User Scope Mapping; and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
 3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
@@ -1876,6 +1921,19 @@ Official GST references consulted for the legal architecture boundary:
 
 These references support the logical architecture boundaries. Current law and official GST Portal procedures must be rechecked before implementation.
 
+
+Official technical references consulted for security and SaaS architecture boundaries:
+
+- [NIST SP 800-63B-4 — Authentication and Authenticator Management](https://csrc.nist.gov/pubs/sp/800/63/B/4/final): authenticator lifecycle, OTP handling, replay resistance, and session considerations.
+- [NIST SP 800-63B-4 — Authenticator technical requirements](https://pages.nist.gov/800-63-4/sp800-63b/authenticators/): OTP single-use, validity windows, rate limiting, and secure handling.
+- [OWASP Forgot Password Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html): secure recovery identifiers, restricted recovery process, and password-reset security.
+- [OWASP Multifactor Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html): OTP lifetime, single-use, attempt limits, and storage.
+- [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html): adaptive password hashing and secure password storage.
+- [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html): session renewal and invalidation after security-sensitive changes.
+- [AWS SaaS Lens — Tenant Onboarding](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/tenant-onboarding.html), [Tenant Isolation](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/tenant-isolation.html), and [Identity and Access Management](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/identity-and-access-management.html): tenant lifecycle orchestration, isolation, and tenant-bound identity.
+- [Stripe Billing — Subscription API and lifecycle](https://docs.stripe.com/api/subscriptions): a vendor example of subscription states, billing behaviour, and effective subscription changes. Stripe is a research reference, not a required CBM provider.
+
+These references inform security and implementation considerations but do not override CBM's explicitly approved business rules. In particular, CBM's no-URL rule and its Organization-configurable initial credential methods are project-specific decisions. Technical implementations must follow the approved CBM rules while applying appropriate compensating security controls.
 ---
 
 **End of authoritative finalized baseline.**
