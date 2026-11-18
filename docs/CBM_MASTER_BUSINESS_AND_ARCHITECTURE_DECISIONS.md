@@ -188,7 +188,7 @@ Being a Service Provider does not make that provider the owner of the customer b
 
 An **Organization** is an independent customer business that uses CBM software services. It has its own Business Identity, ownership, business data, internal business structure, and associated users. It may receive services directly from Main Portal or through an authorized Sub-Portal.
 
-An Organization may have multiple direct structural children of either or both permitted types: Distributor and Shop. Multiple Distributors may be grouped as a **Distribution Network**; multiple Shops may be grouped as a **Retail Network**. An Organization with both distribution and retail operations has a **Hybrid Network** configuration. These are operating configurations/groupings, not separate Business Identities, Owners, Service Providers, or customer businesses. The ownership of each Distributor and Shop is determined independently through Ownership Links.
+An Organization may have multiple direct structural children of either or both permitted types: Distributor and Shop. Multiple Distributors may be grouped as a **Distribution Network**; multiple Shops may be grouped as a **Retail Network**. An Organization with both distribution and retail operations has a **Hybrid Network** configuration. These are operating configurations/groupings, not separate Business Identities, Owners, Service Providers, or customer businesses. Each Distributor and Shop retains its own Business Identity and separately recorded Ownership Links and Ownership IDs. Within that Organization's Customer Business Architecture, however, each child entity's Owner ID set must exactly match the Organization's Owner ID set under Sections 3.12 and 5.3.1; separate Ownership Links do not permit different Owner ID sets.
 
 ### 3.6 Tenant
 
@@ -550,14 +550,25 @@ They do not change either entity's structural parent or ownership.
 
 OWNERSHIP LINK VIEW (INDEPENDENT OF BUSINESS STRUCTURE AND MAPPING)
 
-       OWNER ID A                 OWNER ID B
-           |                          |
-      OWNERSHIP ID               OWNERSHIP ID
-           |                          |
-      ORGANIZATION A                 SHOP S1
+                     OWNER ID SET {A, B}
+                              |
+             +----------------+----------------+
+             |                |                |
+       separate Ownership  separate Ownership  separate Ownership
+          Links/IDs           Links/IDs           Links/IDs
+             |                |                |
+       ORGANIZATION A    DISTRIBUTOR D1       SHOP S1
 
-A Shop may have an Owner different from the Owner(s) of its structural
-Organization. Structural placement does not establish ownership.
+Within this Customer Business Architecture, Organization A and each of
+its direct Distributor and Shop children have exactly the same Owner ID
+set {A, B}. Each Business Identity retains its own separate Ownership
+Links and Ownership IDs. The matching Owner ID set does not merge the
+Business Identities, Legal Identities, Professional Identities, or data.
+
+A Distributor or Shop in a different Organization's Customer Business
+Architecture is governed by that other Organization's own internally
+consistent Owner ID set. Structural placement does not itself create an
+Ownership Link.
 
 USER AUTHORIZATION VIEW
 
@@ -797,7 +808,7 @@ A Distributor's Business Available Authority Scope always includes the Distribut
 
 In addition, it may include a Shop associated with the Distributor's distribution context **only when** an Owner ID linked to that Shop through an Ownership Link is also linked through an Ownership Link to the Distributor, and the applicable Main Portal-governed rules explicitly permit that owner-linked scope.
 
-A Distributor's scope does not include other mapped Shops merely because they participate in its Distribution Network. A Shop owned by a different Owner ID remains outside the Distributor's ownership-based scope, even when mapped to the Distributor. Mapping enables only the expressly authorized relationship interactions; it does not create an Ownership Link or grant unrestricted administrative or data access.
+A Distributor's scope does not include other mapped Shops merely because they participate in its Distribution Network. A mapped Shop that has no Owner ID in common with the Distributor remains outside the Distributor's ownership-based scope, even when mapped to the Distributor. Mapping enables only the expressly authorized relationship interactions; it does not create an Ownership Link or grant unrestricted administrative or data access.
 
 Where a Distributor has multiple Owners, owner-linked eligibility must be evaluated against the explicit Ownership Links and applicable governance rules. It must not be inferred from a shared name, contact detail, User account, or informal association.
 
@@ -924,7 +935,7 @@ Assume Organization A's Business Available Authority Scope may include Distribut
 - User U1 is associated with Organization A and is assigned only Organization A and Shop S1. U1 cannot access D1, S2, or S3 merely because U1 is an Organization-level User.
 - User U2 is associated with Organization A and is assigned Distributor D1 and Shop S2. U2 cannot access S1 or S3 unless those entities are also assigned.
 - User U3 is explicitly assigned the full available scope and may access D1, S1, S2, and S3, subject to Permissions and all other controls.
-- Shops mapped to D1 but owned by unrelated Owners are not included in Organization A's scope merely because of the mapping, and cannot be added to these Users' assignments on that basis.
+- Shops mapped to D1 that have no Owner ID in common with D1 are not included in Organization A's scope merely because of the mapping, and cannot be added to these Users' assignments on that basis.
 
 The same Role may therefore operate over different entity sets for different Users. The assigned scope and action Permissions must both be satisfied.
 
