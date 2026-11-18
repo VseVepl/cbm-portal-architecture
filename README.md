@@ -36,10 +36,21 @@ Global Business Settings contains six domains: Language & Regional Language; Dat
 
 Global Business Settings provides shared defaults and reference conventions; it does not own GST/Tax, Accounting, HR/Payroll, Inventory/Product, Finance/Payment, Business Identity, or other Business Module-specific rules and authoritative records. The Master document defines the complete domains, governance paths, inheritance/override controls, and integrity safeguards.
 
+
+## Accounting Management
+
+**Accounting Management** is an approved independent Business Module. Its canonical internal model is CBM-owned and uses Double-entry Accounting by default. It provides governed Accounting Contexts and Books of Accounts, Accounting Frameworks and Policies, a hierarchical Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, General Ledger and Sub-ledger records, bill-wise/outstanding allocation, Cost Centres, Cost Categories, Accounting Dimensions, Accounting Periods, Reconciliation, Financial Statements, Fixed Asset Accounting, and Management Accounting capabilities.
+
+Accrual basis is the default recognition basis for general-purpose Books; another basis may be used only where the applicable law and Accounting Framework permit it and an authorized policy enables it. Each statutory Book has exactly one accountable Legal Identity. Separate Legal Identities retain separate authoritative Books; Professional Identities and operating locations under one Legal Identity may be tracked through approved accounting dimensions where appropriate. Accounting records do not take ownership of Sales, Purchase, POS, Inventory, GST/Tax, Finance/Payment, HR/Payroll, Subscription/Billing, or other source-domain records.
+
+The **External Accounting Data Exchange Model**, including the **Tally Data Exchange Model** and its version-aware Compatibility Adapter, is separate from the canonical Accounting Model. Tally-specific structures and formats are mapped into CBM domain concepts; Tally does not define CBM's internal accounting schema. Accounting supports governed historical, opening-balance, and selective migration; scoped exports; and permission-controlled CA/Auditor data packages. Import acceptance, posting, provenance, reconciliation, and source-domain ownership remain explicit and auditable.
+
+The complete approved scope, ownership boundaries, Accounting Context/Books rules, migration and exchange safeguards, and applicable framework boundaries are defined in Section 6C of the Master document.
+
 ## Documentation rule
 
 Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. Keep discussion history separate from the master source of truth.
 
 ## Current project stage
 
-The documented baseline covers the finalized project vision and business-level concepts available as of **18 November 2026**, including the approved Business Entity Lifecycle, Subscription, and Customer Business User Account rules. This repository is documentation-only at this stage. It does not authorize application implementation, database changes, infrastructure changes, or deployment.
+The documented baseline covers the finalized project vision and business-level concepts available as of **19 November 2026**, including the approved Business Entity Lifecycle, Subscription, Customer Business User Account, and Accounting Management rules. The wider Business Module Boundaries workstream remains in progress; approval of Accounting Management does not imply that every other potential Business Module has been classified or approved. This repository is documentation-only at this stage. It does not authorize application implementation, database changes, infrastructure changes, or deployment.
