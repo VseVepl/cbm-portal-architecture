@@ -2172,6 +2172,8 @@ A single Product/Variant/package/instance may have multiple carriers or labels f
 
 Where GS1 Application Identifiers are used, their defined data semantics and format rules must be preserved; the same AI value must not be repurposed for a CBM-specific meaning. GS1 Data Carriers, GS1 Application Identifiers, and non-GS1 carrier formats may coexist through registered profiles. Non-GS1 product codes and barcodes must remain supported where permitted by the business use case and device capability.
 
+Each standards-based profile must identify the standards body, standard and release/version, applicable ratified change notifications or amendments, relevant market/sector/application scope, effective date, supported identifier keys/AIs, data carriers, and parsing/validation rules. A newly ratified change notification does not silently rewrite the interpretation of historical labels, identifiers, or accepted transactions. Standards changes must be adopted through a versioned profile and governed compatibility/migration process. CBM must distinguish the latest published standard release from ratified changes announced for a future release; it must not treat an unpublished future consolidated edition as already published.
+
 Printing, scanning, barcode generation, RFID/NFC encoding, and device interaction are shared technical capabilities or client/device integrations. They do not take ownership of Product/Item identity or stock/warehouse transactions. A scanned identifier does not itself authorize a stock movement, sale, purchase, adjustment, or other transaction. Product labels, printed materials, and outbound communications must also comply with the existing absolute no-URL rule in Section 15 and invariant 64: a QR/Data Carrier must not be used to send or expose a URL-resolving action where that rule applies.
 
 ### 6F.8 Physical instances, component identifiers, batch/lot, and serial tracking
@@ -2276,7 +2278,7 @@ Product/Item Management must be designed against the full architecture-wide doct
 - Product types, catalogue templates, attribute definitions, value dictionaries, labels, and applicable taxonomies.
 - Variant dimensions, allowed values, dependencies, valid combinations, and configurable-to-order patterns.
 - Product Codes, SKU policies, identifier types, namespaces, validation, uniqueness scope, and purpose-specific primary identifier choices.
-- Barcode/Data Carrier symbologies, parser/encoding profiles, supported device capabilities, and label profiles.
+- Barcode/Data Carrier symbologies, parser/encoding profiles, versioned standards profiles/change notifications, supported device capabilities, and label profiles.
 - Sale, purchase, stock, service, and other applicability rules.
 - Product/Variant tracking characteristics and Inventory tracking-policy references.
 - Packaging levels, units, conversions, trade-unit identification, and bundle composition.
@@ -3623,7 +3625,10 @@ These references inform logical boundaries and interoperable contracts. They do 
 Official references consulted for Product/Item Management, product identity, variants, identifiers, and barcodes in Section 6F:
 
 - [GS1 General Specifications, Release 26.0 (ratified January 2026)](https://ref.gs1.org/standards/genspecs/): current GS1 reference for trade-item identification, GTIN allocation, identification levels, packaging/trade-item groupings, serialisation, identifier attributes, Application Identifiers, and supported GS1 data carriers.
-- [GS1 General Specifications archive](https://ref.gs1.org/standards/genspecs/archive): official release history; the January 2026 Release 26.0 is the current release consulted for this baseline.
+- [GS1 General Specifications archive](https://ref.gs1.org/standards/genspecs/archive): official release history; the January 2026 Release 26.0.0 is the latest published consolidated edition consulted for this baseline.
+- [GS1 General Specifications Change Notifications](https://ref.gs1.org/standards/genspecs/gscn/): official registry of ratified changes; as of the 19 November 2026 baseline, it lists ratified changes for the planned Version 27.0, which must be distinguished from the currently published Version 26.0.0.
+- [GS1 Global Product Classification (GPC)](https://ref.gs1.org/standards/gpc/): an optional external product-classification vocabulary that may be mapped through a governed taxonomy profile; it does not mandate one CBM product hierarchy or replace business-specific classifications.
+- [GS1 — Who is responsible for numbering trade items?](https://support.gs1.org/support/solutions/articles/43000734414-who-is-responsible-for-numbering-trade-items-): GS1 guidance on the usual GTIN allocator (the brand owner) and the role of an assigned GS1 Company Prefix and applicable exceptions.
 - [GS1 Application Identifiers](https://ref.gs1.org/ai/): official searchable reference for identifiers that define the meaning and format of data attributes encoded in GS1 barcodes and EPC/RFID tags.
 - [GS1 — Why should I use GS1 Application Identifiers in a barcode?](https://support.gs1.org/support/solutions/articles/43000734173-why-should-i-use-the-gs1-application-identifiers-in-a-barcode/): explains how GS1 AIs distinguish identification keys from attributes such as serial, batch/lot, and expiry data, and how these data may be represented through supported GS1 symbols.
 - [GS1 — Are all barcodes the same?](https://support.gs1.org/support/solutions/articles/43000734155-are-all-barcodes-the-same-): explains differences between barcode symbologies, data capacities, and GS1-specific data conventions.
