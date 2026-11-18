@@ -279,7 +279,70 @@ A **Business Relationship** is an explicitly established association between dis
 
 ### 3.15 User
 
-A **User** is an authenticated individual identity that accesses CBM. A User may be associated with one or more businesses through explicit access relationships. A User is not automatically an Owner and does not receive access to every business owned by the same person or served by the same provider.
+A **User** is an individual account identity that can authenticate to CBM. A User Account is a system account record, not a global identity that automatically spans multiple Customer Business Architectures. An Owner is not automatically a User, and ownership does not itself create a User Account or grant operational access.
+
+#### 3.15.1 Customer Business User Account boundary
+
+Within the Customer Business Architecture, each User Account must belong to exactly one Organization's Business Architecture. A single User Account must not be associated with two or more Organizations. The account may be authorized for relevant entities and contexts within its own Organization's Business Architecture, subject to the separately governed User Scope Mapping and Permissions rules.
+
+The same natural person may work for more than one Organization. In that case, each Organization must have a separate User Account for that person. Those accounts are separate CBM account identities, with separate account records, credentials, User Codes, and contact identifiers. An account created within one Organization's Business Architecture must not be used to access or act within another Organization's Business Architecture. The accounts must not be merged into a shared cross-Organization Customer Business User identity.
+
+For the same natural person, the email address and mobile number registered for one Organization-specific User Account must be different from the email address and mobile number registered for that person's User Account in another Organization. The distinct accounts must maintain their own verified contact details. This Customer Business account-boundary rule does not redefine the separate account and authority arrangements of Main Portal or Sub-Portal Service Provider personnel.
+
+#### 3.15.2 User Code
+
+A **User Code** is a system-generated, immutable, portal-wide unique identifier assigned to each CBM User Account. It is exactly six characters long and follows this fixed pattern:
+
+- The first two characters must be uppercase English letters A–Z.
+- The following four characters must be decimal digits 0–9.
+- No spaces, punctuation, lowercase letters, or additional characters are permitted.
+- Example format: AB1234.
+
+The User Code must be generated automatically by CBM. A User, Organization, Service Provider, or administrator must not create, choose, edit, customize, or replace it. The User Code is read-only and may only be viewed by appropriately authorized parties in the relevant account context. It never changes during that account's lifetime and must not be reassigned to another account after termination.
+
+Uniqueness applies across the entire CBM Portal, not merely within one Organization or Service Provider. Each separate User Account belonging to the same natural person therefore receives a different User Code. The User Code is an identifier, not a password, secret, authenticator, or authorization grant.
+
+The fixed format provides a finite namespace of 6,760,000 possible values (26 × 26 × 10,000). The system must allocate codes with collision-safe uniqueness enforcement, monitor remaining capacity, and never reuse an assigned code. If the available namespace is exhausted, allocation must fail safely; the format must not be silently altered or bypassed.
+
+#### 3.15.3 Initial credential establishment methods
+
+A newly provisioned Customer Business User Account must establish its permanent password through the Organization's configured account-provisioning method. The Organization may configure one of the following modes:
+
+1. **Email Temporary Password:** CBM generates a temporary bootstrap password and sends it to the account's registered email address. It may be used only to enter the restricted initial password-establishment process. It must not grant normal business access.
+2. **OTP Password Setup:** CBM sends a one-time verification code through an enabled and verified channel—Email, SMS to the registered mobile number, or WhatsApp to the registered mobile number. The User enters the OTP within the CBM application and, after successful verification, establishes a permanent password. No URL or link is used.
+3. **Both Required:** Both the Email Temporary Password method and the OTP Password Setup method must be successfully completed for initial credential establishment. They are cumulative requirements, not alternative choices in this mode.
+
+The selected Organization configuration governs new account provisioning. A configuration change must not silently reset or invalidate the established credentials of existing accounts. Any later re-verification or credential replacement must use a separately authorized credential lifecycle action.
+
+#### 3.15.4 Temporary bootstrap password
+
+A Temporary Password is a single-purpose bootstrap credential. It is not a normal reusable password and must not grant access to business modules, dashboards, business data, or ordinary account functions. It may only establish or resume the restricted password-change process.
+
+If password validation or password storage fails, the Temporary Password must not be revoked solely because that attempt failed. It remains usable only for the restricted password-establishment process until the permanent password is successfully stored, or until the Temporary Password expires or is explicitly revoked. Once the permanent password is successfully stored, the Temporary Password must immediately become invalid and must never be usable again.
+
+Temporary Passwords must be generated securely, transmitted only through the configured email mechanism, never written to application logs, and never stored as plaintext in the database. Passwords must be stored using a suitable adaptive password-hashing mechanism.
+
+#### 3.15.5 OTP and restricted password-setup session
+
+An OTP is a short-lived verification secret issued for a specific User Account and a specific verification purpose. OTPs must be cryptographically generated, protected against guessing and replay, single-use, time-limited, rate-limited, and invalidated after successful verification. OTP values must not be written to application logs or retained as long-term plaintext.
+
+Successful OTP verification may establish a restricted password-setup session that permits only the required permanent-password creation and confirmation actions. If saving the permanent password fails, the User may retry within that restricted session without reusing the already-consumed OTP. If the restricted session expires or is revoked before password establishment succeeds, a new valid OTP verification is required. The restricted session must never grant ordinary business access.
+
+OTP delivery through Email, SMS, or WhatsApp is an approved CBM capability, but OTP is not assumed to be compromise-proof. The Organization chooses the initial-credential method mode; applicable security controls must mitigate interception, guessing, replay, and account-recovery abuse.
+
+#### 3.15.6 No URL or link transmission
+
+CBM must never send a URL, hyperlink, clickable link, URL-bearing button, QR code that resolves to a URL, or equivalent link-based action to any person for any reason or through any outbound communication channel. This prohibition applies to all CBM-generated email, SMS, WhatsApp, notifications, account provisioning, verification, recovery, invitation-like communication, and future communication purposes.
+
+CBM must not implement invitation links, registration links, activation links, password-reset links, magic-login links, file-download links, or link-based verification. Where a User action or verification is required, the User must open the CBM application independently and complete the action there using the applicable credentials, OTP, or other approved in-application process. This is a platform-wide, non-overridable White-label security and product rule.
+
+#### 3.15.7 Login identification baseline
+
+The approved login-identification concept is:
+
+User Code + (Email Address OR Mobile Number OR Username) + Password
+
+The User Code identifies the specific User Account across the CBM Portal, while the accompanying account identifier must belong to that same account. This statement records the required account-identification inputs only. Detailed login channels, authentication sequences, session behaviour, and the complete Login Architecture are governed by a separate discussion and must not be inferred from this baseline.
 
 ### 3.16 Role
 
@@ -370,6 +433,62 @@ A **GST Registration Assignment** is the explicit, typed association by which a 
 ### 3.33 Place of Business
 
 A **Place of Business** for GST purposes is a location recognized and recorded in relation to a GST Registration under applicable GST law and official registration records. A CBM operational location is not automatically a GST-registered Place of Business merely because it exists in the Business Structure or participates in a Mapping.
+
+### 3.34 Business Entity Lifecycle
+
+**Business Entity Lifecycle** is the governed progression of a Business Entity through its permitted operational states, including creation, verification where required, activation, suspension, deactivation, closure, and subsequent archival. Entity Lifecycle is distinct from Subscription Lifecycle, User Account Lifecycle, Ownership Link Lifecycle, Business Relationship Lifecycle, Service Provider Relationship Lifecycle, and other domain-specific lifecycles.
+
+### 3.35 Lifecycle Operation
+
+A **Lifecycle Operation** is one authorized, identifiable action that changes the lifecycle state of an entity and, where an approved cascade policy applies, the state of its affected structural children or relationships. A Lifecycle Operation has its own unique operation identifier, initiating context, reason, actor or system process, approval where required, effective time, outcome, and related snapshot reference.
+
+### 3.36 Lifecycle Operation Snapshot
+
+A **Lifecycle Operation Snapshot** is an immutable record of the relevant pre-operation state of the entities and relationships within the scope of a Lifecycle Operation. It records enough information to identify which objects were changed by that operation, which objects were already in a different state, and what state must be considered for a safe restoration. It is not a database backup and does not replace Domain History or Audit Trail.
+
+### 3.37 Parent-Caused Cascade
+
+A **Parent-Caused Cascade** is an explicitly defined lifecycle effect in which a state change to a Parent Organization causes specified state changes to its direct structural Distributor and Shop children and to specified relationships involving those children. It applies only where the relevant lifecycle policy expressly defines the cascade. It must not be inferred for Service Provider relationships or unrelated Business Relationships.
+
+### 3.38 Lifecycle Restoration
+
+**Lifecycle Restoration** is the controlled reversal of state changes caused by a specific earlier Lifecycle Operation. Restoration uses that operation's immutable snapshot and operation identity. It restores only objects changed by that operation and must not overwrite a pre-existing state or a later independent lifecycle change.
+
+### 3.39 Commercial Account
+
+A **Commercial Account** is the commercial contract and billing reference through which a customer receives CBM services from one Service Provider. It identifies the applicable contracting/billing context and may have one or more Subscriptions. It is not an Owner ID, User Account, Business Identity, or Business Structure entity.
+
+### 3.40 Plan and Plan Version
+
+A **Plan** is a configurable commercial package of CBM service entitlements and commercial terms. A **Plan Version** is an identifiable, published version of that Plan with its own defined features, Entitlements, Usage Limits, compatibility rules, and commercial terms. Published Plan Versions are preserved for historical Subscription interpretation; changing a published Plan requires a new version rather than silently changing existing contractual meaning.
+
+### 3.41 Subscription
+
+A **Subscription** is the time-bounded or continuing service agreement applied to a Commercial Account under a particular Plan Version and its approved Add-ons, coverage, billing terms, and effective dates. Subscription status controls service entitlement availability; it does not itself create User access, action Permissions, ownership, or Business Entity lifecycle changes.
+
+### 3.42 Subscription Coverage Assignment
+
+A **Subscription Coverage Assignment** explicitly identifies the CBM business entity or entities covered by a Subscription and the effective period and coverage rule. Coverage is not inferred from Ownership, Parent–Child structure, Service Provider association, or Business Mapping.
+
+### 3.43 Entitlement
+
+An **Entitlement** is a defined feature, service capability, or permitted product capacity made available through an eligible Subscription and its Coverage Assignment. An Entitlement does not replace User Assigned Authority Scope or action Permissions.
+
+### 3.44 Usage Limit
+
+A **Usage Limit** is a measurable upper bound or threshold for an Entitlement, such as a quantity, capacity, transaction count, storage amount, or other governed usage metric. Its measurement scope, period, aggregation, and enforcement behaviour must be explicitly defined.
+
+### 3.45 Add-on
+
+An **Add-on** is a separately defined and versioned commercial extension that may add or extend specified Entitlements or Usage Limits beyond the base Plan. It is not a hard-coded package and may be applied only where compatible with the relevant Plan and Subscription.
+
+### 3.46 Invoice
+
+An **Invoice** is a financial document recording a charge or amount due under a Commercial Account or Subscription arrangement. Invoice status and settlement are separate from Subscription service status.
+
+### 3.47 Payment
+
+A **Payment** is a financial settlement transaction made against an Invoice or another valid commercial obligation. Payment processing status, Invoice status, and Subscription status are separate records and must not be conflated.
 
 ---
 
