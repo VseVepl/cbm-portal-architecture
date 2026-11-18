@@ -1405,6 +1405,112 @@ Cancellation, expiry, or suspension of a Subscription does not itself deactivate
 
 Business data, invoices, payments, domain history, and audit records remain subject to their own retention, export, archival, and deletion policies. Subscription termination must not be used as an implicit business deletion instruction.
 
+## 15. User Account Lifecycle and Initial Credential Establishment
+
+### 15.1 Account boundary in the Customer Business Architecture
+
+Each Customer Business User Account belongs to exactly one Organization's Business Architecture. A User Account cannot be reused across multiple Organizations.
+
+The same natural person may work in two or more Organizations, but each Organization must provision a separate User Account for that person. Each account has a separate User Code, email address, mobile number, credentials, account state, and account history. The email address and mobile number used for one of that person's Organization-specific accounts must not be reused for another such account.
+
+A User Account created within Organization A cannot be used to access Organization B, even where the same person works in both Organizations or holds ownership rights in both. This restriction does not prevent a User from being explicitly assigned to multiple eligible Distributors/Shops within the single Organization's own Business Architecture under the separately governed User Scope and Permissions rules.
+
+### 15.2 User Account states
+
+The Customer Business User Account states are:
+
+| State | Meaning |
+|---|---|
+| Pending Verification | Required account/contact or initial credential verification has not been completed. |
+| Active | Account is established and may authenticate, subject to applicable authentication, association, scope, and permission controls. |
+| Locked | Account authentication is temporarily blocked by security controls, such as repeated failed attempts or risk detection. |
+| Suspended | Account use is restricted by an authorized administrative or security action. |
+| Deactivated | Account is disabled for normal use but remains identifiable and historically preserved. |
+| Terminated | The account relationship has been formally ended; normal authentication is permanently prohibited. |
+
+Invited is not a User Account state and is not part of the CBM account model. CBM does not use invitation URLs or invitation links.
+
+Password Change Required is a restricted credential-establishment condition, not a separate User Account state. An account in this condition must not receive normal business access.
+
+### 15.3 Three independent User-related lifecycles
+
+The following three lifecycles are separate and must not be conflated:
+
+1. **User Account Lifecycle:** creation, verification, activation, locking, suspension, deactivation, and termination of the account record.
+2. **User–Business Association Lifecycle:** establishment, activation, suspension, and revocation of the association within that account's permitted Customer Business Architecture.
+3. **Authentication Credential / Authenticator Lifecycle:** creation, verification, use, replacement, expiry, compromise handling, and revocation of passwords, OTP methods, and other approved authenticators.
+
+A transition in one lifecycle affects another only through an explicitly defined rule. In particular, terminating one Organization-specific User Account does not terminate a different account held by the same natural person in another Organization.
+
+### 15.4 Authorized User provisioning; no invitation model
+
+A User Account is provisioned by an Authorized User completing the required account details and business-account setup within CBM. The system creates the account record, allocates its immutable User Code, records its Organization boundary, and applies the Organization's configured initial credential-establishment method.
+
+CBM does not send an invitation URL, activation URL, registration link, or any other link to complete account provisioning. The process is completed through the CBM application using the approved credential or OTP method.
+
+### 15.5 Organization-configurable initial credential method
+
+Each Organization must be able to configure one of these initial credential-establishment modes:
+
+| Configuration mode | Required process |
+|---|---|
+| Email Temporary Password | CBM sends the generated Temporary Password to the User's registered email. The User establishes a permanent password through the restricted bootstrap process. |
+| OTP Password Setup | CBM sends an OTP using a supported verified channel. The User enters the OTP inside CBM and establishes a permanent password. |
+| Both Required | The User must successfully complete both the Email Temporary Password proof and the OTP Password Setup proof before normal account use is enabled. |
+
+The three modes are selectable Organization configuration values. Both Required means both proof methods are mandatory; it does not mean the Organization may select either one at runtime.
+
+Supported OTP delivery channels are Email, SMS to the registered mobile number, and WhatsApp to the registered mobile number. The selected channel must be available and verified for the account. OTP delivery and Temporary Password delivery must not include any URL or link.
+
+The Organization's configured mode governs the account establishment process. A later change to the Organization's configuration does not silently reset credentials or force existing Users through a new setup process. A future re-verification or credential replacement must be a separately authorized action.
+
+### 15.6 Temporary Password bootstrap behaviour
+
+The Email Temporary Password is a single-purpose bootstrap credential. It is not a general password and cannot be used to access normal business functions.
+
+The Temporary Password may authenticate the User only into the restricted initial password-establishment process. If password validation or password storage fails, it must remain valid for retry within that same restricted purpose until it is successfully replaced, expires, or is explicitly revoked. A failed password-change attempt alone must not invalidate it.
+
+Until the permanent password has been successfully stored, all normal business operations, dashboards, modules, data access, and account functions other than the required password-establishment process remain blocked.
+
+After successful permanent-password storage, the Temporary Password is immediately and permanently invalidated. It cannot be used again. It must have a defined expiry and revocation capability and must be protected as a secret.
+
+### 15.7 OTP password setup and retry behaviour
+
+OTP is a one-time, short-lived verification secret bound to a specific account and password-establishment purpose. It must be cryptographically generated, rate-limited, protected from replay, invalidated after successful verification, and excluded from application logs and long-term plaintext storage.
+
+Successful OTP verification establishes only a restricted password-setup session. That session permits password creation and confirmation only. It does not grant normal CBM account access.
+
+If password storage fails after successful OTP verification, the User may retry within the still-valid restricted setup session without reusing the consumed OTP. If the restricted session expires or is revoked before the permanent password is stored, a new OTP verification is required. The same restrictions apply when the Organization selects Both Required; normal account use remains blocked until both required proofs and permanent-password establishment succeed.
+
+OTP is an approved supported method, but it is not treated as compromise-proof. The Organization may select OTP alone, Temporary Password alone, or both methods as mandatory.
+
+### 15.8 Password storage and credential security
+
+Permanent and Temporary Password values must never be stored as plaintext in the CBM database or written to logs. Password storage must use an appropriate adaptive password-hashing algorithm and properly managed salts. Temporary Passwords must be transmitted only through the configured email channel and protected as bootstrap secrets.
+
+Credential changes, resets, authenticator replacement, recovery, compromise handling, and revocation must be authenticated or verified through their applicable approved processes. Any successful password change or security-sensitive credential change must apply the relevant session renewal/revocation controls defined by the Login and Authentication Architecture.
+
+### 15.9 Account recovery without URLs
+
+Password recovery and account recovery must not use URL tokens, reset links, magic links, or any other URL-based action.
+
+Recovery must be performed within the CBM application using the applicable verified OTP channel or an authorized support-assisted identity-verification procedure. A recovery process must not disclose whether an unrelated account exists, must limit repeated attempts, and must preserve an audit record of the recovery outcome. If the User no longer controls the registered channels, recovery must use an independently authorized manual/support verification path; it must still not send a URL or link.
+
+### 15.10 Termination and historical integrity
+
+When a User Account is Terminated:
+
+- Normal authentication is permanently denied.
+- Active sessions and account-bound authentication tokens are revoked.
+- Active authenticators/credentials are revoked or rendered unusable.
+- The account's active associations are ended according to the account termination process.
+- The User Code is retained as a historical identifier and is never reassigned.
+- Existing business records and Audit Trail events retain their original actor/account reference.
+- Termination of this account does not terminate another separate account belonging to the same natural person in another Organization.
+- Terminating a User Account does not deactivate, suspend, close, or alter the Business Entity.
+
+Detailed Login Architecture, login channels, session policy, and the full User Scope/Permissions design remain governed by their separate discussions and must not be inferred from this account-lifecycle baseline.
+
 ## 13. Sub-Portal migration and service continuity
 
 ### 14.1 Nature of migration
