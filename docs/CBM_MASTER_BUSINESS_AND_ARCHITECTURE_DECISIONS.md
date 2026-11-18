@@ -712,7 +712,7 @@ Each Organization, Distributor, and Shop remains a separate Business Identity an
 
 This Customer Business ownership-consistency rule does not apply to the Service Provider Architecture. Main Portal and each Sub-Portal are separate Service Provider businesses and may have different Owner IDs from one another and from customer Organizations. A Sub-Portal's ownership does not become the ownership of its customer Organization.
 
-A change to an Organization's Owner ID set cannot be applied while leaving its direct structural Distributor or Shop children with a different Owner ID set. Ownership Transfer workflows remain subject to the existing deferral and must not be inferred or implemented from this consistency rule alone.
+A change to an Organization's Owner ID set cannot be applied while leaving its direct structural Distributor or Shop children with a different Owner ID set. This baseline does not define or authorize an Ownership Transfer workflow. No such workflow may be inferred, implemented, or treated as approved from the ownership-consistency rule alone; any ownership-change process requires its own explicit project-owner approval and finalized rules.
 
 ### 5.4 Organization Network Configurations
 
