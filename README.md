@@ -28,6 +28,14 @@ Customer Business User Accounts are Organization-scoped. The same natural person
 
 The approved Master baseline also defines **Platform-wide Services** as a distinct Architecture Layer, with four Service Scopes (Ecosystem-wide, Service Provider-scoped, Tenant-scoped, and Business-context-scoped), three Category Groups, and fifteen Categories. It distinguishes Category, Service, and Capability as conceptual levels and preserves the existing authority, authorization, security, approval, audit/history, and strict data-isolation boundaries. The Master document is authoritative for the complete taxonomy and responsibility rules.
 
+## Global Business Settings
+
+The approved product scope is India-only. English is the platform default; only Main Portal-enabled Indian languages may be supported. INR is the only currency and IST / Asia/Kolkata is the only time zone. Shared conventions use Indian number grouping, Indian regional/address references, and a Metric baseline with relevant India-use units. Gregorian is the core calendar; the default Financial Year is 1 April–31 March, with alternatives only where permitted by applicable domain rules and explicitly authorized.
+
+Global Business Settings contains six domains: Language & Regional Language; Date, Time & Calendar; Indian Number & Currency; Indian Measurement & Units; Indian Regional & Address; and Indian Business Defaults. Main Portal governs mandatory platform boundaries and approved shared defaults. Sub-Portal settings remain within delegated Service Provider authority and are not a structural parent path to customer Organizations. Organizations govern eligible defaults for their direct Distributor/Shop children; child overrides and User presentation preferences require explicit applicability and authority.
+
+Global Business Settings provides shared defaults and reference conventions; it does not own GST/Tax, Accounting, HR/Payroll, Inventory/Product, Finance/Payment, Business Identity, or other Business Module-specific rules and authoritative records. The Master document defines the complete domains, governance paths, inheritance/override controls, and integrity safeguards.
+
 ## Documentation rule
 
 Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. Keep discussion history separate from the master source of truth.
