@@ -1163,6 +1163,141 @@ Official references:
 
 ---
 
+## 13. Business Entity Lifecycle and State Management
+
+### 13.1 Scope and separation
+
+Business Entity Lifecycle governs the operational existence and state transitions of Organizations, Distributors, and Shops. The Parent–Child cascade rules in this section apply only to the Customer Business Structure relationship Organization → Distributor / Shop. They do not apply to the Main Portal → Sub-Portal Service Provider relationship or to Business Mappings.
+
+The following lifecycles are separate but explicitly related where a rule defines an effect:
+
+- Business Entity Lifecycle.
+- Structural Parent–Child Cascade Lifecycle.
+- Business Relationship / Mapping Lifecycle.
+- Ownership Link Lifecycle.
+- Subscription Lifecycle.
+- User Account Lifecycle.
+- User–Business Association Lifecycle.
+- Authentication Credential / Authenticator Lifecycle.
+- Archival Lifecycle.
+
+A change in one lifecycle must not silently change another. A defined cascade is permitted only where this section expressly states it.
+
+### 13.2 Business Entity operational states
+
+The common operational states are:
+
+| State | Meaning |
+|---|---|
+| Draft | Entity creation has begun, but required creation or validation conditions are not complete. |
+| Pending Verification | A required verification is outstanding. |
+| Active | Entity is operational and may participate in applicable activities, subject to Subscription, authority, authorization, and other rules. |
+| Suspended | Entity is temporarily restricted under an authorized suspension operation. |
+| Deactivated | Entity's regular operation has been disabled. Reactivation may be permitted through an authorized operation. |
+| Closed | The entity has been formally closed. It is terminal for normal operations and cannot be ordinarily reactivated. |
+
+Not every entity must pass through every state. Pending Verification applies only where a verification is required. A Distributor or Shop must have exactly one Parent Organization from creation as already established in Sections 3 and 5; it must not remain unassigned while in Draft or any later state.
+
+Archived is not a Business Entity operational state. Archival is a separate preservation lifecycle governed by Section 17. A Closed entity may have its records and files archived without replacing its Closed operational state.
+
+### 13.3 State transition controls
+
+Every state transition must be explicitly authorized and satisfy the applicable Main Portal governance, policy, validation, approval, and operational preconditions.
+
+The common transition model is:
+
+- Draft → Pending Verification, when verification is required.
+- Draft → Active, when no separate verification is required and all creation conditions are satisfied.
+- Pending Verification → Active, after successful verification and all other activation conditions are met.
+- Active → Suspended, Deactivated, or Closed, through the applicable authorized operation.
+- Suspended → Active, Deactivated, or Closed, through an authorized operation.
+- Deactivated → Active or Closed, through an authorized operation.
+- Closed → no ordinary reactivation. Any exceptional correction or reopening requires an explicit Main Portal-authorized exceptional process, a recorded reason, and preserved history; it must not be treated as routine reactivation.
+
+A state change must record its reason, actor or system process, relevant authorization and approval, effective time, recorded time, and Lifecycle Operation reference.
+
+### 13.4 Parent Organization suspension and deactivation cascades
+
+Within the Customer Business Structure, an Organization is the direct Parent of its Distributors and Shops. The following cascade behaviour is mandatory:
+
+**Organization Suspended:**
+- Every direct child Distributor and Shop that is Active must become Suspended by the same Parent-Caused Lifecycle Operation.
+- A child that was already Suspended remains Suspended; its pre-existing suspension is not treated as newly caused by the Parent operation.
+- A child that was already Deactivated or Closed remains in that state.
+- Every Active Distributor–Shop Mapping involving a child that is suspended by this operation becomes Suspended.
+- The other endpoint of a cross-Organization Mapping is not itself suspended merely because its counterparty's Parent Organization is suspended.
+
+**Organization Deactivated:**
+- Every direct child Distributor and Shop that is not already Deactivated or Closed must become Deactivated by the same Parent-Caused Lifecycle Operation. This includes a child that was Active or Suspended before the Parent operation.
+- A child already Deactivated or Closed remains in its pre-existing state and must not be treated as changed by the Parent operation.
+- Every Distributor–Shop Mapping involving a child that is deactivated by this operation and that is not already Deactivated or Terminated must become Deactivated.
+- If a Mapping connects to an endpoint under another Organization, only the Mapping relationship changes. The remote Distributor or Shop and its Parent Organization remain unaffected.
+
+Parent suspension or deactivation does not transfer ownership, change Legal Identity or Professional Identity, terminate unrelated business entities, or merge data boundaries.
+
+### 13.5 Child suspension or deactivation
+
+A Distributor or Shop being Suspended or Deactivated must not change the State of its Parent Organization or any sibling Distributor or Shop.
+
+When a Distributor or Shop is Suspended, its Active Distributor–Shop Mappings become Suspended. When a Distributor or Shop is Deactivated, its Mappings that are not already Deactivated or Terminated become Deactivated. These relationship changes affect only the mappings involving that particular endpoint. Other mappings of the remote endpoint remain unchanged.
+
+Examples:
+
+- Deactivating Distributor D1 does not deactivate its Parent Organization or any Shop. Only D1 and the Mappings involving D1 are affected.
+- Deactivating Shop S1 does not deactivate its Parent Organization, any Distributor, or another Shop. Only S1 and the Mappings involving S1 are affected.
+- Deactivating one Shop does not deactivate another Shop merely because they share the same Parent Organization.
+
+### 13.6 Lifecycle Operation Snapshots
+
+Before a Parent-Caused Cascade or another multi-entity Lifecycle Operation changes any state, CBM must capture an immutable Lifecycle Operation Snapshot.
+
+The snapshot must record, as applicable:
+
+- Unique Lifecycle Operation ID and Snapshot ID.
+- Parent Organization and every affected direct child entity.
+- Each entity's exact pre-operation state.
+- Each affected Distributor–Shop Mapping and its exact pre-operation state.
+- Parent identifiers and relevant structural relationships.
+- Owner ID sets required to verify ownership consistency.
+- Which entities and relationships were actually changed by the operation and which were already in their prior state.
+- The operation type, reason, initiating actor/system process, approval reference, effective time, recorded time, and state/version references required to prevent an obsolete restoration.
+
+The snapshot is a state record for a particular operation. It is not a substitute for a complete database backup, Domain History, or Audit Trail. It must be immutable and retained according to the approved Business Entity Lifecycle History and archival rules.
+
+### 13.7 Reactivation and exact restoration
+
+When an Organization is reactivated after a Parent-Caused Suspension or Deactivation, CBM must use the snapshot associated with that exact Parent operation.
+
+- Restore only the child entities and relationships that were actually changed by that operation.
+- Restore each changed entity to its recorded pre-operation state, not indiscriminately to Active.
+- An entity that was already Deactivated or Closed before the Parent operation must remain Deactivated or Closed.
+- A child that was already Suspended before a Parent Suspension must remain Suspended after the Parent is reactivated.
+- Restore a Mapping only if that Mapping was changed by the same operation, its recorded pre-operation state was eligible for restoration, and both endpoints are currently eligible to participate.
+- A Mapping that was already Suspended, Deactivated, or Terminated before the Parent operation must not become Active merely because the Parent is reactivated.
+- A later independent state change must never be overwritten by an older snapshot. State/version and operation-causation checks must be performed before restoration.
+
+The restoration must reference the original Lifecycle Operation and Snapshot. A new restoration event is recorded; the original operation and its snapshot are never rewritten.
+
+### 13.8 Lifecycle operation consistency and failure handling
+
+A Parent-Caused Cascade is one controlled logical operation. CBM must not report the operation as successfully completed while only a subset of its required child and relationship changes have been completed.
+
+The implementation must provide transactionally consistent or equivalently reliable operation orchestration, concurrency protection, idempotent retries, and failure recovery. Conflicting lifecycle changes must be controlled while a cascade or restoration is in progress. A retry must not duplicate History/Audit events or incorrectly apply the cascade twice. The exact technical mechanism is an implementation matter, but the resulting business state must not be partially or ambiguously completed.
+
+### 13.9 Closure preconditions
+
+Deactivation and Closure are different operations.
+
+An Organization must not be moved to Closed while any direct Distributor or Shop child remains in a non-Closed operational state. Each child must first be individually resolved and Closed through its own authorized lifecycle operation. Applicable Distributor–Shop Mappings must be ended or otherwise formally resolved before the related business context is finally closed.
+
+Closing a Parent Organization does not silently create ownership transfers, change the structural Parent of a child, or erase child records. The closure operation must preserve the structural and relationship history required to understand the closed business.
+
+### 13.10 Lifecycle History, Mapping History, and Audit Trail
+
+Business Entity Lifecycle History is a domain-specific History record set for the lifecycle of a particular Organization, Distributor, or Shop. It records that entity's own state changes and relevant Parent-Caused effects, including the Lifecycle Operation reference and snapshot reference. It must not contain unrelated User, Subscription, GST, or other domain events.
+
+Distributor–Shop Mapping state changes remain in the specific Mapping's Domain History. The comprehensive Audit Trail separately records the initiating operation, cascade scope, affected objects, authorization, approvals, snapshot creation, state changes, restoration, failures, retries, and outcomes. Snapshot, Domain History, and Audit Trail remain separate records with separate purposes and access controls.
+
 ## 13. Sub-Portal migration and service continuity
 
 ### 14.1 Nature of migration
