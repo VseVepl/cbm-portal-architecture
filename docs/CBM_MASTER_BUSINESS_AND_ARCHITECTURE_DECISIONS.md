@@ -1250,33 +1250,33 @@ The following statements summarize rules that must remain true across all future
 19. Approval workflows support single, multiple, sequential, and parallel approval patterns.
 20. Approval does not create an underlying action Permission.
 21. Distributor–Shop Mapping is one specific Business Relationship Mapping type, not a universal definition or boundary for Mapping across CBM; it is not ownership and does not grant unrestricted access.
-22. Every Distributor and Shop must have exactly one direct Parent Organization when created; neither may be created unassigned, standalone, or with multiple structural parents.
-23. A Distributor–Shop Mapping does not require either party to select, know, or disclose the other party's Parent Organization.
-24. Distributor–Shop Mapping activation requires successful two-way verification: the Shop's code must first be verified by the Distributor, and a separate Distributor confirmation code must then be verified by the Shop.
-25. Both mapping codes must expire, be single-use, be protected by rate limits, and support revocation. An expired, consumed, or revoked code cannot complete its verification stage.
-26. An Active Mapping permits only Mapping-Type-authorized business transactions and necessary information exchange. It does not change ownership, Structural Membership, Parent Organization, or either party's Business Data Boundary, and it does not grant broad or unrestricted data access.
-22. One Shop may map to multiple Distributors; each mapping is a separate relationship.
-23. Ending a mapping does not close the Shop or terminate its other mappings.
-24. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
-25. Operational data may be removed after the applicable download period only after archival is verified.
-26. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it. Access requires explicit valid association, assigned scope, and Permissions.
-27. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
-28. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
-29. Owner ID identifies an Owner; Ownership ID identifies one specific Ownership Link; neither is a User ID or Business ID.
-30. Ownership Links identify ownership for business-authority purposes, not equity percentages, financial shares, or economic interest.
-31. Ownership Links may inform Business Available Authority Scope only under explicit Main Portal-governed rules. They do not automatically grant User access or action Permissions.
-32. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
-33. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
-34. A business-specific variation must remain within its authorized business context and must not silently affect another business.
-35. Mapping is typed and purpose-specific. Distributor–Shop Mapping does not restrict or define other Mapping or Assignment types.
-36. GST Registration Assignment may target any CBM entity type/context enabled by Main Portal, subject to verified taxpayer identity, lawful registration coverage, and applicable GST rules; it is not limited to Distributor or Shop.
-37. GSTIN eligibility is determined from the actual registered taxpayer, verified registration particulars, lawful Place of Business coverage, intended GST purpose, and applicable law. Owner ID, any Mapping, hierarchy, or service-provider association alone never establishes eligibility.
-38. GST Registration Assignment does not transfer a GST registration or permit an unrelated legal person/distinct person to use that GSTIN.
-39. User Scope Mapping, not merely a User's business level or Business Available Authority Scope, determines the specific entities/locations assigned to that User.
-40. Domain History is maintained separately for each approved domain and contains only that domain's events. It is preserved for the lifetime of the relevant business context and removed only through authorized permanent business deletion.
-41. Audit Trail is the comprehensive chronological record of relevant system events across all domains. It is separate from Domain History and follows its own retention policy; permanent retention is not universally required.
-42. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
-43. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
+27. Every Distributor and Shop must have exactly one direct Parent Organization when created; neither may be created unassigned, standalone, or with multiple structural parents.
+28. A Distributor–Shop Mapping does not require either party to select, know, or disclose the other party's Parent Organization.
+29. Distributor–Shop Mapping activation requires successful two-way verification: the Shop's code must first be verified by the Distributor, and a separate Distributor confirmation code must then be verified by the Shop.
+30. Both mapping codes must expire, be single-use, be protected by rate limits, and support revocation. An expired, consumed, or revoked code cannot complete its verification stage.
+31. An Active Mapping permits only Mapping-Type-authorized business transactions and necessary information exchange. It does not change ownership, Structural Membership, Parent Organization, or either party's Business Data Boundary, and it does not grant broad or unrestricted data access.
+27. One Shop may map to multiple Distributors; each mapping is a separate relationship.
+28. Ending a mapping does not close the Shop or terminate its other mappings.
+29. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
+30. Operational data may be removed after the applicable download period only after archival is verified.
+31. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it. Access requires explicit valid association, assigned scope, and Permissions.
+32. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
+33. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
+34. Owner ID identifies an Owner; Ownership ID identifies one specific Ownership Link; neither is a User ID or Business ID.
+35. Ownership Links identify ownership for business-authority purposes, not equity percentages, financial shares, or economic interest.
+36. Ownership Links may inform Business Available Authority Scope only under explicit Main Portal-governed rules. They do not automatically grant User access or action Permissions.
+37. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
+38. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
+39. A business-specific variation must remain within its authorized business context and must not silently affect another business.
+40. Mapping is typed and purpose-specific. Distributor–Shop Mapping does not restrict or define other Mapping or Assignment types.
+41. GST Registration Assignment may target any CBM entity type/context enabled by Main Portal, subject to verified taxpayer identity, lawful registration coverage, and applicable GST rules; it is not limited to Distributor or Shop.
+42. GSTIN eligibility is determined from the actual registered taxpayer, verified registration particulars, lawful Place of Business coverage, intended GST purpose, and applicable law. Owner ID, any Mapping, hierarchy, or service-provider association alone never establishes eligibility.
+43. GST Registration Assignment does not transfer a GST registration or permit an unrelated legal person/distinct person to use that GSTIN.
+44. User Scope Mapping, not merely a User's business level or Business Available Authority Scope, determines the specific entities/locations assigned to that User.
+45. Domain History is maintained separately for each approved domain and contains only that domain's events. It is preserved for the lifetime of the relevant business context and removed only through authorized permanent business deletion.
+46. Audit Trail is the comprehensive chronological record of relevant system events across all domains. It is separate from Domain History and follows its own retention policy; permanent retention is not universally required.
+47. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
+48. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
 
 ## 17. Illustrative scenarios
 
@@ -1327,6 +1327,12 @@ The GST Registration Assignment capability is not limited to Distributor–Shop 
 ### 17.11 Domain History and Audit Trail are separate
 
 When a GSTIN is changed, GST Registration History records only the GST Registration-domain change, including previous and new registration/assignment, effective date, recorded date, reason, actor, and approver where applicable. A User ID change is not inserted into GST Registration History. The User ID change and GSTIN change may both appear as separate events in the comprehensive Audit Trail, in chronological order. Authorized business Users may view GST Registration History without being permitted to view Audit Trail.
+
+### 17.12 Two-way Distributor–Shop Mapping verification
+
+Shop S1 already exists in CBM under its own Parent Organization and has its own Shop Unique ID. Distributor D1 also already exists in CBM under its own Parent Organization and has its own Distributor Unique ID. S1 generates a Shop Secret Code and shares its Shop Unique ID and code with D1. An authorized D1 User enters them in D1's CBM context, and CBM verifies the first stage. D1 then generates a separate Distributor Confirmation Code for that pending mapping and shares it with S1. An authorized S1 User enters that confirmation code in S1's CBM context. Only after this second verification succeeds does the mapping become Active.
+
+Neither party needs to select, know, or disclose the other party's Parent Organization. Both codes are subject to expiry, one-time use, rate limiting, and revocation. Once Active, the mapping enables only the business transactions and necessary information exchange authorized for its Mapping Type; it does not change either party's ownership, structural membership, Parent Organization, or independent data boundary.
 
 ## 18. Documentation governance
 
