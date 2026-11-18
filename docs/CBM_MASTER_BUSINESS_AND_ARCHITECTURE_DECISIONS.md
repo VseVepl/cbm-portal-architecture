@@ -1533,6 +1533,210 @@ Accounting must maintain its Domain History for material accounting-domain chang
 
 Accounting History must not be treated as a substitute for the Audit Trail, operational logs, event messages, or external export records. Retention and archival must follow the applicable statutory requirements for the accountable entity and record category. Where a legal hold or investigation applies, normal archival or deletion must not remove protected records.
 
+## 6D. Business Module Boundaries, Shared Models, and Connectivity Architecture
+
+### 6D.1 Purpose and architectural classification
+
+CBM must distinguish explicitly between the following architectural classes:
+
+1. **Business Modules:** Independent domain owners responsible for their own business purpose, rules, operations, and authoritative records.
+2. **Shared Domain Models and Shared Model Contracts:** Reusable canonical concepts and contracts that let Modules exchange and reference data without merging ownership.
+3. **Internal Platform Capabilities:** Reusable services available within CBM under Section 6A, including Identity, User/Role/Permission support, workflow, configuration, security, messaging, audit, and reporting infrastructure.
+4. **Application Client Channels:** Web, desktop, mobile, handheld, and other authorized applications through which people or systems interact with CBM.
+5. **External Connectivity Capabilities:** Governed adapters and contracts connecting CBM to external applications, systems, devices, service providers, and independently operated portals.
+6. **Cross-cutting Functions:** Requirements such as security, auditability, privacy, data isolation, configurability, extensibility, and observability that affect multiple architectural classes but do not take ownership of domain data merely by being cross-cutting.
+
+These classes are not interchangeable. A Shared Model is not a Business Module; an Internal Platform Capability is not a Business Module; an Application Client is not a Business Module; and an External Connector is not a domain owner.
+
+### 6D.2 Business Module independence and separation rules
+
+1. Each Business Module must own one clearly defined business responsibility/domain, its domain rules and policies, its authoritative records, its operational lifecycle, and the contracts through which it interacts with other Modules.
+2. A Business Module must not absorb another Module's responsibility merely because the same screen, transaction, workflow, report, operator, or customer action touches both domains.
+3. A user-facing workflow may coordinate multiple Modules, but each Module remains authoritative for its own state transition and record.
+4. A Module may consume a source record, reference, event, calculation, or result from another Module only through an explicit contract. It must not silently copy the source record and treat the copy as a competing source of truth.
+5. Functional size, menu placement, product packaging, Subscription Plan, application deployment, or database grouping does not determine whether something is a Business Module.
+6. Shared functionality must be implemented once at the correct shared layer where appropriate; domain-specific validation and business meaning must remain with the relevant Module.
+7. An optional capability may be enabled for one eligible business context and disabled for another, provided that this does not weaken Stable Core, legal requirements, data integrity, or cross-domain contracts.
+
+### 6D.3 Confirmed module boundaries and distinct ownership areas
+
+The following independent Business Modules and boundaries are established in the current architecture baseline:
+
+| Business Module / Domain | Authoritative responsibility | Explicit boundary |
+|---|---|---|
+| **Accounting Management** | Accounting Contexts/Books, Accounting Policies, Chart of Accounts, Ledgers, Vouchers, Journals, Posting, accounting balances, Reconciliation, and financial statements | Does not own source Sales/Purchase/POS, Inventory, Warehouse, Tax, Payment, HR, Payroll, or Product records. See Section 6C. |
+| **Inventory Management** | Stock ledger, quantities, stock states, reservations/availability, stock movements, stock reconciliation, and inventory valuation | Does not own core Product Master definitions or physical Warehouse execution/layout. See Section 6E. |
+| **Warehouse Management** | Warehouse facilities/layout, storage hierarchy, physical stock placement references, handling units, and warehouse work execution | Does not own Product Master, stock valuation, or the authoritative Inventory Ledger. See Section 6E. |
+| **Human Resource Management** | Employee/personnel records in the employment context, recruitment, onboarding, employment relationships, attendance, leave, workforce administration, and HR policies | Does not own User Account credentials/roles/permissions or Payroll calculations and authoritative Payroll results. |
+| **Payroll Management** | Payroll rules, payroll periods/runs, earnings/deductions, payslips, payroll calculations, statutory payroll obligations, and authoritative payroll records | Consumes authorized employee/employment/attendance facts from HR and produces accounting source facts for Accounting; it does not own employee employment records or payment execution. |
+
+The following are distinct domain ownership responsibilities and must not be folded into the confirmed Modules above. Their precise Business Module Catalogue entries must be governed by the same classification criteria and may be defined in their respective module-boundary workstreams:
+
+- Product/Item Management and product master data.
+- Sales Management and original sales transactions/documents.
+- Purchase/Procurement Management and original purchase transactions/documents.
+- Point of Sale operations and point-of-sale transaction capture.
+- GST/Tax determination, compliance records, and returns.
+- Finance/Payment execution, banking, collection, and settlement.
+- Asset Management and operational asset lifecycle.
+- Enterprise Budgeting and Business Planning.
+- Customer, Supplier, and other counterparty-specific relationship management where those responsibilities are established.
+
+The existence of these distinct responsibilities does not authorize one of the confirmed Modules to absorb them. Their eventual classification must be justified through the approved Business Module criteria and must not be assumed from a product capability name alone.
+
+### 6D.4 Internal Platform Capabilities
+
+Internal Platform Capabilities are provided through the approved Platform-wide Services Architecture in Section 6A. They are shared execution and governance capabilities, not duplicate business modules. Their authoritative business concepts remain in the sections and domains that own them.
+
+| Internal capability | Shared capability responsibility | Authoritative source / boundary |
+|---|---|---|
+| User and identity lifecycle support | Provisioning coordination, account status operations, authentication identity support | User Account and User–Business Association concepts remain governed by Section 15 and applicable identity records. |
+| Authentication | Password, OTP, MFA, authenticator and session verification | Identity & Authentication Services (A1); authentication does not grant business permissions. |
+| User–Business Association and User Scope support | Association and assigned-context checks | Authoritative association and User Scope rules remain in Sections 7–9 and 15. |
+| Role Management | Role definitions, assignment and role lifecycle support | Roles and their scope/meaning remain governed by Section 9; a job title or HR position is not automatically a Role. |
+| Permission Management | Permission definitions, assignment and evaluation support | Permissions and action authorization remain governed by Section 9 and A2; a Role does not automatically grant every action. |
+| Delegated Authority | Delegation constraints and evaluation | Section 8 remains authoritative. |
+| Approval execution | Workflow routing, approval steps, escalation and execution history | Section 11 defines approval requirements and eligible approvers; B3 executes them. |
+| Configuration Management | Schema, defaults, inheritance, versions and authorized overrides | Section 10 and A4 remain authoritative. |
+| Notification and Communication | Notification decision/routing and approved-channel delivery | B1; it must preserve the absolute no-URL outbound communication rule. |
+| Internal Event & Messaging | Event publication, subscriptions, routing, retries and delivery | B5; event delivery is not proof of domain transaction completion. |
+| API and Integration infrastructure | Shared interface registry, authentication/authorization enforcement, versioning, throttling and monitoring | B4; domain validation remains with the owning Module. |
+| Audit and History infrastructure | Separate Domain History and Audit Trail storage, retrieval and protection | C1 and Section 17A; records remain separate. |
+| Search, Reporting and Analytics infrastructure | Shared search, indexing, report rendering, query and export execution | B7; domain calculations and report meaning remain with the relevant Module. |
+| File and Document infrastructure | Shared file storage, attachment, retrieval, version and archive capability | B2; business document meaning and ownership remain with the relevant Module. |
+| Background processing and scheduling | Shared execution, retry, recurring jobs and workload coordination | C3; the job retains its original authority and business context. |
+| Platform and Service Provider administration | Shared platform operation and delegated service-provider administration | C4; Main Portal retains supreme governance. |
+
+User Management, Role Management, Permission Management, and related administration must not be implemented as separate duplicate Business Modules merely because they have substantial interfaces or workflows. Their internal platform responsibilities must be reused consistently by Accounting, Inventory, Warehouse, HR, Payroll, POS, and all other eligible Modules.
+
+A User Account is not an Employee record. An Employee is not automatically a User. A Role is not a job title. A Permission is not a Subscription Entitlement. Authentication is not Authorization. Approval is not Permission. These distinctions are mandatory.
+
+### 6D.5 Shared Domain Models and shared contracts
+
+A Shared Domain Model must define common meaning and references without becoming a universal source of truth. The following Shared Models are established as the cross-domain model families CBM must support:
+
+| Shared Model / Contract | Canonical meaning | Authoritative owner and consumer boundary |
+|---|---|---|
+| **Business Identity Reference Model** | Legal Identity, Professional Identity and verified Business Identity references | Business Identity domain remains authoritative under Section 3.7. A reference does not transfer identity ownership. |
+| **User / Actor Reference Model** | User Account, System Principal, authenticated actor and permitted business-context references | User Account/identity records remain governed by Sections 9 and 15; employee/personnel records remain HR-owned. |
+| **Product/Item Reference Model** | Product/item identity, SKU or equivalent identifier, variants and core product attributes | Product/Item Management owns product definitions where provided. Inventory and Warehouse consume references and own their domain-specific stock/handling facts. |
+| **Unit of Measure and Packaging Reference Model** | Shared units, permitted conversions, packaging references and quantity presentation | Shared Indian reference units are governed by Section 6B/B6; Product, Inventory and Warehouse own their specific applicability, precision, packaging and quantity rules. |
+| **Business Location Reference Model** | Business address, site, branch, operating location and facility references | Business Identity/Professional Identity and relevant domain owners retain their source facts. Warehouse-specific locations are governed by Warehouse Management. |
+| **Inventory Position Model** | Product, stock quantity, stock state, batch/serial/expiry, ownership/custody references and authorized location references | Inventory owns authoritative stock quantities, states and valuation; Warehouse owns physical placement and execution facts through a shared contract. |
+| **Warehouse Location and Handling Contract** | Facility, zone, rack, shelf, bin, handling unit, workstation and warehouse-task references | Warehouse Management owns warehouse topology and task records; Inventory consumes the location/placement references it needs for stock integrity. |
+| **Source Transaction and Document Reference Model** | Source Module identity, record identifier, document reference, version/status and provenance | The originating Module owns the original record; consuming Modules retain references and their own consequences. |
+| **Accounting Posting Contract** | Source accounting facts, posting references, Ledger mappings, posting status and correction linkage | Accounting owns the Voucher, Journal, Ledger Posting and resulting financial records; the source Module owns the original transaction. |
+| **Workforce / Employment Reference Model** | Employee and employment-context references required by other domains | HR owns the Employee and employment records; Payroll and authorized operational Modules consume permitted facts. |
+| **External Identifier and Provenance Model** | Source/target system identifiers, mapping, import batch, source version and lineage | The relevant integration/receiving Module governs mappings within its contract; external identifiers do not become CBM identity or authority. |
+| **Event and Change Reference Model** | Event identity, producer, type, context, version, timestamp and correlation/provenance references | B5 provides shared event infrastructure; the producer Module owns the event's business meaning and authoritative state. |
+| **File and Supporting Document Reference Model** | File identity, metadata, version, business-document relationship and controlled access | B2 provides file infrastructure; the originating Business Module owns the document's business meaning and access purpose. |
+
+Shared Models are not automatically shared databases, universal master-data screens, or common write permissions. Each model must specify its authoritative owner, allowed consumers, permitted read/write operations, effective dates, versioning, provenance, data classification, and authorization requirements.
+
+A shared reference must not merge separate Legal Identities, Owners, User Accounts, Customer and Supplier roles, Employee and User records, Business Entities, Accounting Books, Inventory owners, Warehouses, or Tenant boundaries.
+
+### 6D.6 Important non-equivalences that must remain explicit
+
+| Concept A | Concept B | Required distinction |
+|---|---|---|
+| Inventory Management | Warehouse Management | Stock records/quantity/valuation versus physical storage topology and warehouse execution. |
+| Product/Item Master | Inventory Position | Product definition versus the stock held for a product at a context/location/status. |
+| Warehouse Facility | Business Location | A facility used for warehouse operations versus a general business address/operating location. |
+| Warehouse Bin | Inventory Storage Summary | Exact physical slot versus the stock ledger/position represented at a given level. |
+| Warehouse Counter | POS Counter | Warehouse work point versus retail checkout/POS operating point. |
+| Employee | User Account | Employment identity/relationship versus system login/account identity. |
+| HR Role/Job Title | CBM Role | Employment position versus permission-bearing system role. |
+| Role | Permission | Grouping/assignment of capabilities versus authorization to perform a specific action. |
+| Business Module | Shared Capability | Domain owner versus reusable platform function. |
+| Shared Model | Shared Data Ownership | Common contract/reference versus common authoritative ownership. |
+| Application Client | Business Module | Access channel/presentation app versus business responsibility owner. |
+| External Connector | External Business Module | Integration adapter versus the domain system or Module that owns business meaning. |
+| Accounting Voucher | Source Sales/Purchase/Payment Document | Accounting record versus originating commercial/payment document. |
+| Tally Godown | CBM WMS Warehouse | Source storage-location construct versus a governed warehouse facility and execution model. |
+| Portal Federation | Business Hierarchy | Cross-system data interaction versus Organization/Distributor/Shop structural placement. |
+
+### 6D.7 External Connectivity and Application Client Architecture
+
+External Connectivity must be treated as a distinct architecture model under the existing Integration & API (B4) and Event & Messaging (B5) Categories. It must not be mixed into the internal Accounting, Inventory, HR, Warehouse, or other Business Module models.
+
+The supported connectivity classes are:
+
+**A. External Business-System Integration**
+
+Examples include Tally Data Exchange, other Accounting Systems, external ERP/CRM applications, payment and banking providers, tax/e-invoice services where legally and technically supported, partner systems, and other approved external business applications.
+
+Each integration must have a registered system identity, purpose, eligible business context, data scope, authentication/trust method, authorization policy, contract/version, mapping, auditability, failure/retry handling, and revocation lifecycle.
+
+**B. Application Client Connectivity**
+
+CBM must be capable of serving authorized clients through the Web Portal and, where developed, first-party Desktop, Mobile, Warehouse Handheld, and other client applications. Authorized third-party clients may also connect through governed interfaces.
+
+An Application Client is not permitted to connect directly to authoritative storage or bypass CBM domain contracts. It must use approved interfaces and receive only the data/actions permitted to its authenticated User or System Principal and assigned business context.
+
+First-party Desktop and Mobile applications remain CBM clients even though they execute outside the central web application. Third-party applications are separately registered External Clients and must receive only explicit, revocable, least-privilege access. Native application authentication must follow current applicable security best practices; external system connectivity or a successful login does not itself grant business access.
+
+**C. Device and Peripheral Connectivity**
+
+Where required, CBM may support controlled connectivity to scanners, barcode/RFID readers, printers, weighing devices, label systems, payment terminals, and other operational devices. Device identity, registration, trust, authorization, data origin, and action scope must be explicit. A device connection does not become a Business Module or authority grant.
+
+**D. Portal-to-Portal Interoperability**
+
+CBM must preserve an extensible model for data exchange and synchronization with separately operated portals, including a future portal developed by the project owner. Such interoperability must not be confused with Main Portal/Sub-Portal governance or Customer Business Structure.
+
+The Portal Interoperability Model must support, where authorized:
+
+- Direct API-based exchange or federated query.
+- Event-based change notification and selected event sharing.
+- Scheduled or incremental synchronization.
+- Full-snapshot import/export where justified.
+- A controlled central aggregation or reporting layer for selected, explicitly permitted data.
+- External identity mapping, source provenance, lineage, reconciliation, versioning, conflict handling, and revocation.
+
+A central aggregation or data-centralization facility must not silently replace the source portal's authoritative records. Every exchanged field or dataset must identify its source of truth, permitted purpose, allowed recipient, scope, retention, and update authority. A receiving portal must not overwrite a source portal's authoritative record unless an explicit bilateral contract grants that exact operation.
+
+Two-way synchronization must not be assumed. Where it is authorized, each field/entity must have a defined write authority, conflict-resolution method, idempotency rule, version/effective-time handling, deletion/retention treatment, and recovery process. Synchronization must not merge Tenants, Business Identities, Owners, Users, Accounting Books, stock ownership, or Portal authority.
+
+### 6D.8 Integration, API, and event contracts
+
+1. Synchronous APIs, asynchronous events, file exchanges, and portal synchronization are different interaction patterns and must have explicit contracts.
+2. API contracts must define operations, data schemas, versions, authentication, authorization, error behaviour, pagination/limits where relevant, and compatibility expectations.
+3. Event contracts must define event identity, producer, business meaning, permitted consumers, context, version, delivery semantics, duplicate/retry handling, and recovery behaviour.
+4. A common event envelope may be used to improve portability, but it must not replace the source Module's domain-specific event schema or validation.
+5. External adapters must translate external representations into canonical CBM domain contracts. They must not make an external vendor's object model the internal authoritative model.
+6. Source identifiers, correlation identifiers, external identifiers, mapping versions, and migration/synchronization batch references must be preserved where applicable.
+7. Integration credentials, tokens, subscriptions, webhooks, device identifiers, and API keys do not grant unrestricted data or action rights.
+8. Each operation must enforce the relevant Business Context, Tenant boundary, User/System Principal, Purpose, Permission, Delegated Authority, approval, data classification, and Main Portal governance rules.
+9. Shared interface standards may be adopted where appropriate, including OpenAPI for HTTP API descriptions, AsyncAPI for message/event interface descriptions, CloudEvents for interoperable event metadata, and relevant GS1 visibility standards for supply-chain use cases. Their adoption does not itself approve a particular vendor, deployment topology, protocol, or implementation.
+10. External Connectivity must be extensible by adapters and contracts rather than requiring every Business Module to implement each vendor-specific protocol independently.
+
+### 6D.9 Internal versus external capability boundary
+
+1. **Internal capabilities** are those provided within the CBM Platform-wide Services Architecture and reused by its Business Modules and portals. Examples include User/Identity lifecycle support, Authentication, Role/Permission evaluation, Configuration, Approval, Notification, Audit/History, Event & Messaging, Search/Reporting infrastructure, and Background Processing.
+2. **External capabilities** are those enabling CBM to interact with systems, devices, client applications, services, or separately operated portals outside the relevant internal service boundary.
+3. A capability can have both internal and external aspects. For example, Integration & API is an internal shared capability that enables external connectivity; an external Tally Adapter is a specific connector that uses that shared infrastructure.
+4. An Application Client is a consumer of internal capabilities and domain contracts; it is not itself an external business integration merely because it runs on a desktop or mobile device.
+5. Each internal or external capability must identify its provider, consumers, source-of-truth owner, authorized context, data scope, contract, lifecycle, security requirements, and failure/recovery rules.
+6. No internal or external capability may create a second authoritative User, Role, Permission, Product, Stock, Ledger, Employee, Warehouse, or Business Identity record in conflict with its domain owner.
+
+### 6D.10 Governance and design obligations
+
+Every Business Module, Shared Domain Model, Internal Platform Capability, Application Client, and External Connectivity Capability must be reviewed for:
+
+- One clear responsibility and authoritative owner.
+- Explicit inclusions and exclusions.
+- Source-of-truth and field-level ownership.
+- Relationships and contracts with other Modules.
+- Shared-model reuse without duplicate ownership.
+- Applicable Business Entity, Tenant, Service Provider, Legal Identity, User, and operational scope.
+- Authorization, approval, audit, retention, and data-protection requirements.
+- Configurability, customization, controlled overrides, and versioning.
+- Extensibility and backward compatibility.
+- Failure, retry, reconciliation, migration, and recovery behaviour where relevant.
+- Security and strict Business/Tenant Data Isolation.
+
+A capability must remain fixed where integrity, legal compliance, or Stable Core requires it; configurable where legitimate business variation is needed; and extensible where new integrations, clients, models, or domain capabilities may be added. Flexibility never grants permission to violate ownership, authorization, or isolation rules.
+
+
 ## 7. Business Authority Scope
 
 ### 7.1 Meaning and separation
