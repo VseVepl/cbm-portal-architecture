@@ -72,7 +72,7 @@ Warehouse facility relationships do not use one ambiguous internal/external flag
 
 External connectivity uses the existing Integration & API and Event & Messaging categories. It includes Tally Data Exchange, other external business systems, approved devices/peripherals, first-party desktop/mobile/handheld Application Clients, authorized third-party clients, and future Portal-to-Portal interoperability. A first-party desktop/mobile app is an Application Client, not a Business Module. Portal-to-Portal exchange or central aggregation must preserve each source portal's authoritative records, identity, Tenant boundaries, permissions, purpose limitation, synchronization and conflict rules, provenance, retention, and revocation controls. Two-way unrestricted synchronization is never implied.
 
-The full ownership boundaries, Shared Model contracts, Inventory/Warehouse rules, internal capabilities, and connectivity safeguards are defined in Sections 6D and 6E of the Master document.
+CBM's unified-portal objective is delivered by composing independent Business Modules and shared capabilities under explicit applicability, authorization, and data-ownership boundaries. The full ownership boundaries, Shared Model contracts, Inventory/Warehouse rules, internal capabilities, and connectivity safeguards are defined in Sections 6D and 6E of the Master document.
 
 ## Documentation rule
 
