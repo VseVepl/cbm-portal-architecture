@@ -495,6 +495,30 @@ A **Payment** is a financial settlement transaction made against an Invoice or a
 
 ---
 
+### 3.48 Platform-wide Services
+
+**Platform-wide Services** is the distinct Architecture Layer and Capability Group that provides shared, governed capabilities for use across multiple CBM business-management modules and authorized service-provider, Tenant, and business contexts. It supports common responsibilities without taking ownership of the relevant Business Module's domain rules or authoritative business records.
+
+### 3.49 Platform-wide Service Scope
+
+A **Platform-wide Service Scope** classifies the ecosystem or business context in which a Platform-wide Service is governed, made available, or applied. The approved scopes are Ecosystem-wide, Service Provider-scoped, Tenant-scoped, and Business-context-scoped. A Service Scope is not Business Authority Scope, User Assigned Authority Scope, ownership, or a Permission and does not itself grant access.
+
+### 3.50 Service Category Group
+
+A **Service Category Group** is a high-level classification grouping related Platform-wide Service Categories by their broad architectural responsibility. The approved groups are Platform Foundation Services, Shared Functional Services, and Platform Operations & Governance Services.
+
+### 3.51 Service Category
+
+A **Service Category** is a governed functional grouping of related Platform-wide Service responsibilities within one approved Service Category Group. The approved Category taxonomy and responsibility boundaries are defined in Section 6A.
+
+### 3.52 Platform-wide Service
+
+A **Platform-wide Service** is a defined shared responsibility or cohesive service offering within an approved Service Category. It has an explicit purpose, scope, consumers, inputs/outputs, ownership, policy boundaries, and service contract. It is a conceptual architecture responsibility and does not imply a separate deployment unit.
+
+### 3.53 Service Capability
+
+A **Service Capability** is a specific function or operation made available by a Platform-wide Service to its authorized consumers under the applicable service contract, Service Scope, and authorization controls.
+
 ## 3A. How the CBM relationship model must be read
 
 CBM must not be interpreted as one universal Parent–Child tree. It contains several distinct, overlapping relationship views. Each view answers a different question and must be modelled and evaluated independently.
