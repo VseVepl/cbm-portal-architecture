@@ -716,6 +716,35 @@ A **Synchronization Contract** defines how selected records or events are shared
 
 ### 3.100 Business Location Reference
 
+### 3.101 Inventory Management
+
+**Inventory Management** is an independent Business Module responsible for authoritative stock quantities, stock status, reservations/availability, inventory movements, reconciliation, and valuation within its authorized Business Contexts. It consumes Product/Item references and, where advanced Warehouse Management is enabled, warehouse-location and physical-execution references. It does not own core Product/Item definitions or advanced warehouse layout and execution.
+
+### 3.102 Inventory Transaction / Stock Movement
+
+An **Inventory Transaction** or **Stock Movement** is an authorized record of a change to inventory quantity, status, ownership/custody attribution, or accountable stock location. It is owned by Inventory Management and must preserve the source transaction or physical-execution reference that justifies the change. A Warehouse task or physical handling event is not automatically an accepted Inventory Stock Movement.
+
+### 3.103 Inventory Status
+
+An **Inventory Status** classifies stock availability or condition, such as available, reserved, blocked, damaged, quarantined, under inspection, or otherwise restricted. Status definitions, transition rules, and availability effects are owned by Inventory Management. A Warehouse location or task status does not by itself determine the authoritative Inventory Status.
+
+### 3.104 Warehouse Work Task
+
+A **Warehouse Work Task** is an authorized operational instruction or execution record for a physical warehouse activity such as receiving, inspection, putaway, replenishment, picking, packing, staging, loading, dispatch, returns handling, or internal relocation. Warehouse Management owns its task lifecycle and physical completion evidence. A task request or completion does not by itself post an Inventory Stock Movement.
+
+### 3.105 Warehouse Storage Type / Section
+
+A **Warehouse Storage Type** classifies a storage area by its physical or operational characteristics, constraints, or use. A **Warehouse Storage Section** groups storage positions within a relevant type or area by shared attributes or putaway/picking purpose. These are optional hierarchy levels, used only where the facility's operational design requires them.
+
+### 3.106 Internal Warehouse Facility
+
+An **Internal Warehouse Facility** is a facility or storage operation managed or directly operated by the accountable business or an authorized part of its operating organization. "Internal" describes an operational/control relationship for the specified scope; it does not automatically establish property ownership, inventory ownership, Legal Identity, or User access.
+
+### 3.107 External / Third-party Warehouse Facility
+
+An **External / Third-party Warehouse Facility** is a facility operated, controlled, or provided by an independent party, such as a third-party logistics provider, partner, supplier, customer, or public warehouse operator. Its relationship to CBM and the business must be explicitly identified. External status does not transfer Inventory ownership, Book ownership, Tenant data rights, or authority to the operator.
+
+
 A **Business Location Reference** is a reusable reference to a business operating location, address, site, branch, or facility. It does not automatically represent a Warehouse Storage Location, Storage Bin, POS Counter, User Scope, Legal Identity, or Business Entity. Domain-specific location models may specialize the reference while retaining their own authoritative location semantics.
 
 ## 3A. How the CBM relationship model must be read
@@ -1736,6 +1765,208 @@ Every Business Module, Shared Domain Model, Internal Platform Capability, Applic
 
 A capability must remain fixed where integrity, legal compliance, or Stable Core requires it; configurable where legitimate business variation is needed; and extensible where new integrations, clients, models, or domain capabilities may be added. Flexibility never grants permission to violate ownership, authorization, or isolation rules.
 
+
+## 6E. Inventory Management and Warehouse Management Boundaries
+
+### 6E.1 Independent Module classification
+
+**Inventory Management and Warehouse Management are separate independent Business Modules.** They cooperate through explicit Shared Domain Models and contracts but own different business responsibilities and authoritative records.
+
+Inventory Management owns the authoritative Inventory Ledger, stock quantities, stock states, reservations/availability, inventory movement records, reconciliation, and inventory valuation. Warehouse Management owns warehouse facilities/layout, storage-location hierarchy, physical stock placement, Handling Unit placement, warehouse work/tasks, and physical warehouse execution.
+
+Inventory Management may operate with simple storage-location/godown tracking without advanced Warehouse Management. Advanced WMS is optional where business complexity justifies detailed facility layout, rack/bin control, Handling Units, directed work, and operational execution. It is not mandatory for every Organization, Distributor, or Shop.
+
+### 6E.2 Inventory Management responsibility
+
+Inventory Management owns the authoritative business record of stock within its authorized Inventory Contexts. Its responsibilities include, where applicable:
+
+- Stock ledger, quantities, balances, and valuation.
+- Receipts, issues, transfers, returns, and adjustments.
+- On-hand, available, reserved, blocked, damaged, quarantine, inspection, consignment, and other governed stock states.
+- Batch/lot, serial-number, expiry, condition, and other tracked stock identities.
+- Inventory ownership references and custody distinctions.
+- Inventory valuation methods and calculations.
+- Reservations and availability responses for authorized Sales, Purchase, POS, Warehouse, and other consumers.
+- Reconciliation and acceptance of physical-count adjustments.
+- Inventory history, traceability, and reporting.
+
+Inventory consumes Product/Item references. It may own inventory-specific attributes, classifications, stock rules, units/packaging applicability, batch/serial/expiry tracking, and stock conditions; it does not thereby own the core Product/Item Master.
+
+The Inventory Ledger is authoritative for accepted stock quantities and stock states. A warehouse task, physical count, Sales/Purchase order, POS transaction, or external message is evidence or a source instruction; it is not an authoritative inventory balance change until accepted under Inventory's validation and authorization rules.
+
+### 6E.3 Warehouse Management responsibility
+
+Warehouse Management is responsible for the physical and operational execution of goods within authorized facilities. Its responsibilities include, where applicable:
+
+- Warehouse facilities and operating-model records.
+- Facility layout and configurable location hierarchy.
+- Storage areas/zones, storage types/sections, aisles, racks, shelves, levels, cabinets, bins, slots, docks, and staging locations.
+- Handling Units such as pallets, cartons, totes, and containers.
+- Receiving, unloading, inspection, putaway, replenishment, picking, packing, staging, loading, dispatch, returns handling, and physical internal transfers.
+- Warehouse task templates, queues, priorities, work allocation, and execution policies.
+- Physical stock placement and location-level handling records.
+- Warehouse operator/task assignment and device-assisted execution.
+- Cycle-count tasks and physical-count evidence.
+- Capacity, utilization, location accuracy, task performance, and operational reports.
+
+Warehouse Management owns the physical layout, warehouse location identity/hierarchy, Handling Unit position, Warehouse Work Task records, and physical execution evidence. It does not own core Product/Item definitions, the enterprise Inventory Ledger, stock valuation, Sales/Purchase Orders, Customer/Supplier relationships, payment execution, or Accounting records.
+
+### 6E.4 Inventory versus Warehouse: authoritative boundary
+
+1. **Inventory owns what stock exists and its accountable quantity/status.** It is authoritative for stock balances, stock movements, status, reservations/availability, inventory ownership references, and valuation.
+2. **Warehouse owns where and how goods are physically handled.** It is authoritative for facility topology, storage positions, physical placement, Handling Unit position, work tasks, and execution evidence.
+3. A location-level stock view may be derived from or reconciled against the Inventory Position Model, but Warehouse physical-placement records must not become a competing Inventory Ledger.
+4. Where advanced Warehouse Management is enabled, Warehouse owns the Storage Location hierarchy and physical placement. Inventory owns quantity/status attributed to the relevant Warehouse Location reference.
+5. Where advanced Warehouse Management is not enabled, Inventory may maintain simple Storage Location/Godown references and stock-by-location balances. This does not imply full WMS, bins, racks, Handling Units, or directed warehouse tasks.
+6. A physical movement between bins/locations and an Inventory Stock Movement are related but distinct records. Warehouse records requested/actual physical work; Inventory records the authorized stock quantity/status/location transition.
+7. A Warehouse task request is not proof of physical completion. Warehouse completion is execution evidence; Inventory applies the stock-ledger transition only after relevant Inventory validation, reconciliation, and authorization.
+8. A physical count or discrepancy recorded by Warehouse is evidence/input for Inventory reconciliation. It does not independently authorize a stock adjustment.
+9. Shared Inventory Position and Warehouse Location/Handling contracts must reconcile physical placement views with authoritative stock balances without duplicate stock ownership, quantities, or ledgers.
+10. Both Modules must preserve source references, timestamps, actors/devices, quantities/units, stock owner/custodian distinctions, batch/serial/expiry data, source/destination locations, task/confirmation status, and exception history where applicable.
+
+### 6E.5 Product/Item relationship
+
+1. Product/Item Management, Inventory Management, and Warehouse Management have distinct responsibilities.
+2. Product/Item Management owns core product/item definitions where that domain is provided, including product identity, core descriptions, variants, attributes, and commercial classifications.
+3. Inventory owns stock-specific facts for a Product/Item, including quantities, status, valuation, batch/serial/expiry tracking, and inventory-specific attributes.
+4. Warehouse owns physical handling/storage constraints, warehouse placement, Handling Units, and operational handling rules associated with referenced products/items.
+5. A Product/Item reference does not imply that the item is stocked, available, owned by a particular business, or physically located in a particular Warehouse.
+6. Product/Item responsibility must not be folded into Inventory or Warehouse merely because each needs product information. Its eventual Business Module classification must use the criteria in Section 6D.
+
+### 6E.6 Warehouse facility: internal/external, operator, property, ownership, and custody
+
+"Internal Warehouse" and "External Warehouse" must not be represented by one ambiguous flag. A Warehouse Facility relationship must separately identify, where applicable:
+
+1. **Operational control/operator:** The business's own operation, an authorized third-party logistics/warehouse operator, a partner, supplier/customer, public warehouse provider, or another identified party.
+2. **Physical/geographic relationship:** On the business's operating premises, on another site, off-site, at supplier/customer premises, or at a third-party logistics facility.
+3. **Property/occupancy relationship:** Owned, leased, licensed, shared, public, partner-provided, or another authorized arrangement.
+4. **Inventory ownership:** The Legal Identity or other eligible party that owns the goods.
+5. **Physical custody:** The party currently storing, controlling, or handling the goods.
+6. **Warehouse operational authority:** Which business and authorized Users may configure, view, assign, or execute work at the facility and for which stock scope.
+7. **Service/contract relationship:** The agreement or permitted business relationship under which another party operates, stores, or handles goods, where relevant.
+
+An Internal Warehouse does not necessarily mean the business owns the land/building. An External Warehouse does not mean the external operator owns the goods. A business may own inventory held at a third-party 3PL facility; supplier/customer-owned goods may also be held at a business-operated facility under an authorized custody or consignment arrangement.
+
+Facility ownership, property/occupancy, operational control, Inventory ownership, physical custody, Service Provider association, and access permissions must never be inferred from one another. A third-party operator receives only explicitly authorized facility/task/stock data, not unrestricted access to the business's Inventory, Customer, Supplier, Accounting, HR, or Tenant data.
+
+### 6E.7 Warehouse physical and logical location hierarchy
+
+Warehouse layout must be configurable to the actual structure, scale, and operating complexity of each facility. CBM must not force every facility to use every hierarchy level.
+
+A supported conceptual hierarchy may include:
+
+**Business Site → Warehouse Facility → Warehouse → Storage Area / Zone → Storage Type / Section → Aisle → Rack → Shelf / Level → Bin / Slot**
+
+Additional optional locations may include receiving docks, dispatch docks, inspection areas, staging areas, bulk-floor areas, open yards, cold/controlled areas, picking areas, packing areas, and returns areas.
+
+- **Business Site:** The wider operating site in which a facility may exist.
+- **Warehouse Facility:** The physical or authorized third-party operating facility.
+- **Warehouse:** The warehouse operating unit or logical warehouse within a facility, where needed.
+- **Storage Area / Zone:** A physical or logical subdivision used for operational, environmental, security, turnover, or handling purposes.
+- **Storage Type / Section:** An optional classification of storage areas/positions by characteristics, restrictions, or putaway/picking purpose.
+- **Aisle:** A physical or logical access path between storage positions.
+- **Rack:** A storage structure within which shelves or levels may be arranged.
+- **Shelf / Level:** A defined horizontal or vertical storage subdivision.
+- **Bin / Slot:** The smallest independently addressable storage position where bin-level control is enabled.
+- **Dock / Staging Area:** A receiving, dispatch, inspection, or temporary holding area used for movement coordination.
+- **Handling Unit:** A pallet, tote, carton, container, or similar carrier whose contents and movements may be tracked together.
+
+A simple facility may use only Warehouse → Location. A small Shop may use only a stockroom or a few named locations. An advanced warehouse may use zones, aisles, racks, shelves, bins, Handling Units, capacity rules, and directed work. Optional levels and naming conventions are configurable subject to uniqueness, addressability, traceability, and stock integrity.
+
+A Bin is an addressable storage position; it is not necessarily a physical container. The actual container/carrier may be represented as a Handling Unit.
+
+### 6E.8 Racks, shelves, bins, Handling Units, and counters
+
+1. Racks, shelves/levels, and bins/slots are distinct location elements. A rack may contain shelves/levels; each level may contain independently addressable bins where required.
+2. The model must support storage positions that are not rack-based, such as bulk floor, open yard, tank, cage, cabinet, cold room, or other physical/logical storage areas.
+3. A Handling Unit identifies a movable grouping/carrier of goods, such as a pallet, carton, tote, cage, or container. Its identity, contents, and movement history must not be confused with Product/Item, Inventory owner, or Storage Bin.
+4. A **Warehouse Counter / Workstation** is an operational work point, such as receiving, inspection, picking/issue, packing, returns, dispatch, or material issue. It is not automatically a Storage Location or Bin.
+5. A **POS Counter** or checkout terminal belongs to POS, not Warehouse Management. A Warehouse may reference a Shop/POS hand-off point where authorized without taking ownership of POS operations.
+6. If goods are physically held or staged at a counter/workstation, the stock-holding position must be separately represented as a temporary or fixed Storage Location/Bin and linked to that workstation.
+7. Counter/workstation configuration, task types, stock-holding behaviour, and device use must be applicable to the actual operation.
+
+### 6E.9 Warehouse Work and execution lifecycle
+
+Warehouse Management must support configurable warehouse work patterns appropriate to the business, including:
+
+- Expected receipt, receiving, and unloading.
+- Inspection and putaway.
+- Replenishment.
+- Picking and picking confirmation.
+- Packing and Handling Unit formation.
+- Staging and loading.
+- Dispatch confirmation.
+- Returns receiving and inspection.
+- Internal location transfer.
+- Cycle counting and physical inventory evidence.
+- Exception handling for shortage, overage, wrong location, damage, mis-pick, failed task, or external-custody discrepancy.
+
+Warehouse work may be triggered by Purchase, Sales, POS, Inventory, return, transfer, or authorized manual operation. The source Module owns the originating order or business transaction. Warehouse owns the execution Task; Inventory owns the accepted stock impact.
+
+Warehouse task states may include requested, planned, assigned, in progress, partially completed, completed, cancelled, failed, or exception, as appropriate to task type. These are Warehouse operational states; they do not replace source order states or Inventory stock states.
+
+Partial quantities, split Handling Units, authorized substitutions, retries, duplicate messages, delayed confirmations, and failed execution must be handled explicitly and traceably.
+
+### 6E.10 Inventory–Warehouse Shared Models and execution contracts
+
+Inventory and Warehouse must cooperate through explicit contracts:
+
+**A. Inventory Position Model:** Inventory owns Product reference, stock owner where applicable, quantity, unit, status, batch/serial/expiry/condition, reservation, valuation, and accepted stock movement. A Warehouse Location reference may be attached where physical storage is tracked.
+
+**B. Warehouse Location and Handling Contract:** Warehouse owns facility, warehouse, zone/area, Storage Type/Section, aisle, rack, shelf/level, bin/slot, dock/staging, Handling Unit placement, and operational task references. Inventory consumes permitted location references needed for stock-by-location integrity.
+
+**C. Warehouse Execution Contract:** Communicates source request, stock/context references, requested physical operation, task identity, actor/device, expected and actual quantities/units, source/destination location, Handling Unit, completion evidence, exceptions, and acknowledgement/reconciliation state.
+
+**D. Inventory Movement Contract:** Inventory records the accepted stock quantity/status/location effect linked to source transaction and warehouse execution evidence where required. It must preserve idempotency and prevent duplicate stock movements.
+
+Contracts must define producer/consumer, ownership, data fields, permitted operations, status transitions, correlation/source IDs, versioning, retries, partial completion, failure, correction, and authorization.
+
+### 6E.11 Relationships with other Business Modules
+
+| Related Module | Its authoritative responsibility | Inventory/Warehouse relationship |
+|---|---|---|
+| Product/Item Management | Product identity, core descriptions, variants, attributes and classification | Inventory references products; Warehouse uses handling/storage attributes. |
+| Purchase Management | Supplier order, commercial purchase lifecycle and original documents | Purchase provides expected-receipt facts; Warehouse receives/inspects goods; Inventory accepts stock and valuation facts. |
+| Sales Management | Sales order, commercial sale and original documents | Sales requests availability/reservation; Inventory supplies stock status; Warehouse picks/packs/dispatches. |
+| POS | Checkout and POS transaction capture | POS requests stock availability and provides sale facts; Inventory records stock effects; Warehouse may replenish or fulfil pickup. |
+| Finance/Payment | Payment, collection, banking and settlement | Payment execution remains separate; custody or warehouse fees may be referenced through approved contracts. |
+| Accounting Management | Financial ledgers, accounting treatment and financial statements | Inventory supplies approved valuation/accounting facts; Warehouse task completion alone does not post Accounting entries. |
+| GST/Tax | Tax classification, applicability, determination, liability and statutory records | Tax facts come from GST/Tax; warehouse location does not itself determine GST registration or tax liability. |
+| Human Resource Management | Employee and employment records | Warehouse tasks may be assigned to authorized Users/Employees; Employee and User Account remain distinct. |
+| Payroll Management | Payroll calculations and authoritative payroll records | Permitted work/time facts may be supplied through authorized HR/Payroll contracts; Warehouse does not own payroll calculations. |
+| Asset Management | Physical asset custody, maintenance, assignment and operational lifecycle | Warehouse may provide location/handling references; warehouse bins and equipment are not automatically fixed-asset accounting records. |
+
+### 6E.12 Simple storage versus advanced Warehouse Management
+
+1. Inventory Management must support simple Storage Location/Godown tracking for businesses that do not need advanced WMS.
+2. Advanced Warehouse Management adds facility layout, optional hierarchy levels, bin/rack/Handling Unit control, directed work, work queues, task execution, capacity, and detailed physical-placement capabilities.
+3. A simple Inventory Storage Location does not automatically become a fully modelled Warehouse Management facility. Enabling advanced WMS requires governed activation/migration, explicit location hierarchy, stock reconciliation, and mapping of existing locations.
+4. Where advanced WMS is not enabled, Inventory may maintain simple location identifiers and stock-by-location balances. These do not imply WMS task execution, bin-level placement, or Handling Unit tracking.
+5. Where WMS is enabled, Warehouse owns location topology/physical placement; Inventory owns quantity and status attributed to those locations.
+6. A business may use simple storage tracking in one context and advanced WMS in another where configuration and entitlements permit. The authoritative Inventory Ledger must remain coherent and must not fragment into duplicated balances.
+
+### 6E.13 Tally Godowns and external data migration
+
+1. A Tally Godown/Location must be mapped according to the actual source meaning and available detail.
+2. A simple Tally Godown may map to an Inventory Storage Location when the source contains only basic stock-location semantics.
+3. Where the Tally source contains a genuine hierarchical location structure, the adapter may map available levels to corresponding CBM Storage Location/Warehouse Facility concepts, subject to validation and acceptance.
+4. The adapter must not invent racks, shelves, bins, capacity, Handling Units, Warehouse Work Tasks, physical movements, operator identity, or custody facts not present in the source or separately verified.
+5. Tally Data Exchange remains separate from Inventory and Warehouse internal models. Each imported record must be routed to its owner domain and pass its validation and reconciliation rules.
+
+### 6E.14 Applicability, configuration, and governance across the Customer Business Architecture
+
+1. Inventory Management and Warehouse Management may apply to eligible Organizations, Distributors, and Shops according to actual operations. Neither Module is automatically required at every structural level.
+2. An Organization may operate central warehouses serving eligible operating contexts. A Distributor may operate warehouses, godowns, depots, or external 3PL facilities. A Shop may use a stockroom, simple locations, racks, shelves, bins, or advanced store-room operations where justified.
+3. Applicability must be established through explicit Business Context, accountable Inventory owner, facility relationship, stock ownership/custody, and authorized inter-business contract. It must not be inferred from the Organization → Distributor/Shop hierarchy or Distributor–Shop Mapping.
+4. Warehouse layout, optional hierarchy, storage types, rack/bin structures, Handling Unit types, counters/workstations, capacity rules, putaway/picking strategies, operating calendars, external-facility arrangements, inventory tracking dimensions, stock statuses, reservations, and applicable valuation methods must be configurable within governed limits.
+5. Optional capabilities require explicit applicability, entitlement where relevant, authority, User Scope, and Permissions. Third-party operators receive only facility/task/stock data required for authorized work.
+6. Configuration must be versioned/effective-dated where necessary and auditable. It must not permit one business to alter another business's facilities, inventory, stock ownership, or data boundary.
+
+### 6E.15 History, reconciliation, and physical integrity
+
+Inventory and Warehouse maintain distinct Domain Histories for their own records. Inventory History includes stock receipts/issues/transfers/adjustments, valuation-relevant changes, reservation/status transitions, and reconciliation. Warehouse History includes facility/layout changes, location changes, Handling Unit placement, task assignment/execution, physical counts, and operational exceptions. The comprehensive Audit Trail remains separate under Section 17A.
+
+Physical counts, damaged/blocked/quarantined stock, missing goods, overages, short picks, wrong-bin placements, external-custody discrepancies, partial task completion, and uncompleted tasks must be explicit records or exceptions. They must not be silently corrected by overwriting previous states. Inventory adjustments require Inventory authority and validation; Warehouse preserves physical evidence and execution history.
 
 ## 7. Business Authority Scope
 
