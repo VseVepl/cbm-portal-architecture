@@ -239,13 +239,13 @@ An **Ownership Link** is the explicit relationship connecting an Owner ID to a B
 
 A **Distributor** is an identifiable distribution business entity whose direct structural parent is an Organization. An Organization may have multiple Distributor entities. A Distributor is a terminal structural entity under the currently approved Business Structure model: it cannot have a Shop, another Distributor, or any other business entity as a structural child. A Distributor must not exist as a standalone structural entity outside an Organization's Business Structure.
 
-A Distributor must have a Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable; it is not automatically inherited from its Organization or another entity. Structural placement does not determine ownership. The Owner or Owners of a Distributor are determined only through explicit Ownership Links.
+A Distributor must have exactly one direct Parent Organization as part of its Business Structure. That Parent Organization is mandatory when the Distributor is created; a Distributor must not be created as unassigned, standalone, or with multiple structural parents. The Parent Organization relationship establishes structural membership only and does not determine ownership, Legal Identity, Professional Identity, or the Distributor's Business Relationships. A Distributor must have a Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable; it is not automatically inherited from its Organization or another entity. Structural placement does not determine ownership. The Owner or Owners of a Distributor are determined only through explicit Ownership Links.
 
 ### 3.10 Shop
 
 A **Shop** is the unified CBM retail business entity. The previous two-category classification of Shops has been discontinued. CBM must not model Shops as separate entity types or separate Business Structure classifications based on ownership.
 
-A Shop's direct structural parent is an Organization. A Shop is a terminal structural entity under the currently approved Business Structure model: it cannot have another Shop, a Distributor, or any other business entity as a structural child. An Organization may have multiple Shops and may have both Shops and Distributors at the same time.
+A Shop must have exactly one direct Parent Organization as part of its Business Structure. That Parent Organization is mandatory when the Shop is created; a Shop must not be created as unassigned, standalone, or with multiple structural parents. The Parent Organization relationship establishes structural membership only and does not determine ownership, Legal Identity, Professional Identity, or the Shop's Business Relationships. A Shop is a terminal structural entity under the currently approved Business Structure model: it cannot have another Shop, a Distributor, or any other business entity as a structural child. An Organization may have multiple Shops and may have both Shops and Distributors at the same time.
 
 Every Shop must have its own Professional Identity. Its own Legal Identity is optional and must be explicitly established and validated where applicable. A Shop may have its own Legal Identity or may be associated with another eligible Legal Identity, subject to verified legal facts and applicable law. A Shop's structural placement does not determine who owns it. Ownership is determined independently through explicit Ownership Links; therefore, a Shop structurally belonging to an Organization is not necessarily owned by that Organization or by the same Owner as the Organization.
 
@@ -327,7 +327,7 @@ Approval is a control layered on top of permission. Approval does not create a p
 
 **Business Structure Hierarchy and Structural Integrity** is the strict, non-configurable rule governing the permitted structural levels, entity placement, and parent–child relationships among Main Portal, Sub-Portal, Organization, Distributor, and Shop. Only explicitly valid structures defined by the CBM business model are permitted. A structurally invalid arrangement cannot be created, configured, customized, delegated, or overridden into validity.
 
-The following arrangements are expressly invalid: a Distributor placed under a Shop; an Organization placed under a Distributor; and a Distributor existing independently without belonging to an Organization's business structure. The hierarchy must not be inverted, bypassed, or treated as an arbitrary user-configurable tree.
+The following arrangements are expressly invalid: a Distributor placed under a Shop; an Organization placed under a Distributor; a Distributor or Shop existing independently without belonging to an Organization's business structure; and a Distributor or Shop assigned to more than one Parent Organization. Every Distributor and Shop must have exactly one direct Parent Organization. The hierarchy must not be inverted, bypassed, or treated as an arbitrary user-configurable tree.
 
 This is a business-structure rule only. It has no meaning or application in cryptography, encryption, encryption-key management, or key derivation. The service-provider relationship, Organization business structure, ownership relationship, and Distributor–Shop business mapping remain distinct relationship views; one must not be inferred from another.
 
@@ -528,7 +528,7 @@ These contexts have different platform, service-provider, business, or operation
 
 ### 5.2 Unified Shop entity and identity applicability
 
-The Shop is one unified entity type, regardless of who owns it or which Legal Identity is applicable. A Shop is a direct structural child of an Organization and is terminal in the currently approved Business Structure.
+The Shop is one unified entity type, regardless of who owns it or which Legal Identity is applicable. A Shop is a direct structural child of exactly one Organization and is terminal in the currently approved Business Structure.
 
 The following Legal Identity and Professional Identity applicability matrix is finalized:
 
@@ -543,6 +543,14 @@ The following Legal Identity and Professional Identity applicability matrix is f
 For Distributor and Shop, an optional Legal Identity must be explicitly associated and validated where applicable. It must not be inherited automatically from an Organization, Owner, Service Provider, or another entity. Every Distributor and Shop must have a Professional Identity. A Shop may maintain a distinct Professional Identity while being associated with a Legal Identity shared with another eligible business context, subject to verified facts and applicable law.
 
 Ownership determines whose Distributor or Shop it is. Business Structure determines its permitted structural position. Legal Identity determines the relevant legal person/entity. Professional Identity determines how the business or operating context presents itself. These dimensions must not be conflated.
+
+### 5.2.1 Mandatory Parent Organization
+
+Every Distributor and every Shop must be assigned exactly one direct Parent Organization when it is created. Parent Organization is a mandatory structural relationship, not an optional mapping attribute. A Distributor or Shop must not be created without a Parent Organization or assigned to multiple Organizations.
+
+The Parent Organization relationship identifies the entity's place in the Customer Business Structure. It does not establish ownership, determine Legal Identity or Professional Identity, create a Distributor–Shop Business Relationship, or by itself grant every User access or every possible management action. Authority availability and individual User access continue to be determined by Sections 7, 8, and 9.
+
+A Distributor–Shop Mapping does not require either party to select, disclose, or know the other party's Parent Organization. Each party's Parent Organization remains part of its own structural and authorized administration context; it is not a mapping credential, mapping prerequisite, or information that must be exposed to the other mapping party.
 
 ### 5.3 Ownership Links and ownership identity
 
@@ -884,39 +892,61 @@ The CBM Ecosystem must support authorized Distributor–Shop business mappings a
 - One Shop may be associated with multiple Distributors.
 - Each Distributor–Shop Mapping is an independently identifiable relationship with its own lifecycle and its own Distributor–Shop Mapping History. Related system events are separately recorded in the Audit Trail; Mapping History and Audit Trail are not combined.
 
-### 12.3 Mapping initiation and approval
+### 12.3 Two-way mapping initiation and confirmation
 
-1. The Shop owner initiates a Distributor Mapping Request.
-2. The request uses the Distributor's Unique ID and Secret Code.
-3. The system creates a mapping request for the identified Distributor.
-4. The Distributor or an appropriately authorized Organization may approve or reject the request, in accordance with the applicable business authority scope and authorization rules.
-5. A mapping becomes active only through the required authorization process.
+A Distributor–Shop Mapping may be established only between two existing, eligible CBM business entities. Both the Distributor and the Shop must already have their own CBM Business Identity and unique CBM identifier. An external business or an external identifier alone cannot be used to create this CBM mapping.
 
-### 12.4 Unique ID and Secret Code
+The mapping requires independent confirmation by both parties through two separate Secret Codes:
 
-- The **Distributor Unique ID** identifies the Distributor for mapping purposes. It is an identifier, not a grant of access.
-- The **Distributor Secret Code** is a protected credential used in initiating/validating the mapping request. It must be protected as a secret and must not be treated as a public identifier.
+1. **Shop initiation:** An authorized Shop User generates a Shop Secret Code in the Shop's CBM business context. The Shop shares its Shop Unique ID and this Shop-generated Secret Code with the intended Distributor.
+2. **Distributor's first verification:** An authorized Distributor User enters the Shop Unique ID and Shop Secret Code in the Distributor's CBM business context. CBM verifies that the identified Shop exists, is eligible for the requested relationship, and that the submitted code is valid and usable for this pending mapping.
+3. **Distributor confirmation:** Only after the first verification succeeds, an authorized Distributor User generates a separate Distributor Confirmation Code for that specific pending mapping. The Distributor shares this second code with the Shop.
+4. **Shop's final verification:** An authorized Shop User enters the Distributor Confirmation Code in the Shop's CBM business context. CBM verifies that the code belongs to the intended Distributor and the corresponding pending mapping, and that it remains valid and usable.
+5. **Activation:** The mapping becomes Active only after both the Shop-originated code and the Distributor-originated confirmation code have been successfully verified. Completion of only the first verification must never activate the mapping.
 
-Knowing a Unique ID or Secret Code does not grant general access to the Distributor or Shop.
+The two codes serve different confirmation stages and must not be treated as interchangeable. The verification and confirmation actions remain subject to the applicable User–Business association, User Assigned Authority Scope, Permissions, and other mandatory authorization controls. Parent Organization selection or disclosure for the other party is not part of this process.
 
-### 12.5 Relationship effects and limits
+### 12.4 Unique IDs and Secret Codes
 
-A Distributor–Shop Mapping:
+- The **Shop Unique ID** identifies the Shop involved in the mapping request. It is an identifier, not an authentication credential or grant of access.
+- The **Shop Secret Code** is generated by the Shop and is used by the Distributor for the first verification stage.
+- The **Distributor Unique ID** identifies the Distributor involved in the mapping. It is an identifier, not an authentication credential or grant of access.
+- The **Distributor Confirmation Code** is independently generated by the Distributor after successful first-stage verification and is used by the Shop for final confirmation.
+- Each Secret Code is associated with its intended business, verification stage, and pending mapping. A code for one stage or mapping must not be accepted as confirmation for another stage or mapping.
 
-- Establishes only the authorized business relationship.
+Knowing a Unique ID or Secret Code does not grant general access to either business or its data.
+
+### 12.5 Mandatory Secret Code security controls
+
+Both the Shop Secret Code and the Distributor Confirmation Code must be subject to all of the following controls:
+
+- **Code Expiry:** Each code must become invalid after its defined validity period.
+- **One-Time Use:** A code may be successfully used only once. A successfully consumed code must not be reusable.
+- **Rate Limiting:** Code generation and code-verification attempts must be rate-limited to prevent abuse, guessing, and repeated unauthorized attempts. Applicable limits must be governed by the platform's security controls.
+- **Revocation:** A code must be capable of being revoked before successful use. A revoked code must immediately become invalid and must not complete its verification stage.
+
+An expired, consumed, or revoked code cannot be used to complete the pending mapping. If a required code is no longer valid, the affected verification stage must not succeed; the mapping must remain non-Active until a valid, authorized confirmation process is completed. The exact validity periods and rate-limit thresholds are security-policy values, not fixed numeric values established by this business decision.
+
+### 12.6 Relationship effects and limits
+
+An Active Distributor–Shop Mapping:
+
+- Establishes only the authorized Business Relationship of the relevant Mapping Type.
+- Permits only the business transactions and necessary information exchange expressly authorized for that Mapping Type and applicable business rules.
 - Does not change either party's ownership or create an Ownership Link.
-- Does not convert an Shop into a Distributor-owned child business.
+- Does not change either party's Structural Membership or Parent Organization.
+- Does not require either party to select, view, or disclose the other party's Parent Organization. Parent Organization information is not made available to the mapping counterparty merely because the Mapping is Active.
+- Does not convert a Shop into a Distributor-owned child business.
 - Does not, by itself or solely because of the mapping, expand the Distributor's Business Available Authority Scope to include the Shop. Any separate owner-linked eligibility must be determined under Section 7.
 - Does not, by itself or solely because of the mapping, expand the Organization's Business Available Authority Scope through the Distributor to the Shop. Any separate owner-linked eligibility must be determined under Section 7 and must not be inferred from the mapping.
-- Does not grant unrestricted access to Accounting, Inventory, HR, Users, administration, or other business data.
-- May enable only the specific transactions and interactions expressly authorized for the relationship.
+- Does not grant unrestricted access to Accounting, Inventory, HR, Users, administration, or any other business data. Only information necessary for the expressly authorized relationship interactions may be exchanged, subject to the applicable authority, scope, permission, and data-isolation rules.
+- Does not merge the parties' Business Identities, Ownership Contexts, or Business Data Boundaries.
 
-The Distributor's authorization is necessary and sufficient for enabling the automated transactions covered by this Distributor–Shop Mapping relationship. An additional mandatory Shop approval must not be introduced for those transactions without a separate business decision. This does not remove the Shop owner's role in initiating the mapping request. This authorization rule applies only to Distributor–Shop Mapping and must not be generalized to another Mapping or Assignment type.
+The two-way code verification confirms the participating businesses' intent to establish the mapping; it does not itself grant broad administrative authority. The exact transactions and information permitted remain governed by the applicable Mapping Type, Main Portal-governed business rules, and authorization controls.
 
-### 12.6 Ending a mapping
+### 12.7 Ending a mapping
 
-Ending one Distributor–Shop mapping ends that relationship only. It does not close the Shop, change its ownership, invalidate its Business Identity, or terminate its other Distributor relationships.
-
+Ending one Distributor–Shop Mapping ends that relationship only. It does not close the Shop, change either party's ownership, invalidate either party's Business Identity, change either party's Parent Organization, or terminate the Shop's other Distributor relationships.
 ---
 
 ## 12A. GST Taxpayer Profile and GST Registration Architecture
@@ -1220,6 +1250,11 @@ The following statements summarize rules that must remain true across all future
 19. Approval workflows support single, multiple, sequential, and parallel approval patterns.
 20. Approval does not create an underlying action Permission.
 21. Distributor–Shop Mapping is one specific Business Relationship Mapping type, not a universal definition or boundary for Mapping across CBM; it is not ownership and does not grant unrestricted access.
+22. Every Distributor and Shop must have exactly one direct Parent Organization when created; neither may be created unassigned, standalone, or with multiple structural parents.
+23. A Distributor–Shop Mapping does not require either party to select, know, or disclose the other party's Parent Organization.
+24. Distributor–Shop Mapping activation requires successful two-way verification: the Shop's code must first be verified by the Distributor, and a separate Distributor confirmation code must then be verified by the Shop.
+25. Both mapping codes must expire, be single-use, be protected by rate limits, and support revocation. An expired, consumed, or revoked code cannot complete its verification stage.
+26. An Active Mapping permits only Mapping-Type-authorized business transactions and necessary information exchange. It does not change ownership, Structural Membership, Parent Organization, or either party's Business Data Boundary, and it does not grant broad or unrestricted data access.
 22. One Shop may map to multiple Distributors; each mapping is a separate relationship.
 23. Ending a mapping does not close the Shop or terminate its other mappings.
 24. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
@@ -1257,7 +1292,7 @@ Organization A has Shop S1, Shop S2, and Shop S3 as direct structural children. 
 
 ### 17.3 Organization, Distributor, and mapped Shops
 
-Organization A has Distributor D1 and Shop S1 as direct structural children. Distributor D1 is linked to Owner A through an Ownership Link, while Shop S1 is linked to Owner B through a separate Ownership Link. Shop S1 also has a Business Mapping with D1. The Mapping does not make Shop S1 a structural child of D1, change its Owner, or merge their data boundaries. Any authority eligibility beyond the structural scope must be established independently under explicit Main Portal-governed rules.
+Organization A has Distributor D1 and Shop S1 as direct structural children. Distributor D1 is linked to Owner A through an Ownership Link, while Shop S1 is linked to Owner B through a separate Ownership Link. Shop S1 also has a Business Mapping with D1. The Mapping does not make Shop S1 a structural child of D1, change its Owner, or merge their data boundaries. Neither D1 nor S1 needs to select, know, or disclose the other party's Parent Organization to establish the Mapping. Any authority eligibility beyond the structural scope must be established independently under explicit Main Portal-governed rules.
 
 The Organization's direct structural relationship with Shop S1 is independent of the Distributor–Shop Mapping. The Mapping itself does not enlarge either party's authority scope.
 
@@ -1330,7 +1365,7 @@ A proposed change is not final merely because it has been suggested or documente
 This baseline consolidates:
 
 1. The user-provided project context document **CBM_Project_Context_and_Decisions_2026-11-17** (provided in the conversation as the CBM project context text), including its confirmed business, service-provider, ownership, mapping, continuity, migration, archival, and Stable Core principles.
-2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the finalized unified Shop entity and simplified Business Structure (Organization → Distributor / Shop), the Legal Identity and Professional Identity applicability matrix, Organization Network Configurations, GSTIN eligibility independence, generic GST Registration Assignment, typed and purpose-specific Mapping, explicit User Scope Mapping, and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
+2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the finalized unified Shop entity and simplified Business Structure (Organization → Distributor / Shop), exactly one mandatory Parent Organization for every Distributor and Shop, the Legal Identity and Professional Identity applicability matrix, Organization Network Configurations, GSTIN eligibility independence, generic GST Registration Assignment, typed and purpose-specific Mapping, two-way Distributor–Shop Secret Code verification with expiry, one-time use, rate limiting and revocation, mapping-type-limited business transactions and information exchange, explicit User Scope Mapping, and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
 3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
