@@ -24,7 +24,7 @@
 10. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
 11. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
 12. [Approval Workflow governance](#11-approval-workflow-governance)
-13. [Distributor–Shop relationships and mapping](#12-distributorshop-relationships-and-mapping)
+13. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
 14. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
 15. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
 16. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
