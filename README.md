@@ -24,6 +24,10 @@ Subscription, Plan, Add-on, Entitlement, Coverage Assignment, Usage Limit, Invoi
 
 Customer Business User Accounts are Organization-scoped. The same natural person may have separate accounts in different Organizations, each with distinct verified email/mobile details and a separate portal-wide unique User Code. User Code is system-generated, immutable, and follows two uppercase English letters plus four digits. Initial credential establishment is Organization-configurable: Email Temporary Password, OTP Password Setup, or Both Required. URL/link transmission is prohibited for every CBM-generated outbound communication and purpose.
 
+## Platform-wide Services Architecture
+
+The approved Master baseline also defines **Platform-wide Services** as a distinct Architecture Layer, with four Service Scopes (Ecosystem-wide, Service Provider-scoped, Tenant-scoped, and Business-context-scoped), three Category Groups, and fourteen Categories. It distinguishes Category, Service, and Capability as conceptual levels and preserves the existing authority, authorization, security, approval, audit/history, and strict data-isolation boundaries. The Master document is authoritative for the complete taxonomy and responsibility rules.
+
 ## Documentation rule
 
 Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. Keep discussion history separate from the master source of truth.
