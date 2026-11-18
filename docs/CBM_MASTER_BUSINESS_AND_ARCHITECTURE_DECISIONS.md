@@ -1250,11 +1250,11 @@ The following statements summarize rules that must remain true across all future
 19. Approval workflows support single, multiple, sequential, and parallel approval patterns.
 20. Approval does not create an underlying action Permission.
 21. Distributor–Shop Mapping is one specific Business Relationship Mapping type, not a universal definition or boundary for Mapping across CBM; it is not ownership and does not grant unrestricted access.
-27. Every Distributor and Shop must have exactly one direct Parent Organization when created; neither may be created unassigned, standalone, or with multiple structural parents.
-28. A Distributor–Shop Mapping does not require either party to select, know, or disclose the other party's Parent Organization.
-29. Distributor–Shop Mapping activation requires successful two-way verification: the Shop's code must first be verified by the Distributor, and a separate Distributor confirmation code must then be verified by the Shop.
-30. Both mapping codes must expire, be single-use, be protected by rate limits, and support revocation. An expired, consumed, or revoked code cannot complete its verification stage.
-31. An Active Mapping permits only Mapping-Type-authorized business transactions and necessary information exchange. It does not change ownership, Structural Membership, Parent Organization, or either party's Business Data Boundary, and it does not grant broad or unrestricted data access.
+22. Every Distributor and Shop must have exactly one direct Parent Organization when created; neither may be created unassigned, standalone, or with multiple structural parents.
+23. A Distributor–Shop Mapping does not require either party to select, know, or disclose the other party's Parent Organization.
+24. Distributor–Shop Mapping activation requires successful two-way verification: the Shop's code must first be verified by the Distributor, and a separate Distributor confirmation code must then be verified by the Shop.
+25. Both mapping codes must expire, be single-use, be protected by rate limits, and support revocation. An expired, consumed, or revoked code cannot complete its verification stage.
+26. An Active Mapping permits only Mapping-Type-authorized business transactions and necessary information exchange. It does not change ownership, Structural Membership, Parent Organization, or either party's Business Data Boundary, and it does not grant broad or unrestricted data access.
 27. One Shop may map to multiple Distributors; each mapping is a separate relationship.
 28. Ending a mapping does not close the Shop or terminate its other mappings.
 29. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
