@@ -24,23 +24,24 @@
 10. [Accounting Management](#6c-accounting-management)
 11. [Business Module Boundaries, Shared Models, and Connectivity Architecture](#6d-business-module-boundaries-shared-models-and-connectivity-architecture)
 12. [Inventory Management and Warehouse Management Boundaries](#6e-inventory-management-and-warehouse-management-boundaries)
-13. [Business Authority Scope](#7-business-authority-scope)
-14. [Delegated Authority](#8-delegated-authority)
-15. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-16. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-17. [Approval Workflow governance](#11-approval-workflow-governance)
-18. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-19. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-20. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-21. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-22. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-23. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-24. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-25. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-26. [Cross-concept invariants](#19-required-cross-concept-invariants)
-27. [Illustrative scenarios](#20-illustrative-scenarios)
-28. [Documentation governance](#21-documentation-governance)
-29. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+14. [Product/Item Management, Product Identity, Variants, Identifiers, and Trade Packaging](#6f-product-item-management-product-identity-variants-identifiers-and-trade-packaging)
+14. [Business Authority Scope](#7-business-authority-scope)
+15. [Delegated Authority](#8-delegated-authority)
+16. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
+17. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+18. [Approval Workflow governance](#11-approval-workflow-governance)
+19. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+20. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+21. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+22. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+23. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+24. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+25. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+26. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+27. [Cross-concept invariants](#19-required-cross-concept-invariants)
+28. [Illustrative scenarios](#20-illustrative-scenarios)
+29. [Documentation governance](#21-documentation-governance)
+30. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -674,7 +675,9 @@ An **External System** is an application, service, platform, device-management s
 
 ### 3.89 Product/Item Reference Model
 
-The **Product/Item Reference Model** is the shared canonical reference for identifying and describing products or items consumed by Sales, Purchase, POS, Inventory, Warehouse Management, and other eligible domains. Product/Item Management owns authoritative product definitions where that domain is provided. Inventory and Warehouse Management own their own stock-specific and physical-handling facts and must not redefine the product's core identity.
+The **Product/Item Reference Model** is the shared canonical model and contract through which eligible Business Modules identify and reference products, services, product variants, trade packaging configurations, and other governed commercial or operational items. Its core identity structure distinguishes a Product Definition from its Product Variants and from individual physical instances. It also supports optional product-family/group and classification relationships, typed identifiers, machine-readable data carriers, packaging and unit-of-measure references, product attributes, lifecycle/version references, and authorized source/provenance mappings.
+
+Product/Item Management is the authoritative owner of Product Definitions, Product Variants, product/variant attributes and classifications, product-level and variant-level identifiers, and Product/Item catalogue lifecycle where that Business Module is enabled. The Product/Item Reference Model is nevertheless a Shared Domain Model: Sales, Purchase, POS, Inventory, Warehouse Management, Asset Management, and other eligible domains consume the references through explicit contracts and retain ownership of their own transactions and domain facts. Inventory owns stock quantities, stock states, stock valuation, and operational batch/serial traceability; Warehouse owns physical placement and warehouse execution; neither may redefine the core Product/Variant identity. A Product/Item reference does not imply ownership, stocking, saleability, purchaseability, availability, or physical existence.
 
 ### 3.90 Inventory Position Model
 
@@ -748,6 +751,48 @@ An **External / Third-party Warehouse Facility** is a facility operated, control
 
 
 A **Business Location Reference** is a reusable reference to a business operating location, address, site, branch, or facility. It does not automatically represent a Warehouse Storage Location, Storage Bin, POS Counter, User Scope, Legal Identity, or Business Entity. Domain-specific location models may specialize the reference while retaining their own authoritative location semantics.
+
+
+### 3.108 Product Definition
+
+A **Product Definition** (or **Product**) is the canonical catalogue-level definition of a product or service that describes the common identity and characteristics shared by its Product Variants. It may represent a tangible good, service, non-stock item, or another eligible commercial/operational offering. It is not, by itself, an individual physical unit, inventory balance, price, transaction, or proof that the product is offered or stocked by a particular business.
+
+### 3.109 Product Variant
+
+A **Product Variant** is a distinct, configured form of a Product Definition whose selected characteristics make it meaningful to identify separately for one or more applicable business purposes, such as purchasing, selling, stocking, fulfilment, or service delivery. A Product Variant is the normal operational item reference when a transaction or stock record must identify the specific form involved. A Product Variant is a defined type/configuration, not an individual physical occurrence. A Product with no meaningful variation must still be usable through one standard/default variant representation; the interface may present that as a simple Product without requiring the User to manage variant complexity.
+
+### 3.110 Product Family, Group, and Classification
+
+A **Product Family** or **Product Group** is an optional grouping relationship used to associate related Product Definitions for catalogue, commercial, technical, reporting, or navigation purposes. A **Product Classification** assigns a Product or Product Variant to a governed taxonomy, category, class, collection, or other classification scheme. These groupings and classifications are not Product identity levels, are not required parent records, and do not imply a single universal product hierarchy. A Product may participate in multiple independently governed groupings or taxonomies where permitted.
+
+### 3.111 Product/Item Identifier
+
+A **Product/Item Identifier** is a typed identifier value associated with a specified Product Definition, Product Variant, Trade Packaging Configuration, physical instance, component, batch/lot, or other explicitly supported subject. Each identifier type defines its issuing authority or namespace, applicable subject level, format and validation, uniqueness scope, permitted purpose, provenance, and lifecycle. Identifiers may include CBM internal record IDs, business Product Codes, Item Codes, SKUs, PLUs, manufacturer model/part numbers, supplier/customer item codes, GTINs, and other approved internal, industry, regulatory, or external-system identifiers. These types are not interchangeable and do not all have the same uniqueness or allocation rules.
+
+### 3.112 Data Carrier / Barcode
+
+A **Data Carrier** is a machine-readable representation or physical carrier used to capture one or more identifiers and/or structured data attributes. It may include a one-dimensional barcode, two-dimensional symbol such as a DataMatrix or QR Code, RFID tag, NFC tag, or another supported carrier. A **Barcode** is one type of optical machine-readable Data Carrier. The carrier/symbology (for example EAN-13, UPC-A, Code 128, GS1-128, ITF-14, GS1 DataMatrix, or QR Code) is distinct from the identifier scheme and data values it encodes. A carrier is not automatically a unique Product Identifier.
+
+### 3.113 Product/Item Instance
+
+A **Product/Item Instance** is one individual physical or otherwise separately identifiable occurrence of a Product Variant or component. It may be represented as an individual CBM record when unit-level identity or traceability is required, or remain implicit within quantity-based Inventory where no individual instance record is required. A Product/Item Instance may carry multiple identifiers issued by different parties or identifying different aspects of the same unit. Identifiers that belong to a separately identifiable component or interface must be associated with that component/interface subject rather than incorrectly treated as the identity of the complete unit.
+
+### 3.114 Batch / Lot
+
+A **Batch** or **Lot** is a group of Product Variant units identified by a common production, procurement, quality, traceability, or other governed grouping reference. A batch/lot may carry attributes such as manufacture date, expiry/best-before date, source, quality status, or supplier batch reference. A lot identifies a group and does not, by itself, identify each individual unit within that group.
+
+### 3.115 Trade Packaging Configuration
+
+A **Trade Packaging Configuration** is a defined packaging or trade-unit arrangement for a Product Variant, such as each/unit, inner pack, box, case, carton, or pallet-level trade configuration. It may define contained quantity, unit-of-measure conversion, packaging materials, dimensions, weight, permitted handling, and applicable product/trade identifiers. It is distinct from the underlying Product Variant and from a Warehouse Handling Unit. A packaging configuration may be separately identified, ordered, priced, sold, purchased, or stocked where the business and applicable standards require it.
+
+### 3.116 Product Bundle / Kit
+
+A **Product Bundle** or **Kit** is a defined commercial or operational composition of one or more Product Variants and/or Trade Packaging Configurations. Its composition may be fixed or governed by permitted alternatives, and may be physically pre-packed/assembled or virtually grouped for an offer or order. A bundle/kit is not automatically a Product Variant, a Trade Packaging Configuration, a manufacturing bill of materials, or a Warehouse Handling Unit; its identity, composition, stock treatment, and fulfilment behaviour must be explicitly defined for its use case.
+
+### 3.117 Product Attribute and Variant Dimension
+
+A **Product Attribute** is a typed property describing a Product Definition, Product Variant, packaging configuration, or another explicitly applicable product subject. A **Variant Dimension** is an attribute or governed combination of attributes whose values distinguish Product Variants for an applicable business purpose. Not every attribute is a Variant Dimension: descriptive, compliance, measurement, or informational differences must not create separate variants unless the applicable product policy says that the difference changes the separately managed item identity.
+
 
 ## 3A. How the CBM relationship model must be read
 
@@ -1596,6 +1641,7 @@ The following independent Business Modules and boundaries are established in the
 | Business Module / Domain | Authoritative responsibility | Explicit boundary |
 |---|---|---|
 | **Accounting Management** | Accounting Contexts/Books, Accounting Policies, Chart of Accounts, Ledgers, Vouchers, Journals, Posting, accounting balances, Reconciliation, and financial statements | Does not own source Sales/Purchase/POS, Inventory, Warehouse, Tax, Payment, HR, Payroll, or Product records. See Section 6C. |
+| **Product/Item Management** | Product Definitions, Product Variants, product/variant attributes and classifications, product catalogue identity, product-level/variant-level identifiers, and catalogue lifecycle | Does not own Sales/Purchase/POS transactions, prices as transaction facts, Inventory Ledger/valuation, batch/serial stock lifecycle, or Warehouse physical execution. See Section 6F. |
 | **Inventory Management** | Stock ledger, quantities, stock states, reservations/availability, stock movements, stock reconciliation, and inventory valuation | Does not own core Product Master definitions or physical Warehouse execution/layout. See Section 6E. |
 | **Warehouse Management** | Warehouse facilities/layout, storage hierarchy, physical stock placement references, handling units, and warehouse work execution | Does not own Product Master, stock valuation, or the authoritative Inventory Ledger. See Section 6E. |
 | **Human Resource Management** | Employee/personnel records in the employment context, recruitment, onboarding, employment relationships, attendance, leave, workforce administration, and HR policies | Does not own User Account credentials/roles/permissions or Payroll calculations and authoritative Payroll results. |
@@ -1603,7 +1649,6 @@ The following independent Business Modules and boundaries are established in the
 
 The following are distinct domain ownership responsibilities and must not be folded into the confirmed Modules above. Their precise Business Module Catalogue entries must be governed by the same classification criteria and may be defined in their respective module-boundary workstreams:
 
-- Product/Item Management and product master data.
 - Sales Management and original sales transactions/documents.
 - Purchase/Procurement Management and original purchase transactions/documents.
 - Point of Sale operations and point-of-sale transaction capture.
@@ -1650,7 +1695,7 @@ A Shared Domain Model must define common meaning and references without becoming
 |---|---|---|
 | **Business Identity Reference Model** | Legal Identity, Professional Identity and verified Business Identity references | Business Identity domain remains authoritative under Section 3.7. A reference does not transfer identity ownership. |
 | **User / Actor Reference Model** | User Account, System Principal, authenticated actor and permitted business-context references | User Account/identity records remain governed by Sections 9 and 15; employee/personnel records remain HR-owned. |
-| **Product/Item Reference Model** | Product/item identity, SKU or equivalent identifier, variants and core product attributes | Product/Item Management owns product definitions where provided. Inventory and Warehouse consume references and own their domain-specific stock/handling facts. |
+| **Product/Item Reference Model** | Product Definitions, Product Variants, their attributes and classifications, optional Family/Group relationships, typed identifiers, Data Carrier references, Trade Packaging Configurations, Product Bundle/Kit compositions, and applicable version/provenance references | Product/Item Management owns catalogue definitions and product/variant/trade-unit identity. Inventory, Warehouse, Sales, Purchase, POS, Asset Management, and other consumers retain their own stock, handling, transaction, pricing, asset, and operational facts under Sections 6E and 6F. |
 | **Unit of Measure and Packaging Reference Model** | Shared units, permitted conversions, packaging references and quantity presentation | Shared Indian reference units are governed by Section 6B/B6; Product, Inventory and Warehouse own their specific applicability, precision, packaging and quantity rules. |
 | **Business Location Reference Model** | Business address, site, branch, operating location and facility references | Business Identity/Professional Identity and relevant domain owners retain their source facts. Warehouse-specific locations are governed by Warehouse Management. |
 | **Inventory Position Model** | Product, stock quantity, stock state, batch/serial/expiry, ownership/custody references and authorized location references | Inventory owns authoritative stock quantities, states and valuation; Warehouse owns physical placement and execution facts through a shared contract. |
@@ -1685,6 +1730,16 @@ A shared reference must not merge separate Legal Identities, Owners, User Accoun
 | Accounting Voucher | Source Sales/Purchase/Payment Document | Accounting record versus originating commercial/payment document. |
 | External Storage-Location Record | CBM Warehouse Facility | Source location description versus a governed CBM facility and physical-execution model; mapping requires sufficient source meaning and must not be presumed. |
 | Portal Federation | Business Hierarchy | Cross-system data interaction versus Organization/Distributor/Shop structural placement. |
+| Product Definition | Product Variant | Common product identity and shared characteristics versus a specific configured/operational form. |
+| Product Variant | Product/Item Instance | A repeatable type/configuration that may have many occurrences versus one individual occurrence. |
+| Product Family / Product Group | Product Identity | Optional grouping/classification versus the identity of a Product Definition or Variant. |
+| Product Code / SKU | CBM Internal Record ID | A business/catalogue identifier with an explicit scope and lifecycle versus an immutable CBM record identity. |
+| Identifier | Barcode / Data Carrier | The typed value that identifies a subject versus the machine-readable representation that carries one or more values. |
+| GTIN | CBM Product Code / SKU | A GS1 trade-item identification key allocated under GS1 rules versus a CBM/business-defined identifier with its own namespace and scope. |
+| Batch / Lot | Serial Number | A group of units sharing a traceability reference versus an identifier for an individual unit or component. |
+| Product Packaging Configuration | Warehouse Handling Unit | A defined trade/packaging unit versus a movable logistics carrier/grouping used in physical operations. |
+| Product Variant | Product Price | The identity of the priced item versus a price determined and owned by an applicable commercial/pricing domain and context. |
+| Product Attribute | Variant Dimension | A descriptive property versus a property explicitly selected to distinguish separately managed variants. |
 
 ### 6D.7 External Connectivity and Application Client Architecture
 
@@ -1845,12 +1900,12 @@ Warehouse Management owns the physical layout, warehouse location identity/hiera
 
 ### 6E.5 Product/Item relationship
 
-1. Product/Item Management, Inventory Management, and Warehouse Management have distinct responsibilities.
-2. Product/Item Management owns core product/item definitions where that domain is provided, including product identity, core descriptions, variants, attributes, and commercial classifications.
-3. Inventory owns stock-specific facts for a Product/Item, including quantities, status, valuation, batch/serial/expiry tracking, and inventory-specific attributes.
-4. Warehouse owns physical handling/storage constraints, warehouse placement, Handling Units, and operational handling rules associated with referenced products/items.
-5. A Product/Item reference does not imply that the item is stocked, available, owned by a particular business, or physically located in a particular Warehouse.
-6. Product/Item responsibility must not be folded into Inventory or Warehouse merely because each needs product information. Its eventual Business Module classification must use the criteria in Section 6D.
+1. Product/Item Management, Inventory Management, and Warehouse Management are separate independent Business Modules with distinct authoritative responsibilities.
+2. Product/Item Management owns Product Definitions, Product Variants, applicable product/variant attributes and classifications, product-level and variant-level catalogue identifiers, and Trade Packaging/Bundle definitions as specified in Section 6F.
+3. Inventory owns stock-specific facts for a Product Variant or applicable trade unit, including quantities, status, valuation, reservations, batch/lot records, serial/instance traceability, expiry, and inventory-specific attributes and tracking operations. Product/Item Management may define product-side tracking characteristics or minimum requirements, but it does not own the Inventory Ledger or operational stock-traceability lifecycle.
+4. Warehouse owns physical handling/storage constraints, warehouse placement, Handling Units, and operational handling rules associated with referenced products, variants, trade packages, and stock.
+5. A Product/Item reference does not imply that the item is stocked, available, owned by a particular business, saleable, purchasable, or physically located in a particular Warehouse.
+6. Product/Item responsibility must not be folded into Inventory or Warehouse merely because each needs product information. The independent module boundary and its consumer contracts are defined in Sections 6D and 6F.
 
 ### 6E.6 Warehouse facility: internal/external, operator, property, ownership, and custody
 
@@ -1986,6 +2041,264 @@ Contracts must define producer/consumer, ownership, data fields, permitted opera
 Inventory and Warehouse maintain distinct Domain Histories for their own records. Inventory History includes stock receipts/issues/transfers/adjustments, valuation-relevant changes, reservation/status transitions, and reconciliation. Warehouse History includes facility/layout changes, location changes, Handling Unit placement, task assignment/execution, physical counts, and operational exceptions. The comprehensive Audit Trail remains separate under Section 17A.
 
 Physical counts, damaged/blocked/quarantined stock, missing goods, overages, short picks, wrong-bin placements, external-custody discrepancies, partial task completion, and uncompleted tasks must be explicit records or exceptions. They must not be silently corrected by overwriting previous states. Inventory adjustments require Inventory authority and validation; Warehouse preserves physical evidence and execution history.
+
+
+## 6F. Product/Item Management, Product Identity, Variants, Identifiers, and Trade Packaging
+
+### 6F.1 Independent Business Module and purpose
+
+**Product/Item Management is an independent Business Module.** It owns the business responsibility for defining, classifying, identifying, governing, and maintaining the product/item catalogue and its lifecycle. The **Product/Item Reference Model** remains a Shared Domain Model and contract; it is not a second Business Module or a universal shared-write database.
+
+Product/Item Management provides reliable canonical references to eligible consumers, including Sales, Purchase, POS, Inventory, Warehouse Management, and Asset Management. Each consumer owns its own source transactions and operational facts. A screen or workflow may coordinate several Modules, but it must not merge their ownership. Product/Item Management does not own sales orders/invoices, purchase orders/bills, POS transactions, customer/supplier relationships, Inventory quantities/valuation, Warehouse physical execution, Accounting entries, GST/Tax determinations, payment execution, or asset lifecycle merely because those domains use Product/Item references.
+
+The model must accommodate physical goods, services, non-stock items, consumables, raw materials, components, configurable offerings, and future eligible item classes without forcing every business to use every capability. Applicability is explicit and governed.
+
+### 6F.2 Canonical identity structure
+
+CBM must distinguish the following concepts:
+
+1. **Product Definition (Product):** the common catalogue identity and shared characteristics.
+2. **Product Variant:** a specific configured form of the Product that must be distinguished for an applicable commercial or operational purpose.
+3. **Product/Item Instance:** an individual physical occurrence, represented separately only when the applicable tracking, operational, contractual, or legal requirement needs unit-level identity.
+4. **Product Family / Group / Classification:** optional relationships used to organize or classify Products; they are not required identity parents.
+5. **Trade Packaging Configuration:** an optional packaging/trade-unit definition associated with a Product Variant.
+6. **Product Bundle / Kit:** a separately governed composition of Product Variants and/or trade units where the relevant business use requires it.
+
+The conceptual relationship is:
+
+- Optional Product Family, Group, Category, Collection, Brand Line, or other taxonomies may classify or group one or more Products through typed relationships. They do not create a compulsory Product parent-child tree.
+- A Product Definition has one or more Product Variants. Where the Product has no meaningful variation, CBM must support one standard/default Variant. The user experience may hide variant administration for such a simple Product, but any transaction or stock record that requires a concrete operational item must resolve to an explicit Variant-level reference.
+- A Product Variant may have zero or more Trade Packaging Configurations and may be referenced by zero or more Product/Item Instances.
+- Batch/Lot and serial/instance tracking are Inventory-owned operational traceability structures linked to the Product Variant. They are not extra Product hierarchy levels.
+- A Product Bundle/Kit may compose several Product Variants or trade units according to a versioned composition rule.
+
+A Product Definition, Product Variant, Product/Item Instance, package, lot, serial, component, and Handling Unit are different subjects. They must never be collapsed into one generic “Product” record or one untyped code field.
+
+### 6F.3 Product Family, groups, taxonomies, and classifications
+
+Product Family is optional. CBM must not require every Product to belong to exactly one Family, nor require a Family to be the sole parent of a Product. A business may use one or more independent classification schemes for different purposes, such as product category, merchandise hierarchy, technical family, brand line, collection, season, department, regulatory class, or reporting group.
+
+Each taxonomy must define its own scope, hierarchy rules, allowed membership cardinality, effective lifecycle, governance, and applicability. A Product may belong to multiple taxonomies where the relevant scheme permits it; a particular taxonomy may impose one primary classification where that business purpose requires it. Classification membership does not change Product identity, Product Variant identity, data ownership, pricing, stock, or Business Structure.
+
+Product Family, Product Category, Brand, Manufacturer, Supplier, Customer, and Business Entity are distinct concepts. Manufacturer and brand-owner information must not be inferred from the supplier currently selling an item. HSN/SAC, tax classifications, and other regulatory classifications are not interchangeable with Product Codes, SKUs, GTINs, or other identifiers.
+
+### 6F.4 Product Variant model and variant dimensions
+
+A Product Variant represents a meaningfully distinguishable configured form. Variant dimensions may include, for example, colour, size, capacity, memory, storage, material, grade, style, configuration, voltage, power rating, model/version, finish, flavour, pack content, or other business-relevant characteristics. This list is illustrative and must not be hard-coded as a universal fixed set.
+
+Each Product type/category or Product Definition may use an appropriate governed attribute/dimension schema. The schema may support required, optional, conditional, dependent, mutually exclusive, multi-value, and context-specific values. It must allow valid combinations to be defined explicitly; not every mathematical combination of values must be created as a valid Variant. A business may create only the combinations it actually offers, purchases, stocks, configures, or otherwise manages.
+
+Only attributes that change the identity or separate handling of an operational offering should normally define a Variant. Descriptive facts that do not distinguish the item for the relevant business purpose should remain attributes rather than generating unnecessary Variants. Physical dimensions common to all Variants may remain Product-level attributes; they must not automatically create Variants.
+
+CBM must support at least these patterns where applicable:
+
+- A simple Product with one standard/default Variant.
+- A Product with pre-defined, separately selectable Variants.
+- A Product with a constrained set of valid combinations, including combinations that are unavailable or prohibited.
+- A configurable Product where some values are selected for an order or service instance and need not all be pre-created as permanent catalogue Variants.
+- A Product or service with variants even where no Inventory record is required.
+- A Product with variants that differ in purchaseability, saleability, stockability, traceability, or operational applicability.
+
+The architecture must not create a permanent Variant for every theoretical combination. For configurable-to-order or made-to-order cases, the chosen configuration must be preserved in the relevant transaction/configuration snapshot; it becomes a separately stocked or permanently identified Variant only where the applicable lifecycle requires that identity.
+
+### 6F.5 Product attributes, inheritance, and controlled customization
+
+Product/Item attributes must be typed, governed, reusable, and applicable at the correct subject level. Attribute definitions may specify data type, unit of measure, allowed values, validation rules, precision, cardinality, language/localized label, sensitivity, effective dates, source/provenance, and applicability to Product, Variant, packaging, instance, or another supported subject.
+
+For each attribute, the governing schema must expressly define one of the applicable behaviours, including:
+
+- Common Product-level value inherited by Variants and locked against lower-level override.
+- Product-level default inherited by Variants with an authorized Variant-level override.
+- Attribute required or maintained only at Variant level.
+- Attribute applicable only to an individual package, lot, instance, component, or other subject.
+- Derived/calculated value whose source and recalculation policy are explicit.
+- Not applicable to the selected Product type or business context.
+
+Inheritance and override behaviour must be explicit per attribute; it must not be inferred merely because two records are related. A Variant override must not silently change the Product Definition or sibling Variants. Changes to a Product-level default must not silently rewrite historical transactions, existing instance records, or previously accepted stock facts.
+
+Authorized businesses may define permitted custom attributes, product templates, variant dimensions, validation rules, categories, labels, and workflows through the Configuration Management governance of Section 10. Main Portal may establish mandatory attribute schemas, controlled vocabularies, reserved identifier types, or validation boundaries where interoperability, legal compliance, security, or data integrity requires them. Lower levels may extend or override only where the applicable authority and Permission expressly allow it. Custom fields must not silently redefine an established core field or the semantics of an external standard.
+
+### 6F.6 Product codes, identifiers, namespaces, and uniqueness
+
+A Product or Variant may have multiple identifiers for different purposes and issued by different parties. CBM must therefore use a typed identifier model rather than assuming one universal Product Code, one SKU, or one barcode.
+
+Supported identifier types may include, where applicable:
+
+- Immutable CBM internal record identifiers.
+- Business-defined Product Codes and Item Codes.
+- Business/catalogue-scoped SKUs (Stock Keeping Units).
+- POS/retail PLUs and other operational lookup codes.
+- Manufacturer model numbers and Manufacturer Part Numbers (MPN).
+- Supplier/vendor item codes and customer part numbers.
+- GS1 GTINs and other applicable GS1 identification keys.
+- ISBNs, industry-specific identifiers, regulatory/product-registration identifiers, and other governed external identifiers where relevant.
+- External marketplace, distributor, procurement, or legacy-system item references.
+
+This list is extensible and is not an instruction to implement every identifier type. An identifier's name does not determine its subject level or uniqueness scope; its registered type definition does.
+
+The following rules apply:
+
+1. The CBM internal record identifier is distinct from every business or external identifier. It is not a substitute for a Product Code, SKU, GTIN, serial number, or barcode.
+2. A Product Code may identify a Product Definition, while an Item Code or SKU may identify a Product Variant or another configured trade unit. The actual subject level must be declared by its identifier type and catalogue policy.
+3. SKU is not a universal global Product identity. It is normally meaningful within the issuing business/catalogue or other declared namespace. Two businesses may legitimately use the same SKU for different items; the same item may have different SKUs in different authorized catalogues.
+4. Product Code and SKU are distinct identifier types even where a business chooses to use the same character value for both. CBM must not infer equivalence from matching text.
+5. Manufacturer, supplier, customer, and external-system codes must retain the identity of the issuer and source context. A supplier's item code must not be treated as a manufacturer code or CBM SKU without an explicit, verified mapping.
+6. A GTIN identifies a GS1 trade item under GS1 rules; it is not an arbitrary CBM-generated Product Code. CBM must preserve its complete value and leading zeroes, validate it under the applicable standard, and record its allocator/provenance where available. CBM must not invent, fabricate, or allocate a GS1 identifier without the required GS1 licensing and allocation authority.
+7. A GTIN is not automatically required for every Product, Variant, service, inventory item, or business. Its applicability depends on the trade item and the relevant supply-chain/sector requirements.
+8. The same Product Variant may have multiple valid identifiers, such as an internal SKU, a manufacturer code, a supplier code, and a GTIN. A Product may also have a distinct Product Code in addition to Variant-level identifiers.
+9. The same identifier value may appear under different identifier types or namespaces where their rules permit it. Uniqueness must be enforced within the identifier type's declared scope: for example, global, issuer-wide, manufacturer-wide, business/catalogue, external-system/account, or a defined combination of subject and namespace.
+10. Each identifier type must define whether its value is case-sensitive, whether whitespace/separators are significant, allowed character set and length, checksum or validation algorithm, normalization and comparison rules, reuse prohibition or permitted reuse interval, and whether an identifier may be historical, temporary, or reassigned.
+11. Identifier values must be stored and handled as strings where their semantics are code-like. Leading zeroes, significant letters, punctuation, and case must not be lost by numeric conversion or unsafe normalization.
+12. Where a type permits multiple identifiers for one subject, CBM may distinguish a primary identifier for a particular business purpose from secondary identifiers and aliases. “Primary” is purpose/context-specific and does not make other identifiers invalid.
+13. A retired or replaced identifier must retain its historical association and status. It must not be silently reassigned to an unrelated Product or Variant contrary to the identifier type's reuse rules.
+14. Identifier validation, collision handling, duplicate resolution, and manual override must be governed and auditable. A matching code alone is not sufficient proof that two records represent the same Product.
+15. HSN/SAC, product category, tax rate, descriptive model name, and free-text search label must not be treated as a Product identifier unless a separately defined, authoritative scheme explicitly gives that value an identification role.
+
+An identifier record should be able to preserve, as applicable, identifier type, value, namespace, issuer/allocator, subject type and subject reference, scope, purpose, source, verification status, validity period, lifecycle status, provenance, and any applicable check/validation outcome. This is a logical contract, not a prescribed database schema.
+
+### 6F.7 Barcode, QR, RFID, NFC, and scan resolution
+
+A Barcode/Data Carrier is not synonymous with the identifier that it carries. CBM must distinguish:
+
+- The identifier scheme/type and identifier value.
+- The Data Carrier or symbology used to represent the value.
+- The encoded payload, which may contain one identifier or several structured identifiers/attributes.
+- The label/marking profile and the physical object or package on which the carrier is placed.
+
+CBM must not assume that every barcode contains a SKU, that every Product has a barcode, that every barcode value is globally unique, or that the symbology determines the business meaning of the scanned data. Examples of carriers/symbologies include EAN-13, EAN-8, UPC-A, UPC-E, Code 128, GS1-128, ITF-14, GS1 DataBar, GS1 DataMatrix, GS1 QR Code, QR Code, RFID, and NFC. This is an extensible set; the applicability and supported scanners/devices are governed separately.
+
+A single Product/Variant/package/instance may have multiple carriers or labels for different uses. A carrier may encode more than one value, such as a trade-item identifier together with batch/lot, serial, manufacture date, expiry date, quantity, or other allowed attributes. Scan processing must identify the symbology and applicable encoding/profile, parse the payload, resolve each typed value to the correct subject and context, validate the values, and reject or route ambiguous/unknown payloads for authorized resolution. It must not treat an arbitrary scanned string as a valid Product automatically.
+
+Where GS1 Application Identifiers are used, their defined data semantics and format rules must be preserved; the same AI value must not be repurposed for a CBM-specific meaning. GS1 Data Carriers, GS1 Application Identifiers, and non-GS1 carrier formats may coexist through registered profiles. Non-GS1 product codes and barcodes must remain supported where permitted by the business use case and device capability.
+
+Printing, scanning, barcode generation, RFID/NFC encoding, and device interaction are shared technical capabilities or client/device integrations. They do not take ownership of Product/Item identity or stock/warehouse transactions. A scanned identifier does not itself authorize a stock movement, sale, purchase, adjustment, or other transaction.
+
+### 6F.8 Physical instances, component identifiers, batch/lot, and serial tracking
+
+A Product Variant may represent many physically identical units. The Variant is the repeatable configuration; the individual unit is an Instance. CBM must not force an individual instance record for every quantity-based item. A business may track stock by aggregate quantity where the use case and applicable requirements permit it.
+
+Where individual traceability is required, an individual Product/Item Instance must be represented and associated with the relevant Product Variant, and its inventory/asset lifecycle must be owned by the appropriate Business Module. Examples include serial-tracked electronics, individually controlled equipment, regulated medical devices, or other items where a unique-unit history is necessary.
+
+A Product/Variant may have an applicable tracking profile that states the tracking characteristics or minimum requirements for downstream operations. Inventory Management owns the authoritative operational tracking policy and records for stock, including batch/lot, serial, expiry, condition, and their relationship to accepted stock movements. The Product/Item profile is a product-side constraint/reference, not an Inventory Ledger or a substitute for Inventory's policy. A business-context-specific Inventory policy may impose stricter tracking where authorized, but must not reduce an applicable legal, regulatory, contractual, manufacturer, or already-accepted traceability requirement.
+
+Supported tracking patterns may include:
+
+- Quantity-only tracking, where no individual unit or batch identity is required.
+- Batch/Lot tracking, where a group of units shares a traceability identity.
+- Individual serial tracking, where each controlled unit requires a distinct serial/instance reference.
+- Batch/Lot plus serial tracking, where each instance is associated with a batch/lot.
+- Expiry, best-before, manufacture date, production source, or other traceability attributes at the level required by the product and applicable domain policy.
+- Other industry-specific or future tracking profiles introduced through governed extension.
+
+A serial number identifies an individual unit or component within its declared issuer/type/namespace and uniqueness scope. It is not a Product Variant attribute and must not be stored as if every unit had the same serial. A serial value may not be globally unique across all manufacturers or identifier types; the identifier definition must determine its scope and validation. The association must retain Product Variant, issuing party, identifier type, value, and instance/component subject so that the same alphanumeric serial issued by different manufacturers does not create a false collision.
+
+One physical unit may carry multiple identifiers, for example a manufacturer serial number, one or more IMEI values, an internal asset tag, a supplier reference, or another unit-level code. These values must be represented as distinct typed identifiers linked to the same Unit Instance or to the correct subcomponent/interface. An IMEI, MAC address, component serial, or other interface/component identifier must not automatically be treated as the identifier of the complete device if it identifies a narrower subject. The model must support parent-unit/component relationships and multiple identifiers per unit without collapsing the identifiers into one serial-number field.
+
+Batch/Lot records may contain many units and may be linked to individual serial-tracked instances. A serial-tracked instance may also belong to a batch. Lot and serial are complementary, not mutually exclusive alternatives. Batch/Lot identity and stock lifecycle remain Inventory-owned. Where an item is also an operational fixed asset, Asset Management owns the asset's assignment, maintenance, depreciation/asset lifecycle, and related facts; it may reference the Product/Item Instance and identifiers without taking ownership of Inventory stock balances. Warranty Management is outside the currently approved product scope and must not be implied by serial capture alone.
+
+### 6F.9 Units of measure, packaging, and trade-unit hierarchy
+
+Product identity, Unit of Measure, Trade Packaging Configuration, and Warehouse Handling Unit must remain distinct.
+
+The shared Unit of Measure and Packaging Reference Model provides governed units and conversions. Inventory, Sales, Purchase, and Warehouse apply them under their own domain rules and precision. The Product/Item catalogue may provide default/recommended units and packaging references, but it does not override a consuming Module's authoritative quantity, valuation, or transaction rules.
+
+A Product Variant may be represented in more than one permitted unit of measure for purchasing, stocking, selling, or handling. Conversions must be explicit, dimensionally valid, and sufficiently precise. A conversion may be Variant-specific or context-specific where the physical/commercial facts require it. Variable-measure items such as goods traded by actual weight, length, area, volume, or another measured quantity must preserve the relevant actual measure; CBM must not assume that every package contains an invariant integer number of pieces.
+
+A pack of 10 pieces, box of 50, or carton of 500 may be represented as a Trade Packaging Configuration associated with the underlying Product Variant, with its own pack code/identifier and GTIN where applicable. A package level may be separately saleable, purchasable, orderable, or stockable where the business requires it. Each independently traded packaging level must be identified and validated according to the relevant identification standard and allocator's rules; CBM must not assume that the individual unit's identifier can be reused for every outer pack. Stock quantities and conversions must avoid double-counting the same physical contents across pieces, boxes, cartons, and other levels.
+
+Packaging is not automatically a Variant. If a packaging change materially changes the Product's defining configuration or trade identity, it may require a new Variant or another distinct Product/trade-unit identity under the applicable policy. If it only changes the permitted pack quantity or trade packaging level, a Trade Packaging Configuration is normally the more accurate representation. The decision must be explicit and preserve separate identifiers where required.
+
+A Warehouse Handling Unit (such as a movable pallet, tote, container, or transport carton) is an operational logistics carrier whose contents and physical movements are managed by Warehouse Management. It is not automatically a predefined retail Trade Packaging Configuration. One Handling Unit may contain multiple Products/Variants or packages, and its contents may change through authorized warehouse work.
+
+### 6F.10 Bundles, kits, components, and product relationships
+
+CBM must distinguish at least the following use patterns where applicable:
+
+- A **physical fixed bundle/kit** has a defined, fixed composition and is physically combined or assembled. Where it is independently traded or stocked as one unit, it must have an appropriate Product/Variant or separately identified Trade Unit representation and an explicit component composition.
+- A **virtual bundle/offer** groups separately identified Products/Variants for a commercial offer but is not itself a physical stocked item. Its fulfilment and stock effects are recorded against the component items by the owning transaction and Inventory contracts.
+- A **configurable/dynamic bundle** permits specified component choices or substitutions under a governed composition rule. The selected composition must be preserved for the relevant transaction/fulfilment instance.
+- A **kit** may be a set of parts supplied together, a group prepared for one task, or an assembled product. Its meaning and inventory/warehouse treatment must be declared; the term alone does not determine stock or manufacturing behaviour.
+
+Product/Item Management owns the catalogue-level definition and approved component relationships where applicable. Purchase, Sales, POS, Inventory, Warehouse, and any future Manufacturing/Production Module own their respective transaction, stock, physical execution, and production records. A product composition reference is not automatically a manufacturing Bill of Materials or a production order.
+
+The Product/Item relationship model should support typed, optionally effective-dated relationships where useful, such as component-of, contains, accessory-for, compatible-with, substitute-for, replacement-for, successor-of, supersedes, or used-with. Each relationship type must define direction, subject levels, cardinality, applicability, validation, effective period, and whether it is informational or operationally enforceable. A compatibility or replacement link must not silently authorize substitution, change historical transactions, or alter the original Product/Variant identity.
+
+### 6F.11 Commercial applicability, prices, and tax boundary
+
+A Product Definition or Variant may be marked as applicable for sale, purchase, stocking, consumption, service delivery, or another supported business purpose. These are independently governed applicability capabilities; the existence of a Product record does not automatically enable every purpose. Applicability may vary by business context, channel, location, effective date, and authorized business policy.
+
+Product/Item Management defines the item that a commercial or operational record refers to. It does not own every price or commercial amount associated with the item. In particular:
+
+- A Product/Variant reference is not a selling price, purchase price, landed cost, inventory valuation, discount, promotion, or accounting value.
+- Sales/POS own their transaction prices and sales-document facts under their approved domain contracts.
+- Purchase owns supplier quotation/order/invoice prices and purchase-document facts under its approved domain contracts.
+- Inventory owns inventory valuation rules and values within its responsibility; Accounting owns accounting records and postings.
+- GST/Tax owns tax classifications, applicability, determination, liability, and statutory records.
+- A printed/declared MRP, manufacturer suggested retail price, list reference, or other published amount may be retained as a typed, sourced, effective-dated product/packaging attribute where relevant, but it must not be confused with the actual transaction price or tax determination.
+
+Price lists, customer/supplier conditions, channel prices, discounts, effective dates, and other commercial pricing policies must be owned by the appropriate commercial/pricing domain and explicitly related to Product Variant or Trade Packaging Configuration. This Section does not prematurely assign a future Pricing Business Module classification.
+
+### 6F.12 Catalogue ownership, publication, sharing, and tenant isolation
+
+Every Product Definition, Variant, classification, identifier set, and catalogue customization must have an explicit owning Business Context or an explicitly governed platform reference-data owner. Product/Item Management is responsible for catalogue ownership metadata and sharing contracts; being a Service Provider or having a Distributor–Shop Mapping does not automatically confer ownership of, or access to, another business's Product catalogue.
+
+A business may maintain its own catalogue, use an authorized published catalogue, or combine its own items with externally sourced catalogue references. Catalogue publication and consumption must be explicit, permission-controlled, purpose-limited, revocable, and governed by source-of-truth, version, update, and conflict-resolution rules. A Main Portal or Sub-Portal reference catalogue may be offered only under an authorized publication/service model; a Sub-Portal does not become the owner of a customer's catalogue merely because it provides the service.
+
+Where an Organization makes catalogue defaults available to its Distributor/Shop children, the relationship, inherited data, permitted local additions, override rights, and update behaviour must be explicitly configured under Sections 7 and 10. Structural parentage alone does not create unrestricted catalogue access or edit permission. Child-specific customizations must not mutate the parent's Product definitions or another child's values.
+
+A local business code, identifier alias, descriptive override, or permitted attribute customization must remain scoped to its owning context. It must not rewrite the source Product or another business's catalogue. Cross-Tenant catalogue data sharing must not bypass strict Business/Tenant Data Isolation. A separately authorized published reference may be consumed through a governed read/replication contract; it does not create shared write access or merge ownership.
+
+If an external Product record is imported as a new locally owned catalogue record, CBM must preserve its source system, source identifier, mapping, import provenance, and any source version available. It must not silently assume that similarly named Products from different systems or businesses are identical. A deliberate merge or mapping must be validated and auditable.
+
+### 6F.13 Lifecycle, versioning, change, and history
+
+Product Definition, Product Variant, identifiers, packaging configurations, bundles/compositions, and classification memberships must have separately governed lifecycle states and effective dates as required by their purpose. A Product may remain active while one Variant is discontinued; a Variant may stop being offered while existing inventory, returns, service, audit, or historical transaction references remain valid.
+
+A discontinued, blocked, superseded, or inactive catalogue item must not be deleted or silently repurposed in a way that breaks historical references. The applicable consuming Modules define whether new transactions are blocked, existing stock may still be sold/issued, returns are allowed, or a replacement is required. Replacement/supersession creates an explicit relationship; it does not rewrite old transactions or automatically transfer stock.
+
+Changes to Product/Variant attributes must preserve the definition that applied at the time of an accepted transaction, stock movement, or individually tracked event. Where the consuming Module needs an immutable description/configuration snapshot, it must capture it through its own source-document or history contract. Product/Item Management maintains its own Domain History for catalogue changes; the comprehensive Audit Trail remains separate under Section 17A. History must distinguish who changed a value, which context and source owned it, when it was effective, when it was recorded, and whether the change was a correction, replacement, or new version.
+
+Identifier changes, retirements, external remappings, merges, and reassignments must preserve provenance and historical association. A new GTIN or other standards-governed identifier must be allocated only under the applicable issuing authority's rules. Product similarity, a new image/name, a packaging change, or a supplier import must not trigger automatic identifier reuse or merge.
+
+### 6F.14 External data exchange and interoperability
+
+The Product/Item Reference Model must be vendor-neutral and independent of any one accounting, ERP, POS, marketplace, warehouse, or inventory product. External system structures and customizations do not define CBM's canonical Product, Variant, package, identifier, tracking, or bundle model.
+
+External imports may include Product/Variant records, identifiers, barcodes, attributes, dimensions, units, packaging, manufacturer/supplier references, classification, and available provenance. Each receiving domain must validate and accept only the data within its ownership boundary. Missing or ambiguous variant distinctions, barcodes, serials, packaging conversions, or ownership must be identified and resolved by authorized data entry or a documented mapping; CBM must never invent identifiers, serials, unit-level identities, conversion factors, or product facts.
+
+Exports/offboarding must preserve identifiers with their types/namespaces, Product/Variant relationships, packaging and unit conversions, relevant classifications, effective versions, source mappings, and traceability data within the authorized data scope. Export does not promise that an external application will support or reproduce CBM's complete data model or configuration. Interoperability contracts must follow Section 6D.8 and the approved External-System Onboarding and Customer Offboarding rules.
+
+### 6F.15 Configurability, extensibility, and mandatory integrity controls
+
+Product/Item Management must be designed against the full architecture-wide doctrine in Sections 2.6, 10, and 18. Subject to Main Portal governance and Stable Core, it must support controlled variation in:
+
+- Product types, catalogue templates, attribute definitions, value dictionaries, labels, and applicable taxonomies.
+- Variant dimensions, allowed values, dependencies, valid combinations, and configurable-to-order patterns.
+- Product Codes, SKU policies, identifier types, namespaces, validation, uniqueness scope, and purpose-specific primary identifier choices.
+- Barcode/Data Carrier symbologies, parser/encoding profiles, supported device capabilities, and label profiles.
+- Sale, purchase, stock, service, and other applicability rules.
+- Product/Variant tracking characteristics and Inventory tracking-policy references.
+- Packaging levels, units, conversions, trade-unit identification, and bundle composition.
+- Lifecycle rules, approvals, publication, authorized local additions, permitted overrides, and change workflows.
+
+Configuration must be versioned, scoped, auditable, and applied only to eligible contexts. It must not make every possible feature mandatory or add needless complexity to simple businesses. A Shop managing only a small number of quantity-based items must not be forced to configure product-family hierarchies, serial tracking, advanced packaging, or Warehouse functionality. A regulated or traceability-intensive business must be able to enable the necessary stronger controls without changing the core model.
+
+The following are mandatory Stable Core/integrity boundaries and are not ordinary business-level override options:
+
+1. Strict Business/Tenant Data Isolation and authorized access.
+2. Immutable CBM record identity and preservation of historical references.
+3. Explicit identifier type, issuer/namespace, subject level, and uniqueness scope; no assumption that one code or barcode identifies every level.
+4. Preservation of significant identifier characters and leading zeroes.
+5. No fabricated or unauthorized GS1 or other externally governed identifiers.
+6. No cross-context catalogue access, edits, or overrides without explicit authorization and publication/sharing contract.
+7. No silent mutation of another Product, Variant, business catalogue, accepted stock fact, or historical transaction.
+8. Inventory and Warehouse ownership boundaries in Sections 6D and 6E.
+9. Legal, regulatory, contractual, and other higher-authority tracking/identification requirements must not be weakened by lower-level configuration.
+10. All changes, imports, identifier resolution, merges, overrides, and lifecycle transitions must preserve required Domain History and Audit Trail separation.
+
+Flexibility must come from a clear stable identity model plus governed extensions, not from untyped fields, ambiguous code reuse, uncontrolled variant proliferation, unrestricted tenant sharing, or domain-boundary violations.
+
+
 
 ## 7. Business Authority Scope
 
@@ -3234,6 +3547,8 @@ This baseline consolidates:
 8. The project owner's explicit direction on 19 November 2026 to separate Business Modules such as Accounting, Inventory, Human Resource, and Warehouse Management; distinguish Shared Domain Models from Internal Platform Capabilities and External Connectivity; preserve independently governed external-system and Application Client interoperability; and define warehouse facilities, storage hierarchy, counters, and internal/external custody boundaries. The project owner delegated the necessary subordinate architecture analysis and decisions, subject to previously approved Stable Core, governance, and documentation rules.
 9. The project owner's explicit clarification on 19 November 2026 that CBM must not be designed as a copy of Tally or any other external system. External-system relationships are for importing the relevant available data needed to establish business continuity and exporting the relevant CBM data needed to continue business elsewhere. The source system's optional modules, data structures, customizations, accounting method, inventory granularity, warehouse concepts, and workflows do not define CBM's architecture. Missing or insufficient source data must be identified and completed through authorized CBM setup or data entry; data must never be invented. Vendor-specific compatibility is limited to the documented and validated data-transfer capability actually required.
 
+10. The project owner's explicit direction and approval on 19 November 2026 to finalize the Product/Item concept and directly update the authoritative documentation. The approved baseline establishes Product/Item Management as an independent Business Module; distinguishes Product Definition, Product Variant, Product/Item Instance, optional Family/Group classification, typed identifiers, Data Carriers, Trade Packaging Configurations, and Bundles/Kits; and requires flexible, governed product, variant, identifier, packaging, and tracking policies within the existing Stable Core, tenant-isolation, authority, module-ownership, and documentation rules.
+
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
 - Main Portal's ecosystem-wide authority scope;
@@ -3284,6 +3599,17 @@ Official references consulted for Business Module separation, warehouse structur
 - [Microsoft Learn — Principle of least privilege](https://learn.microsoft.com/en-us/entra/id-governance/scenarios/least-privileged): supports minimum necessary access for users, applications, and agents; referenced as a security design principle rather than a required vendor product.
 
 These references inform logical boundaries and interoperable contracts. They do not mandate Microsoft Dynamics, SAP, Tally, GS1, OAuth/OIDC, or a particular deployment design. Exact protocol profiles, product versions, legal requirements, and device integration methods must be validated during the authorized technical design stage.
+
+Official references consulted for Product/Item Management, product identity, variants, identifiers, and barcodes in Section 6F:
+
+- [GS1 General Specifications, Release 26.0 (ratified January 2026)](https://ref.gs1.org/standards/genspecs/): current GS1 reference for trade-item identification, GTIN allocation, identification levels, packaging/trade-item groupings, serialisation, identifier attributes, Application Identifiers, and supported GS1 data carriers.
+- [GS1 General Specifications archive](https://ref.gs1.org/standards/genspecs/archive): official release history; the January 2026 Release 26.0 is the current release consulted for this baseline.
+- [GS1 Application Identifiers](https://ref.gs1.org/ai/): official searchable reference for identifiers that define the meaning and format of data attributes encoded in GS1 barcodes and EPC/RFID tags.
+- [GS1 — Why should I use GS1 Application Identifiers in a barcode?](https://support.gs1.org/support/solutions/articles/43000734173-why-should-i-use-the-gs1-application-identifiers-in-a-barcode/): explains how GS1 AIs distinguish identification keys from attributes such as serial, batch/lot, and expiry data, and how these data may be represented through supported GS1 symbols.
+- [GS1 — Are all barcodes the same?](https://support.gs1.org/support/solutions/articles/43000734155-are-all-barcodes-the-same-): explains differences between barcode symbologies, data capacities, and GS1-specific data conventions.
+- [Microsoft Learn — Product dimensions](https://learn.microsoft.com/en-us/dynamics365/supply-chain/pim/product-dimensions): a product-management implementation example of configurable variant dimensions, dimension groups, valid combinations, and product variants. It is a comparative reference, not a CBM implementation mandate.
+
+These sources support the distinction between an identified trade item, its variants and attributes, identifier values, and the data carrier that transports those values. They do not require CBM to adopt GS1 identifiers for every item, reproduce Microsoft Dynamics concepts, or use a vendor-specific Product Master. CBM's canonical model and applicability rules remain governed by this document; standards are applied where the relevant business, trade, regulatory, or interoperability use case justifies them.
 
 Official technical references consulted for security and SaaS architecture boundaries:
 
