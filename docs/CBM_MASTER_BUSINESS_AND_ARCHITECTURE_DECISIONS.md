@@ -1298,6 +1298,113 @@ Business Entity Lifecycle History is a domain-specific History record set for th
 
 Distributor–Shop Mapping state changes remain in the specific Mapping's Domain History. The comprehensive Audit Trail separately records the initiating operation, cascade scope, affected objects, authorization, approvals, snapshot creation, state changes, restoration, failures, retries, and outcomes. Snapshot, Domain History, and Audit Trail remain separate records with separate purposes and access controls.
 
+## 14. Subscription, Plans, Entitlements, and Billing
+
+### 14.1 Commercial Account and Service Provider boundary
+
+A Commercial Account belongs to one Service Provider commercial context: Main Portal or one authorized Sub-Portal. The Commercial Account identifies the customer's contracting and billing relationship with that Service Provider. It may have one or more Subscriptions.
+
+A Commercial Account is not an Owner ID, User Account, Business Identity, or Business Structure entity. The contracting/billing party must be explicitly identified; it must not be inferred from User identity, Parent Organization, ownership alone, or Distributor–Shop Mapping.
+
+A Service Provider migration does not silently transfer a Commercial Account or Subscription to another provider. Any contractual transition must be expressly authorized under Main Portal governance. Existing invoices, payments, subscription terms, entitlement history, and other financial records must remain traceable through the transition.
+
+### 14.2 Plan Catalog and versioning
+
+Plans and Add-ons must be data/configuration driven, not hard-coded product packages.
+
+Main Portal governs the allowed Entitlement catalogue, measurement types, composition rules, and immutable platform boundaries. An authorized Service Provider may define and publish Plans within the permitted catalogue and its delegated commercial authority.
+
+Every published Plan must have an identifiable Plan Version. A published Plan Version must preserve the Entitlements, Usage Limits, compatibility rules, duration/billing terms, and commercial conditions under which it was offered. A change that alters published contractual meaning must create a new Plan Version; it must not silently rewrite the meaning of an existing Subscription.
+
+Add-ons are independently defined, versioned commercial extensions. Their compatibility with Plans, other Add-ons, and Subscription terms must be explicit. They must not be hard-coded or treated as unrestricted overrides.
+
+### 14.3 Subscription and explicit coverage
+
+A Subscription applies a specific Plan Version to a Commercial Account for an explicit term or renewal arrangement. It must identify its effective start, applicable end/renewal terms, billing arrangement, covered entities/contexts, attached Add-ons, and relevant commercial conditions.
+
+Subscription Coverage must be established through an explicit Subscription Coverage Assignment. Supported coverage modes are:
+
+1. **Organization Only:** covers the Organization itself.
+2. **Selected Business Entities:** covers only the explicitly selected eligible Distributors and/or Shops.
+3. **Full Organization Network:** covers the Organization and the eligible Distributor and Shop entities within its current Business Structure, as defined by the Subscription terms.
+4. **Future-inclusive Organization Network:** covers the Organization's current eligible network and also includes subsequently created eligible child entities, but only when this mode is expressly selected in the Subscription terms.
+
+Coverage must never be inferred from Ownership, Parent–Child placement alone, Service Provider association, User association, or Business Mapping. A Subscription must not cover another Organization's Shop merely because that Shop is mapped to a covered Distributor.
+
+### 14.4 Entitlements and entitlement resolution
+
+The effective Entitlements available to a covered entity are derived from the applicable Active/Trial Subscription, its Plan Version, compatible Add-ons, Coverage Assignment, effective dates, Usage Limits, and applicable Main Portal/Service Provider rules.
+
+Every Entitlement identifies the feature or capacity it makes available. Each Entitlement type must have an explicit composition rule defining how multiple eligible sources combine—for example, exclusive selection, additive capacity, maximum capacity, or an expressly defined replacement rule. No implicit merge, precedence, or privilege expansion is permitted.
+
+An Entitlement makes a product capability commercially available. It does not grant a User access, User Assigned Authority Scope, Role, Permission, or action authorization. Existing User authorization requirements continue to apply independently.
+
+### 14.5 Usage Limits and enforcement
+
+Each Usage Limit must define:
+
+- The measured resource or activity.
+- The entity/business scope to which the measurement applies.
+- The unit and aggregation method.
+- The measurement or billing period.
+- The limit and any warning thresholds.
+- The enforcement mode and any permitted overage treatment.
+- The reset, carry-forward, or renewal behaviour where applicable.
+
+A limit may use an expressly defined hard-block, soft-warning, or authorized overage model. The behaviour must be stated in the Plan/Entitlement terms and must not be guessed by an implementation. Exceeding a limit must not silently delete, corrupt, or transfer existing business data.
+
+### 14.6 Subscription lifecycle states
+
+The common Subscription service states are:
+
+| State | Meaning |
+|---|---|
+| Pending Activation | Subscription has been created but activation conditions are not yet complete or effective. |
+| Trial | An approved trial period is active. |
+| Active | Subscription is active for its effective term and coverage. |
+| Grace Period | A governed grace period is in effect after an applicable billing/renewal issue; permitted service behaviour is controlled by policy. |
+| Suspended | Subscription service entitlement is suspended under an authorized policy or action. |
+| Cancelled | Subscription has been cancelled before or at its defined cancellation effective point. |
+| Expired | Subscription term has ended without a continuing effective renewal. |
+
+A scheduled cancellation is represented by its cancellation instruction and effective date; it does not need to be a separate operational Subscription state.
+
+Past Due is a billing/Invoice condition, not a Subscription state. Payment Collection pause or failure must not be conflated with the Subscription's service state.
+
+### 14.7 Invoice and Payment lifecycles
+
+Invoice and Payment are independently identifiable financial records.
+
+Common Invoice statuses are Draft, Issued/Open, Partially Paid, Paid, Past Due, Void, and Uncollectible, subject to the applicable accounting and legal requirements.
+
+Common Payment statuses are Initiated, Processing, Successful, Failed, and Reversed/Refunded. Refunds and reversals must remain traceable to the original Payment and related Invoice or commercial obligation.
+
+One Invoice may be settled through one or more Payments, including partial payments where permitted. A successful Payment does not by itself prove that every other Invoice or Subscription obligation is settled. Invoice status, Payment status, and Subscription status must be resolved independently through defined business rules.
+
+### 14.8 Payment default, Grace Period, suspension, and reinstatement
+
+A failed, late, or missing Payment must not automatically deactivate, close, or delete the Organization, Distributor, Shop, or User Accounts.
+
+The applicable Commercial Account/Subscription policy must define due dates, reminders, retries, Grace Period, permitted service restrictions, suspension conditions, and reinstatement conditions within Main Portal governance.
+
+During Grace Period, the Subscription's permitted service behaviour follows its defined policy. When the applicable Grace Period and required conditions end, the Subscription may be Suspended under an authorized rule. On successful payment/default resolution, the Subscription may be reinstated where its contractual and policy conditions permit.
+
+Subscription suspension or expiry changes entitlement availability only. It does not change the operational lifecycle state of the covered Business Entity, the User Account state, Ownership, Business Structure, or Domain History.
+
+### 14.9 Upgrade, downgrade, renewal, and cancellation changes
+
+Every Plan change, Add-on change, renewal, upgrade, downgrade, cancellation, or other Subscription amendment must have an explicit effective date/time and preserve the before-and-after contractual terms.
+
+Where supported, the applicable terms must determine whether a change takes effect immediately or at the next billing period, and whether proration, credit, additional charge, or limit adjustment applies. The system must preserve the old and new Plan Versions, coverage, Entitlements, Usage Limits, billing calculation references, and approval/authorization records.
+
+Automatic renewal must be expressly defined in the Subscription terms. It must not be inferred merely because a Subscription has previously renewed.
+
+### 14.10 Subscription termination, retention, and entity independence
+
+Cancellation, expiry, or suspension of a Subscription does not itself deactivate or close a covered Organization, Distributor, or Shop. Nor does it terminate a User Account or rewrite business ownership.
+
+Business data, invoices, payments, domain history, and audit records remain subject to their own retention, export, archival, and deletion policies. Subscription termination must not be used as an implicit business deletion instruction.
+
 ## 13. Sub-Portal migration and service continuity
 
 ### 14.1 Nature of migration
