@@ -21,23 +21,23 @@
 7. [Service-provider architecture](#6-service-provider-architecture)
 8. [Platform-wide Services Architecture](#6a-platform-wide-services-architecture)
 9. [Global Business Settings](#6b-global-business-settings)
-9. [Business Authority Scope](#7-business-authority-scope)
-10. [Delegated Authority](#8-delegated-authority)
-11. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-12. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-13. [Approval Workflow governance](#11-approval-workflow-governance)
-14. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-15. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-16. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-17. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-18. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-19. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-20. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-21. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-22. [Cross-concept invariants](#19-required-cross-concept-invariants)
-23. [Illustrative scenarios](#20-illustrative-scenarios)
-24. [Documentation governance](#21-documentation-governance)
-25. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+10. [Business Authority Scope](#7-business-authority-scope)
+11. [Delegated Authority](#8-delegated-authority)
+12. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
+13. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+14. [Approval Workflow governance](#11-approval-workflow-governance)
+15. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+16. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+17. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+18. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+19. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+20. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+21. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+22. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+23. [Cross-concept invariants](#19-required-cross-concept-invariants)
+24. [Illustrative scenarios](#20-illustrative-scenarios)
+25. [Documentation governance](#21-documentation-governance)
+26. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -894,7 +894,7 @@ The event/messaging infrastructure is not the Audit Trail. It must not merge wit
 
 **B6. Localization & Reference Data Services**
 
-Shared capabilities for language and locale support, translation, timezone handling, date/number formatting, currency metadata, units of measure, country/state/region data, address formats, and other approved common reference data.
+Shared capabilities for language and locale support, translation, IST-based date/time handling, date/number formatting, INR currency metadata, units of measure, Indian State/UT/District and other regional references, Indian address formats, and other approved common reference data. These capabilities must operate only within the India-only product scope and the fixed INR-only and IST-only boundaries in Section 6B.
 
 Generic Reference Data must remain distinct from a Business's own Master Data. For example, a shared country or unit-of-measure reference does not become a customer's Organization-specific Product Category, Price List, Customer, Supplier, or other Business Master Data. Reference data access and permitted overrides must follow Main Portal governance and the applicable business context.
 
@@ -1106,7 +1106,7 @@ Global Business Settings may provide a shared default, display convention, or re
 
 Global Business Settings is a governed configuration/business-settings responsibility that may use Platform-wide Services, particularly Configuration & Policy Management Services and Localization & Reference Data Services. Those services provide infrastructure and common capabilities; they do not determine a setting's business meaning, authority, or domain ownership.
 
-The India-only scope is a product/business boundary, not a technical localization implementation specification. Language-resource implementation, formatting libraries, reference-data storage, and service decomposition remain outside this business and logical-architecture decision.
+The India-only scope is a product/business boundary, not a technical localization implementation specification. Generic technical capabilities in B6 do not authorize international language, country, currency, or time-zone support: CBM's enabled language set remains Indian languages only, country and regional references remain India-specific, currency remains INR, and time-zone handling remains IST / Asia/Kolkata. Language-resource implementation, formatting libraries, reference-data storage, and service decomposition remain outside this business and logical-architecture decision.
 
 ---
 
