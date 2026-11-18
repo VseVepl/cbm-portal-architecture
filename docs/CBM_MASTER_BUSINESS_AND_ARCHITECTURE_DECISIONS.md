@@ -162,7 +162,7 @@ This section defines terms that must be used consistently. Similar-sounding term
 
 ### 3.1 CBM Ecosystem
 
-The **CBM Ecosystem** is the complete platform environment governed by Main Portal. It includes Main Portal, Sub-Portals, customer Organizations/Tenants, Distributors, Stores, independent Shops, their users, their permitted business relationships, and the services and data managed within CBM.
+The **CBM Ecosystem** is the complete platform environment governed by Main Portal. It includes Main Portal, Sub-Portals, customer Organizations/Tenants, Distributors, Shops, their users, their permitted business relationships, and the services and data managed within CBM.
 
 ### 3.2 Main Portal
 
@@ -202,7 +202,7 @@ A **Legal Identity** represents the person or legal entity to which the relevant
 
 A **Professional Identity** represents how a business, service, location, branch, store, or other identifiable operating context presents and is recognized in actual commercial/professional activity. It may include its trading/business name, brand, branch/store name, business category, operating address/location, contact details, logo/branding, and other context-specific particulars. It may be independently maintained even when the relevant Legal Identity is shared with other Professional Identities.
 
-Legal Identity and Professional Identity are separate but related. One Legal Identity may be associated with multiple distinct Professional Identities. For example, five stores may each have their own store name, location, contact details, and Professional Identity while operating under one legal taxpayer and one applicable GST Registration. The shared legal/tax identity does not merge the stores' distinct professional identities or operational records. Conversely, a Professional Identity must not be assumed to have a particular Legal Identity or GST Registration without an explicit, verified association.
+Legal Identity and Professional Identity are separate but related. One Legal Identity may be associated with multiple distinct Professional Identities. For example, five Shops may each have their own Shop name, location, contact details, and Professional Identity while operating under one legal taxpayer and one applicable GST Registration. The shared legal/tax identity does not merge the stores' distinct professional identities or operational records. Conversely, a Professional Identity must not be assumed to have a particular Legal Identity or GST Registration without an explicit, verified association.
 
 This two-dimensional identity model applies to all eligible CBM identity-bearing contexts, not only customer businesses. Main Portal and each Sub-Portal may each maintain their own Legal Identity and Professional Identity for their respective platform/service-provider business. Organizations, Distributors, and Shops may each maintain the applicable Legal Identity and Professional Identity dimensions. A Shop's own Legal Identity is optional; its Professional Identity is required.
 
@@ -210,12 +210,12 @@ A Business Identity must not be replaced merely because the business changes its
 
 #### 3.7.1 Identity dimensions and cardinality
 
-1. One Legal Identity may be associated with multiple distinct Professional Identities, including multiple branches, Stores, Shops, or operating contexts.
+1. One Legal Identity may be associated with multiple distinct Professional Identities, including multiple branches, Shops, or operating contexts.
 2. A distinct Professional Identity does not automatically imply a distinct Legal Identity, legal person, GST Taxpayer Profile, GST Registration, Owner ID, or Ownership Link.
 3. Shared Legal Identity does not merge distinct Professional Identities, operational records, locations, transactions, inventory, staff scopes, or business relationships.
 4. The association between a Legal Identity and a Professional Identity must be explicit, validated, and effective-dated where appropriate. It must not be inferred solely from a shared Owner ID, similar name, common address, Business Structure, or Mapping.
 5. The same two-dimensional model applies to Main Portal and Sub-Portals as service-provider businesses, and to customer/business entities and eligible operational contexts. A portal's Service Provider role does not remove the need to represent its own legal and professional identity.
-6. Identity particulars must be maintained in the correct dimension. Legal names and statutory identifiers belong to Legal Identity; trading names, brand/branch/store presentation and operating contact/location particulars belong to Professional Identity, while shared or context-specific fields must be modelled without duplicating or conflating the two dimensions.
+6. Identity particulars must be maintained in the correct dimension. Legal names and statutory identifiers belong to Legal Identity; trading names, brand/branch/Shop presentation and operating contact/location particulars belong to Professional Identity, while shared or context-specific fields must be modelled without duplicating or conflating the two dimensions.
 
 ### 3.8 Owner / Ownership Holder
 
@@ -379,12 +379,12 @@ CBM must not be interpreted as one universal Parent–Child tree. It contains se
 |---|---|---|
 | **Platform/service-provider structure** | Who provides the CBM service to this customer business, and under whose platform governance does that provider operate? | Main Portal → Sub-Portal → served Organization/Tenant; or Main Portal → directly served Organization/Tenant. |
 | **Business structure** | Which entities are direct structural children of an Organization? | Organization → Distributor entities and/or Shop entities. Both are terminal structural entities. |
-| **Identity relationship** | What legal person/entity is responsible, and how is each business or operating context professionally identified? | One Legal Identity may be associated with multiple distinct Professional Identities, such as five separately named Stores operating under one legal taxpayer. | 
+| **Identity relationship** | What legal person/entity is responsible, and how is each business or operating context professionally identified? | One Legal Identity may be associated with multiple distinct Professional Identities, such as five separately named Shops operating under one legal taxpayer. | 
 | **Ownership relationship** | Who owns each independently owned business? | Owner ID → Ownership ID → ownership-bearing Business Identity; one Owner may be linked to several separate businesses. |
 | **Business relationship** | Which independent businesses are associated for a specific commercial purpose? | Distributor ↔ Shop through the specific Distributor–Shop Mapping type. |
 | **Business Available Authority Scope** | Which entities are eligible for a business-level authority to govern or make available for User assignment? | Eligibility is determined under explicit authority rules; neither structural placement nor Mapping automatically grants unrestricted scope. |
-| **User Assigned Authority Scope** | Which of the business-available entities has been explicitly assigned to this User? | An Organization-level User may be assigned only Store A and Store C, not every Store. |
-| **Permission / Role** | Which actions may this User perform within the assigned entity scope? | A Store Manager may update records only for Store A. |
+| **User Assigned Authority Scope** | Which of the business-available entities has been explicitly assigned to this User? | An Organization-level User may be assigned only Shop A and Shop C, not every Shop. |
+| **Permission / Role** | Which actions may this User perform within the assigned entity scope? | A Shop Manager may update records only for Shop A. |
 
 These views may refer to the same businesses or operational contexts, but they are not interchangeable. A relationship in one view does not create a relationship in another unless the applicable rule explicitly says so. Distributor–Shop Mapping is one specific Mapping type, not a universal definition or restriction on Mapping across CBM. Other Mapping and Assignment types must be separately defined with their own endpoints, purpose, eligibility, authority, and lifecycle. Ownership Links may inform eligible Business Available Authority Scope under Section 7; they do not change Business Structure or automatically grant a User access. User Scope Mapping determines the specific entities or areas assigned to a User; business-level authority availability alone does not assign a User's scope. GST Registration Assignment is separately governed and is never inferred from Owner ID, Business Structure, service-provider association, or another Mapping. The Business Structure Hierarchy has its own strict valid-parent and valid-child constraints; it is not a freely rearrangeable universal tree.
 
@@ -626,7 +626,7 @@ These are separate controls and must be evaluated independently.
 
 ### 7.2 Main Portal scope
 
-Main Portal's authority scope extends across the entire CBM Ecosystem without subordinate-imposed restriction. It covers all Sub-Portals, Organizations, Distributors, Stores, Shops, and applicable business/service contexts within CBM.
+Main Portal's authority scope extends across the entire CBM Ecosystem without subordinate-imposed restriction. It covers all Sub-Portals, Organizations, Distributors, Shops, and applicable business/service contexts within CBM.
 
 No Sub-Portal, Organization, Distributor, Shop, User, or Role may narrow or constrain Main Portal's supreme authority scope.
 
@@ -642,8 +642,7 @@ An Organization's Business Available Authority Scope includes:
 
 - The Organization's own business context.
 - Distributor entities belonging to its business structure, grouped as its Distribution Network when multiple, within the Organization's permitted governance and operational authority.
-- Shop entities that are direct structural children of the Organization, subject to the applicable Main Portal-governed authority rules. Their inclusion in Business Available Authority Scope does not determine or transfer their ownership.
-- Other directly subordinate operational entities that remain within the Organization's own business and ownership structure.
+- Shop entities that are direct structural children of the Organization, where and to the extent expressly included by applicable Main Portal-governed authority rules. Their structural placement does not itself grant authority or determine ownership.
 - An independently identified business only where a valid Ownership Link and an explicit Main Portal-governed rule make that business eligible for the relevant owner-linked authority scope.
 
 An Organization's Business Available Authority Scope must be determined under explicit Main Portal-governed authority rules. A Shop's structural placement under an Organization does not itself establish ownership or unrestricted authority. A Distributor–Shop Mapping does not, by itself, expand the Organization's authority scope through the Distributor to another business context. Any additional authority must be expressly authorized and must preserve independent ownership and Business Data Isolation.
@@ -778,8 +777,8 @@ A permission to perform one action does not imply permission to perform another 
 
 Assume Organization A's Business Available Authority Scope may include Distributor D1 and Shops S1, S2, and S3 where permitted by the applicable authority rules.
 
-- User U1 is associated with Organization A and is assigned only Organization A and Store S1. U1 cannot access D1, S2, or S3 merely because U1 is an Organization-level User.
-- User U2 is associated with Organization A and is assigned Distributor D1 and Store S2. U2 cannot access S1 or S3 unless those entities are also assigned.
+- User U1 is associated with Organization A and is assigned only Organization A and Shop S1. U1 cannot access D1, S2, or S3 merely because U1 is an Organization-level User.
+- User U2 is associated with Organization A and is assigned Distributor D1 and Shop S2. U2 cannot access S1 or S3 unless those entities are also assigned.
 - User U3 is explicitly assigned the full available scope and may access D1, S1, S2, and S3, subject to Permissions and all other controls.
 - Shops mapped to D1 but owned by unrelated Owners are not included in Organization A's scope merely because of the mapping, and cannot be added to these Users' assignments on that basis.
 
@@ -1224,26 +1223,26 @@ The following statements summarize rules that must remain true across all future
 21. Distributor–Shop Mapping is one specific Business Relationship Mapping type, not a universal definition or boundary for Mapping across CBM; it is not ownership and does not grant unrestricted access.
 22. One Shop may map to multiple Distributors; each mapping is a separate relationship.
 23. Ending a mapping does not close the Shop or terminate its other mappings.
-25. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
-26. Operational data may be removed after the applicable download period only after archival is verified.
-27. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it. Access requires explicit valid association, assigned scope, and Permissions.
-28. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
-29. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
-30. Owner ID identifies an Owner; Ownership ID identifies one specific Ownership Link; neither is a User ID or Business ID.
-31. Ownership Links identify ownership for business-authority purposes, not equity percentages, financial shares, or economic interest.
-32. Ownership Links may inform Business Available Authority Scope only under explicit Main Portal-governed rules. They do not automatically grant User access or action Permissions.
-33. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
-34. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
-35. A business-specific variation must remain within its authorized business context and must not silently affect another business.
-36. Mapping is typed and purpose-specific. Distributor–Shop Mapping does not restrict or define other Mapping or Assignment types.
-37. GST Registration Assignment may target any CBM entity type/context enabled by Main Portal, subject to verified taxpayer identity, lawful registration coverage, and applicable GST rules; it is not limited to Distributor or Shop.
-38. GSTIN eligibility is determined from the actual registered taxpayer, verified registration particulars, lawful Place of Business coverage, intended GST purpose, and applicable law. Owner ID, any Mapping, hierarchy, or service-provider association alone never establishes eligibility.
-39. GST Registration Assignment does not transfer a GST registration or permit an unrelated legal person/distinct person to use that GSTIN.
-40. User Scope Mapping, not merely a User's business level or Business Available Authority Scope, determines the specific entities/locations assigned to that User.
-41. Domain History is maintained separately for each approved domain and contains only that domain's events. It is preserved for the lifetime of the relevant business context and removed only through authorized permanent business deletion.
-42. Audit Trail is the comprehensive chronological record of relevant system events across all domains. It is separate from Domain History and follows its own retention policy; permanent retention is not universally required.
-43. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
-44. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
+24. Sub-Portal migration preserves identity, ownership, data rights, and internal structure; only Service Provider changes.
+25. Operational data may be removed after the applicable download period only after archival is verified.
+26. No User receives access to a business solely because the User, Owner, Service Provider, or another associated business has a relationship with it. Access requires explicit valid association, assigned scope, and Permissions.
+27. Business and Tenant Data Isolation are strict Stable Core constraints and cannot be weakened through configuration, customization, extension, delegation, or override.
+28. Business Structure Hierarchy and Structural Integrity are strict Stable Core constraints: invalid entity placement and parent–child arrangements cannot be created, configured, customized, delegated, or overridden.
+29. Owner ID identifies an Owner; Ownership ID identifies one specific Ownership Link; neither is a User ID or Business ID.
+30. Ownership Links identify ownership for business-authority purposes, not equity percentages, financial shares, or economic interest.
+31. Ownership Links may inform Business Available Authority Scope only under explicit Main Portal-governed rules. They do not automatically grant User access or action Permissions.
+32. Every feature, policy, configuration, workflow, permission, and extension must have deliberate applicability to the business contexts for which it is intended.
+33. Scalability, configurability, extensibility, customization, override capability, and applicability must be considered throughout architecture design; none grants permission to violate Stable Core constraints.
+34. A business-specific variation must remain within its authorized business context and must not silently affect another business.
+35. Mapping is typed and purpose-specific. Distributor–Shop Mapping does not restrict or define other Mapping or Assignment types.
+36. GST Registration Assignment may target any CBM entity type/context enabled by Main Portal, subject to verified taxpayer identity, lawful registration coverage, and applicable GST rules; it is not limited to Distributor or Shop.
+37. GSTIN eligibility is determined from the actual registered taxpayer, verified registration particulars, lawful Place of Business coverage, intended GST purpose, and applicable law. Owner ID, any Mapping, hierarchy, or service-provider association alone never establishes eligibility.
+38. GST Registration Assignment does not transfer a GST registration or permit an unrelated legal person/distinct person to use that GSTIN.
+39. User Scope Mapping, not merely a User's business level or Business Available Authority Scope, determines the specific entities/locations assigned to that User.
+40. Domain History is maintained separately for each approved domain and contains only that domain's events. It is preserved for the lifetime of the relevant business context and removed only through authorized permanent business deletion.
+41. Audit Trail is the comprehensive chronological record of relevant system events across all domains. It is separate from Domain History and follows its own retention policy; permanent retention is not universally required.
+42. History and Audit Trail have separate record sets and access permissions. A business History may be visible to multiple authorized Users without granting those Users Audit Trail access.
+43. Project Discussion History, Domain History, and Audit Trail are three distinct concepts.
 
 ## 17. Illustrative scenarios
 
