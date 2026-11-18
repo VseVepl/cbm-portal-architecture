@@ -91,6 +91,8 @@ CBM is a comprehensive SaaS-based business-management platform combined with a w
 
 CBM is intended to provide practical, user-friendly business-management services to different types of businesses while supporting independent service providers, strong business boundaries, centralized platform governance, and long-term expansion.
 
+CBM's product objective is to provide a unified portal ecosystem through which an eligible business can access the broad set of business capabilities it needs in one coherent environment. This unified experience must be achieved by composing independently bounded Business Modules, Shared Domain Models, and Internal Platform Capabilities—not by merging domain responsibilities, creating duplicate sources of truth, or weakening ownership and isolation. The capabilities presented to each business must be governed by explicit applicability, Service/Subscription entitlements where relevant, authority, User Scope, Permissions, and configuration. The product must be extensible to new business needs without assuming that every capability is mandatory or applicable to every business.
+
 ### 2.3 Initial business-management capabilities
 
 The product vision includes:
@@ -3076,6 +3078,7 @@ The following statements summarize rules that must remain true across all future
 144. A cross-Module process must preserve each Module's separate state, source record, validation, authorization, and correction lifecycle. Event/API delivery does not prove a domain transaction or downstream posting has completed.
 145. Shared Product/Item, Unit/Packaging, Location/Facility, Inventory Position, Source Transaction, Accounting Posting, Workforce, External Identifier, Event, and Document references must have explicit authoritative owners and contracts; shared use never implies shared write authority.
 146. Business Data Isolation, Tenant Data Isolation, Main Portal governance, explicit authority, domain ownership, and Stable Core rules apply to all internal and external integrations, client applications, warehouse operators, third-party providers, and portal synchronization.
+147. CBM must provide a coherent unified portal experience by composing independently governed Business Modules, Shared Domain Models, Internal Platform Capabilities, and External Connectivity. Unified access or workflow orchestration does not merge Module ownership, source records, business authority, Tenant boundaries, or Permissions; each capability remains subject to explicit applicability and authorization.
 
 
 
