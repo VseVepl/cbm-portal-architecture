@@ -25,23 +25,24 @@
 11. [Business Module Boundaries, Shared Models, and Connectivity Architecture](#6d-business-module-boundaries-shared-models-and-connectivity-architecture)
 12. [Inventory Management and Warehouse Management Boundaries](#6e-inventory-management-and-warehouse-management-boundaries)
 13. [Product/Item Management, Product Identity, Variants, Identifiers, and Trade Packaging](#6f-product-item-management-product-identity-variants-identifiers-and-trade-packaging)
-14. [Business Authority Scope](#7-business-authority-scope)
-15. [Delegated Authority](#8-delegated-authority)
-16. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-17. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-18. [Approval Workflow governance](#11-approval-workflow-governance)
-19. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-20. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-21. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-22. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-23. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-24. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-25. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-26. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-27. [Cross-concept invariants](#19-required-cross-concept-invariants)
-28. [Illustrative scenarios](#20-illustrative-scenarios)
-29. [Documentation governance](#21-documentation-governance)
-30. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+14. [Pricing, Price References, Price Determination, and Price History](#6g-pricing-price-references-price-determination-and-price-history)
+15. [Business Authority Scope](#7-business-authority-scope)
+16. [Delegated Authority](#8-delegated-authority)
+17. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
+18. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+19. [Approval Workflow governance](#11-approval-workflow-governance)
+20. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+21. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+22. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+23. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+24. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+25. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+26. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+27. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+28. [Cross-concept invariants](#19-required-cross-concept-invariants)
+29. [Illustrative scenarios](#20-illustrative-scenarios)
+30. [Documentation governance](#21-documentation-governance)
+31. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -793,6 +794,40 @@ A **Product Bundle** or **Kit** is a defined commercial or operational compositi
 ### 3.117 Product Attribute and Variant Dimension
 
 A **Product Attribute** is a typed property describing a Product Definition, Product Variant, packaging configuration, or another explicitly applicable product subject. A **Variant Dimension** is an attribute or governed combination of attributes whose values distinguish Product Variants for an applicable business purpose. Not every attribute is a Variant Dimension: descriptive, compliance, measurement, or informational differences must not create separate variants unless the applicable product policy says that the difference changes the separately managed item identity.
+
+
+
+### 3.118 Price Record
+
+A **Price Record** is an owner-domain record stating a monetary amount for a declared price purpose, an identified Product/Variant/Trade Packaging Configuration or other permitted subject, and an explicitly defined business/applicability scope and validity period. It must identify its owning domain, Price Type, amount, INR currency, applicable quantity basis and unit/packaging reference, tax basis where relevant, source/provenance, approval/status, and effective/recorded times. A Price Record is not automatically an accepted transaction price, tax determination, inventory valuation, or accounting value.
+
+### 3.119 Price Type
+
+A **Price Type** identifies the business meaning and intended use of a price, such as declared MRP, Manufacturer Suggested Retail Price / RRP, selling/list/retail/wholesale/dealer price, customer/contract/promotion price, supplier quotation/agreement/purchase reference price, or a governed cost/valuation reference. Each Price Type must define its owner domain, eligible subject levels, permitted scope, tax-basis behaviour, lifecycle, visibility, and applicable validation. Different Price Types must not be treated as interchangeable merely because they contain monetary amounts.
+
+### 3.120 Price List
+
+A **Price List** is a governed, named collection of Price Records and associated applicability conditions used for a declared commercial purpose, such as a sales channel, customer group, supplier relationship, contract, or business context. A Price List has an owning domain and business context, effective lifecycle, eligible consumers, and explicit rules for publication, sharing, inheritance, priority, and override. A Price List is not itself a Product catalogue, transaction document, or tax schedule.
+
+### 3.121 Price Condition
+
+A **Price Condition** is a governed qualification or adjustment associated with a Price Record or Price List, such as customer/supplier applicability, quantity break, channel, location, contract, date/time, promotion, discount, surcharge, or other permitted commercial condition. Conditions must state their scope, qualification logic, combination/exclusivity behaviour, priority, effective period, and authority. A Price Condition does not itself establish the legal GST treatment of a transaction.
+
+### 3.122 Price Tax Basis
+
+A **Price Tax Basis** states how a Price Record's amount is expressed in relation to applicable indirect taxes: tax-inclusive, tax-exclusive, or not stated/not applicable where legitimately permitted for that Price Type. It describes the representation of the amount; it does not declare tax applicability, tax classification, HSN/SAC, GST rate, tax liability, or entitlement to input tax credit. Those determinations remain with the authoritative Tax domain and applicable law.
+
+### 3.123 Price Determination
+
+**Price Determination** is the governed process by which the responsible domain resolves the applicable Price Record and Price Conditions for a specific subject, business context, counterparty, channel, quantity, unit/packaging, and effective time. It must produce a reproducible result, identify the selected records and rules, and report conflicts or missing/ambiguous data rather than silently guessing.
+
+### 3.124 Price Snapshot
+
+A **Price Snapshot** is the immutable price-related information captured by an accepted transaction or other authoritative domain event at the time it is accepted. It preserves the selected price and applicable conditions, relevant amounts, unit/quantity basis, discount/surcharge, tax basis, tax breakdown or tax reference as determined by the owning domains, and source/version references needed to explain the accepted result later. A later Price Record change must not rewrite a historical Price Snapshot.
+
+### 3.125 Declared Retail Price
+
+A **Declared Retail Price** is a price declaration associated with a Product or Trade Packaging Configuration, such as a legally applicable Maximum Retail Price (MRP), Manufacturer Suggested Retail Price, Recommended Retail Price, or other sourced declared/list reference. These declarations have different legal and commercial meanings. In particular, MRP must not be treated as an ordinary transaction Selling Price or as synonymous with RRP/MSRP.
 
 
 ## 3A. How the CBM relationship model must be read
@@ -1696,7 +1731,8 @@ A Shared Domain Model must define common meaning and references without becoming
 |---|---|---|
 | **Business Identity Reference Model** | Legal Identity, Professional Identity and verified Business Identity references | Business Identity domain remains authoritative under Section 3.7. A reference does not transfer identity ownership. |
 | **User / Actor Reference Model** | User Account, System Principal, authenticated actor and permitted business-context references | User Account/identity records remain governed by Sections 9 and 15; employee/personnel records remain HR-owned. |
-| **Product/Item Reference Model** | Product Definitions, Product Variants, their attributes and classifications, optional Family/Group relationships, typed identifiers, Data Carrier references, Trade Packaging Configurations, Product Bundle/Kit compositions, and applicable version/provenance references | Product/Item Management owns catalogue definitions and product/variant/trade-unit identity. Inventory, Warehouse, Sales, Purchase, POS, Asset Management, and other consumers retain their own stock, handling, transaction, pricing, asset, and operational facts under Sections 6E and 6F. |
+| **Product/Item Reference Model** | Product Definitions, Product Variants, their attributes and classifications, optional Family/Group relationships, typed identifiers, Data Carrier references, Trade Packaging Configurations, Product Bundle/Kit compositions, declared MRP/RRP and legally required product/package price declarations, and applicable version/provenance references | Product/Item Management owns catalogue definitions, product/variant/trade-unit identity, and its declared product/package price records. Inventory, Warehouse, Sales, Purchase, POS, Asset Management, and other consumers retain their own stock, handling, transaction, commercial-price, cost, asset, and operational facts under Sections 6E–6G. |
+| **Price Reference and Price Determination Contract** | Typed Price Records, Price Lists, Price Conditions, tax-basis declarations, effective periods, selected-price references, and Price Snapshot references | Price Records remain authoritative in their owning domains: Product/Item Management for declared product/package prices; Sales for selling-price lists and sales conditions; Purchase for supplier quotation/agreement/purchase reference prices; Inventory for its cost/valuation references. A shared contract or reusable determination capability does not create a universal price owner or a separate Pricing Business Module. GST/Tax owns tax determination. |
 | **Unit of Measure and Packaging Reference Model** | Shared units, permitted conversions, product-specific Trade Packaging Configuration references, and quantity presentation | Shared Indian reference units are governed by Section 6B/B6; Product/Item Management owns canonical product-specific packaging definitions, while Inventory, Sales, Purchase, and Warehouse own their operational applicability, precision, quantity, and transaction/stock rules. |
 | **Business Location Reference Model** | Business address, site, branch, operating location and facility references | Business Identity/Professional Identity and relevant domain owners retain their source facts. Warehouse-specific locations are governed by Warehouse Management. |
 | **Inventory Position Model** | Product, stock quantity, stock state, batch/serial/expiry, ownership/custody references and authorized location references | Inventory owns authoritative stock quantities, states and valuation; Warehouse owns physical placement and execution facts through a shared contract. |
@@ -2230,16 +2266,11 @@ The Product/Item relationship model should support typed, optionally effective-d
 
 A Product Definition or Variant may be marked as applicable for sale, purchase, stocking, consumption, service delivery, or another supported business purpose. These are independently governed applicability capabilities; the existence of a Product record does not automatically enable every purpose. Applicability may vary by business context, channel, location, effective date, and authorized business policy.
 
-Product/Item Management defines the item that a commercial or operational record refers to. It does not own every price or commercial amount associated with the item. In particular:
+Product/Item Management defines the item that a commercial or operational record refers to. It owns catalogue-level declared price records that are intrinsic to, or declared for, the Product/Variant/Trade Packaging Configuration, including legally applicable MRP, Manufacturer Suggested Retail Price / RRP, and required unit-sale-price declarations where the relevant packaged-commodity rules apply. Such declarations must preserve issuer/source, applicable package and declaration version, validity, and history. MRP, RRP/MSRP, and actual Selling Price are distinct.
 
-- A Product/Variant reference is not a selling price, purchase price, landed cost, inventory valuation, discount, promotion, or accounting value.
-- Sales/POS own their transaction prices and sales-document facts under their approved domain contracts.
-- Purchase owns supplier quotation/order/invoice prices and purchase-document facts under its approved domain contracts.
-- Inventory owns inventory valuation rules and values within its responsibility; Accounting owns accounting records and postings.
-- GST/Tax owns tax classifications, applicability, determination, liability, and statutory records.
-- A printed/declared MRP, manufacturer suggested retail price, list reference, or other published amount may be retained as a typed, sourced, effective-dated product/packaging attribute where relevant, but it must not be confused with the actual transaction price or tax determination.
+Product/Item Management does not own every price or commercial amount associated with the item. Sales owns selling Price Lists, sales conditions, and sales transaction-price facts; Purchase owns supplier quotation/agreement and purchase transaction-price facts; Inventory owns inventory cost and valuation records; Accounting owns accounting records and postings; GST/Tax owns tax classification, applicability, determination, liability, and statutory records. A Product/Variant reference is not itself a price, discount, landed cost, inventory valuation, or accounting value.
 
-Price lists, customer/supplier conditions, channel prices, discounts, effective dates, and other commercial pricing policies must be owned by the appropriate commercial/pricing domain and explicitly related to Product Variant or Trade Packaging Configuration. This Section does not prematurely assign a future Pricing Business Module classification.
+The complete cross-domain Price Reference, Price Determination, tax-basis, price-history, and transaction-snapshot rules are defined in Section 6G.
 
 ### 6F.12 Catalogue ownership, publication, sharing, and tenant isolation
 
@@ -2300,6 +2331,174 @@ The following are mandatory Stable Core/integrity boundaries and are not ordinar
 10. All changes, imports, identifier resolution, merges, overrides, and lifecycle transitions must preserve required Domain History and Audit Trail separation.
 
 Flexibility must come from a clear stable identity model plus governed extensions, not from untyped fields, ambiguous code reuse, uncontrolled variant proliferation, unrestricted tenant sharing, or domain-boundary violations.
+
+
+
+
+## 6G. Pricing, Price References, Price Determination, and Price History
+
+### 6G.1 Purpose and architectural classification
+
+CBM must support multiple kinds of prices and commercial amounts without reducing them to one generic Product price field or merging the authoritative responsibilities of Product/Item Management, Sales, Purchase, Inventory, GST/Tax, and Accounting.
+
+The **Price Reference and Price Determination Contract** is a Shared Domain Model/contract. Reusable price lookup, condition evaluation, calculation, and resolution capabilities may be provided as shared capabilities where appropriate. Their existence does not establish a separate Pricing Business Module or create one universal authoritative Price Master. Each Price Record remains owned by the Business Module responsible for the business meaning and lifecycle of that price.
+
+Price applicability, effective dates, price conditions, approval, visibility, and override rules must follow the architecture-wide principles in Sections 2.6, 6A, 10, 17A, and 18. A common price interface or calculation service must never take ownership of another Module's source record.
+
+### 6G.2 Price categories and authoritative ownership
+
+The following Price Types and ownership rules are established:
+
+| Price Type / Amount | Authoritative owner | Required distinction |
+|---|---|---|
+| Legally applicable Maximum Retail Price (MRP) | Product/Item Management | Declared maximum retail price for covered packaged commodities; subject to applicable Legal Metrology law and declaration source. |
+| Manufacturer Suggested Retail Price / Recommended Retail Price (MSRP/RRP) | Product/Item Management | Manufacturer/brand-owner commercial recommendation; not automatically a statutory MRP ceiling. |
+| Other manufacturer/importer/brand-owner declared or list price | Product/Item Management | Sourced declaration/reference, not automatically the actual price charged by a seller. |
+| Legally required unit-sale-price declaration | Product/Item Management catalogue/package declaration | Maintained where the applicable packaged-commodity rules require it; it is distinct from the actual transaction price per unit. |
+| Base/List/Retail/Wholesale/Dealer/Distributor Selling Price | Sales | Governed selling Price Lists and sales applicability conditions. |
+| Customer-specific, customer-group, contract, channel, location, quantity-break, or promotional Selling Price | Sales | Sales-owned Price Records and Price Conditions; accepted transaction values remain on the Sales/POS source transaction. |
+| Supplier quotation, supplier Price List, negotiated purchase reference, or Purchase Agreement Price | Purchase | Supplier and agreement-specific commercial terms; accepted Purchase transactions retain their own actual values. |
+| Actual Purchase Price | Purchase | The accepted price recorded in the relevant purchase transaction/document; it is not a reusable universal cost field. |
+| Landed/Acquisition Cost and Inventory valuation cost | Inventory | Inventory-owned cost formation, allocation, costing method, and valuation records. |
+| Standard/Planned Cost or other Inventory cost reference | Inventory | Governed cost reference within the Inventory domain; not the actual supplier transaction price. |
+| Last/average purchase-price references | Derived from authorized Purchase data, under the relevant consuming/reporting domain contract | Calculated values with defined context and methodology; not manually maintained as an unrelated authoritative price master. |
+| Tax amount, tax rate, tax classification, and statutory tax determination | GST/Tax | Tax remains independently determined by the authoritative Tax domain and applicable law; it is not owned by the Price List or Price Record. |
+| Accounting value and accounting posting | Accounting | Resulting accounting interpretation and records; not the source of Sales/Purchase price facts or Inventory cost methodology. |
+
+The phrase **Original Price** is ambiguous and must not be used as a universal Price Type or a single field for purchase cost, list price, MRP, or historical price. The actual business meaning must be represented by an explicit Price Type.
+
+POS consumes the applicable Sales pricing contract and owns its accepted POS transaction facts; it must not create a competing authoritative sales Price List. A future Pricing Business Module is not established by this Section. Any future proposal to change module classification requires separate project-owner approval.
+
+### 6G.3 Price subject and relationship to Product, Variant, and packaging
+
+A Price Record must explicitly identify the subject to which it applies. Permitted subjects may include Product Definition, Product Variant, Trade Packaging Configuration, or another eligible subject expressly supported by the owner domain.
+
+Product Variant is the normal subject for a price that applies to the configured item itself. Trade Packaging Configuration is the preferred subject when the amount is specific to a pack, box, case, carton, or other separately identified trade unit. Product-level prices may be used only where the owner domain's explicit rule makes the price valid across all eligible Variants or where it is a declared default with controlled inheritance.
+
+A Price Record must identify the quantity basis and unit/packaging basis to which its amount refers. For example, price per piece, kilogram, litre, metre, pack, box, or carton must not be ambiguous. Variable-measure goods must preserve the applicable measured quantity and unit. A package price must not be interpreted as a per-piece price without an explicit conversion rule.
+
+Where one declared price applies to a specific package revision, label/declaration version, batch/lot, or effective period, that association must be recorded where necessary to establish which declaration applies to the physical goods. CBM must not force per-unit price records when a package-level or batch-level reference provides sufficient traceability. MRP applicability and subject selection must follow the applicable Legal Metrology requirements; CBM must not assume that every Product or Variant requires an MRP.
+
+### 6G.4 Price Lists, Price Conditions, applicability, and selection
+
+Sales and Purchase must be able to maintain multiple independently governed Price Lists appropriate to their purposes. Examples include retail, wholesale, dealer, distributor, customer-specific, customer-group, contract, channel, supplier-specific, negotiated-agreement, and quantity-break prices. These are examples, not mandatory Price Lists for every business.
+
+A Price List or Price Record may have explicit conditions for:
+- Owning Organization, Distributor, Shop, or other eligible Business Context.
+- Customer, customer group, supplier, supplier group, agreement, or contract.
+- Sales/Purchase channel, POS context, location, or fulfilment context.
+- Product, Product Variant, Trade Packaging Configuration, unit of measure, and quantity range.
+- Effective date/time, expiry, season, promotion, or other time-bound commercial rule.
+- Currency, which remains INR only under the approved Global Business Settings.
+- Tax basis where relevant.
+- Any additional governed business condition or applicability dimension.
+
+Not every condition must be mandatory or supported for every Price Type. The owner domain must explicitly define which dimensions are valid, optional, required, mutually exclusive, or inapplicable. An absent condition must not accidentally broaden access or applicability beyond the owning business context.
+
+Several Price Lists or Conditions may qualify for the same transaction. Their priority, combination/exclusivity, replacement, stacking, fallback, and conflict behaviour must be deterministic and governed by the owner domain. The system must not silently choose an arbitrary price when applicable records conflict or required information is missing. It must return a clear conflict, exception, or authorized resolution path.
+
+Discounts, promotional reductions, surcharges, rebates, and other adjustments must remain distinct Price Conditions or transaction adjustments, as appropriate. They must not destructively rewrite the underlying list/base Price Record. Whether and how an adjustment affects taxable value is determined by GST/Tax under applicable law, not inferred solely from its label in a Price List.
+
+### 6G.5 Time validity, versioning, and price changes
+
+Price Records and Price Conditions must support effective-dated changes. A new price may be prepared in advance, approved, and scheduled to become effective at a future date/time. The end of one price's validity and the start of its successor must be explicit. Where overlapping validity is deliberately permitted, its priority and selection rules must be explicit; accidental conflicting overlaps must be detected.
+
+The price model must distinguish:
+1. **Effective Time:** when the price or condition is valid in the business world.
+2. **Recorded Time:** when CBM recorded the price or change.
+3. **Approval/Publication Time:** when the relevant authorization or publication made it eligible for use, where that lifecycle applies.
+
+A Price Record change must create a new version or a traceable superseding record. The previous approved value and its scope must remain retrievable. A correction must preserve the original record and identify the correction reason, actor, approver where applicable, and relationship to the corrected/superseding record. Backdated changes must not silently alter completed transactions or conceal when CBM learned/recorded the change.
+
+Price Records must have an explicit lifecycle appropriate to their owner domain, such as draft, submitted, approved, scheduled, active, suspended, expired, withdrawn, or superseded. These are conceptual states; an owner domain may use a governed subset or additional states. An unapproved/draft/suspended Price Record must not be used as an active price merely because its date range includes the current date.
+
+### 6G.6 Tax-inclusive and tax-exclusive price basis
+
+Where relevant, every Price Record must be able to state whether its amount is:
+- **Tax Inclusive:** the stated amount includes the applicable indirect tax components represented by that price basis.
+- **Tax Exclusive:** the stated amount is before the applicable indirect tax components, which are determined and added where legally applicable.
+- **Not Stated / Not Applicable:** permitted only where the Price Type and business use legitimately allow the basis not to be specified or no tax-inclusive/exclusive representation applies.
+
+Tax basis is part of the Price Record's meaning; it is not a User display preference. A User interface must not silently switch an authoritative inclusive amount to an exclusive amount or vice versa without a defined, authorized calculation and clear presentation.
+
+This Section does not define, own, or store the applicable GST rate, HSN/SAC classification, tax category, tax applicability, Input Tax Credit entitlement, place-of-supply decision, or statutory tax liability. Those remain with the GST/Tax domain and applicable law. A Price Record's tax basis must be consumed by GST/Tax through an explicit contract when a transaction is evaluated. A shared price calculation capability must not calculate or override statutory tax.
+
+Where a supply value is stated inclusive of GST, the relevant tax component must be extracted using the applicable statutory valuation rule, including CGST Rules Rule 35 where it applies. Tax-exclusive values must have tax determined separately by GST/Tax. The applicable transaction may also require additional statutory valuation adjustments or rules; inclusive/exclusive arithmetic alone does not replace GST valuation law.
+
+### 6G.7 MRP, RRP/MSRP, and packaged-commodity declarations
+
+MRP, RRP/MSRP, Selling Price, and unit-sale-price declarations are distinct.
+
+For pre-packaged commodities covered by the Legal Metrology (Packaged Commodities) Rules, the declared Retail Sale Price/MRP is the maximum price at which the covered packaged commodity may be sold to the consumer and is declared inclusive of all applicable taxes. A retailer must not charge a covered packaged commodity above its applicable MRP. A lower actual Selling Price, discount, or promotion may be used where otherwise lawful; the MRP is not itself the transaction Selling Price. MRP must not be treated as a universal requirement or statutory ceiling for every service, loose good, non-covered package, or exempt category; applicability and exclusions must follow the current law and authoritative guidance.
+
+Product/Item Management must preserve, where applicable:
+- The declared MRP amount and INR currency.
+- The identified Product Variant and relevant Trade Packaging Configuration/package level.
+- The manufacturer, packer, importer, brand owner, or other responsible declaring party and source evidence, as applicable.
+- The declaration/label version, effective/recorded dates, and applicable batch/lot or package revision references where required for traceability.
+- The applicable Legal Metrology applicability/verification status and any permitted revised declaration or sticker history.
+- Unit-sale-price declarations where legally required, including their declared measurement basis and applicable rounding/format requirements.
+
+A manufacturer's suggested retail price or RRP/MSRP is a different commercial declaration. It must not be labelled MRP or enforced as the statutory MRP ceiling merely because it is a suggested/list price. Similarly, an MRP update must not overwrite the old package declaration; the original and revised declarations and their validity/traceability must remain available. Any permitted sticker, revised declaration, or correction must be handled only as allowed by applicable law.
+
+CBM must use a versioned, maintainable Legal Metrology compliance profile for relevant declaration requirements. A legal applicability status must not be fabricated from a product name or category alone. The relevant business data, package facts, and legal rule version must be sufficiently established before CBM treats a declaration as verified.
+
+### 6G.8 Price Determination, override, approval, and security
+
+The domain owning a Price Record owns the authoritative Price Determination rules for its purpose. A reusable shared capability may execute those rules through a versioned contract, but it must receive explicit business context, subject, counterparty/channel, quantity/unit, effective time, and any other required inputs. It must return the selected Price Record/Condition references, version, amount, tax basis, calculation explanation, and any exception/conflict.
+
+The owner domain must configure a deterministic priority and fallback policy. Examples include a contract-specific price taking precedence over a customer-group list, or a time-bound promotional condition applying only within its approved scope. Such examples do not establish one universal priority order for all domains.
+
+An authorized User may be permitted to override a determined price only within explicit authority and policy. An override must record the original determined price, final entered/accepted price, reason, actor, timestamp, approval outcome/reference where required, and the affected transaction/context. Permission to override one Price Type or business context does not grant permission to modify another. Approval does not create missing action Permission.
+
+Purchase cost, supplier agreement, margin, and Inventory valuation information may be commercially sensitive. Access must be independently permission-controlled by Price Type, owning domain, business context, purpose, and User scope. Sales/POS Users must not automatically see Purchase Cost or margin details merely because they can view or sell a Product.
+
+Price List sharing, publication, inheritance, and local overrides across Organization, Distributor, and Shop contexts must be explicit and follow Sections 7 and 10. Structural parentage, Service Provider association, or Distributor–Shop Mapping alone does not grant access to another business's prices. Cross-Tenant price sharing must preserve strict Business/Tenant Data Isolation and must never create unrestricted shared-write authority.
+
+### 6G.9 Purchase prices, cost formation, and historical transaction snapshots
+
+Supplier quotation price, purchase agreement price, accepted purchase order price, supplier invoice price, acquisition/landed cost, and Inventory valuation are distinct values and events.
+
+Purchase Management owns supplier quotations, purchase agreements, purchase orders, invoices, and accepted purchase transaction-price facts. A quotation or agreement reference does not prove that the goods were purchased at that amount. The accepted purchase transaction records its actual values and their source references.
+
+Inventory Management owns its cost formation, allocation, costing policy, and stock valuation. Landed/Acquisition Cost may include relevant purchase and directly attributable cost components under the applicable Inventory policy; it must not be substituted automatically for the supplier invoice unit price. Standard or planned cost is a reference/policy value, not proof of actual acquisition price.
+
+Last Purchase Price and Average Purchase Price are derived references. Their calculation must define the accountable Business Context, Product Variant/packaging and unit basis, supplier inclusion/exclusion, quantity/returns/charges treatment, time range, and source data. These derived values must be reproducible and must not be manually overwritten as though they were original transaction facts.
+
+Whenever Sales, POS, or Purchase accepts a transaction, the source transaction must preserve an immutable Price Snapshot for its accepted line/value facts. It must capture as applicable the subject, selected Price Record and Price Condition versions, quantity and unit/packaging basis, base/selected price, discounts/surcharges, override details, tax basis, tax determination reference and resulting breakdown supplied by GST/Tax, final accepted line amount, currency, effective time, and provenance. A later change to any Product, Price List, Price Condition, MRP, tax rule, or Price Record must not silently rewrite that completed transaction's historical snapshot.
+
+Corrections, credit/debit notes, returns, post-supply discounts, and other adjustments must be represented through the owning transaction domain's authorized correction/adjustment lifecycle. They must not be implemented by editing an old Price Snapshot or overwriting a historical transaction price.
+
+### 6G.10 Configurability, domain independence, and integrity
+
+Pricing must be designed against the complete architecture-wide doctrine: scalability, configurability, extensibility, customization, controlled override, applicability, business-specific variation, maintainability, and operability.
+
+The responsible domains must be able, where applicable, to configure:
+- Price Types and their permitted subject levels.
+- Multiple Price Lists and independent business-purpose lists.
+- Business, customer, supplier, contract, channel, location, quantity, UOM, and time applicability.
+- Price Conditions, quantity breaks, discount/surcharge behaviour, priority, exclusivity, and combination policies.
+- Tax basis for applicable Price Types, without making the Price Record authoritative for tax rates/classification.
+- Effective-date scheduling, version lifecycle, approval requirements, and controlled overrides.
+- Local price lists, publication, inheritance, sharing, and revocation within explicit authority.
+- Price visibility and sensitive-data permissions.
+
+Not every business must use every Price Type, list, condition, package level, or approval workflow. A simple Shop may maintain one uncomplicated selling list and a small number of Product declared prices. A distributor or complex business may use multiple customer/supplier lists, quantity breaks, contracts, and scheduled prices. Both use the same governed concepts without separate product forks.
+
+The following rules are mandatory:
+1. Price Records remain owned by their authoritative domain; the Shared Price Reference/Determination Contract does not create a universal price owner.
+2. A single generic Original Price field must not replace distinct Price Types.
+3. Product, Variant, and Trade Packaging references must not be confused with Price Records.
+4. MRP is distinct from RRP/MSRP, Selling Price, and transaction value.
+5. Applicable MRP declarations must comply with the relevant Legal Metrology rules; they are inclusive of all taxes where the law requires and cannot be exceeded for covered packaged retail commodities.
+6. Tax Inclusive/Exclusive is a Price Tax Basis, not a tax-rate or HSN/SAC master and not a tax determination.
+7. Sales, Purchase, Inventory, GST/Tax, and Accounting retain their independent responsibilities and source records.
+8. Price changes must preserve prior versions, Effective Time, Recorded Time, source, reason, actor, and approval evidence where applicable.
+9. Accepted transaction Price Snapshots are immutable; later price changes cannot rewrite completed commercial transactions.
+10. Cost and margin data must be protected by explicit least-privilege permissions.
+11. Price List inheritance or sharing must be explicitly authorized and must not bypass Tenant/Data Isolation.
+12. Price selection, conflict handling, rounding, and adjustment behaviour must be deterministic and auditable.
+13. All monetary records operate in INR under the approved India-only/INR-only Global Business Settings; no lower-level setting may introduce another currency.
 
 
 
@@ -3148,6 +3347,10 @@ The History domains established in this baseline are:
 3. **Ownership History:** events concerning the relevant Owner ID, Ownership ID, and Ownership Link only.
 4. **User Scope Mapping History:** events concerning the relevant User-to-entity/location scope assignment only.
 5. **Business Entity Lifecycle History:** lifecycle state changes for one Organization, Distributor, or Shop, including the causal Lifecycle Operation and associated Snapshot reference. It contains only that entity's lifecycle events.
+6. **Product/Item Declared Price History:** declared MRP, Manufacturer Suggested Retail Price / RRP, legally required unit-sale-price declarations, their product/package scope, source, declaration version, effective/recorded times, and authorized corrections or superseding declarations. It does not contain Sales transaction prices or Purchase transaction prices.
+7. **Sales Pricing History:** Sales-owned Price Lists, Selling Price Records, Price Conditions, promotions/discount rules, effective-date changes, approvals, and authorized overrides. It does not replace the accepted Sales/POS transaction records or their Price Snapshots.
+8. **Purchase Pricing History:** Purchase-owned supplier quotation/agreement/reference-price records, their terms, effective-date changes, approvals, and authorized overrides. It does not replace accepted Purchase transaction records or supplier invoice history.
+9. **Inventory Cost and Valuation History:** Inventory-owned cost-reference, cost-formation, valuation-policy and valuation-result changes within Inventory's scope. It must not duplicate or replace the authoritative Inventory Ledger or accepted stock-movement records.
 
 A User ID or User profile change must never be inserted into GST Registration History, Ownership History, or Mapping History. A separate User account/profile History may be introduced only if a distinct business need is established and approved. Other History domains must not be assumed merely because Audit Trail records exist; each requires an explicit business requirement and a definition of scope, contents, permissions, and retention.
 
@@ -3163,7 +3366,7 @@ History may be available to multiple appropriately authorized Users. Its visibil
 
 Audit Trail must capture all relevant system events and activities across CBM in chronological order. Its coverage is not limited to the History domains above or to security events alone.
 
-As applicable, Audit Trail includes successful and failed actions, creation and modification attempts, access and authentication events, User and Role changes, User Scope Mapping changes, Ownership Link changes, Business Relationship/Mapping changes, GST verification and assignment events, configuration changes, approvals and rejections, administrative actions, data exports, archival and deletion operations, and security events.
+As applicable, Audit Trail includes successful and failed actions, creation and modification attempts, access and authentication events, User and Role changes, User Scope Mapping changes, Ownership Link changes, Business Relationship/Mapping changes, GST verification and assignment events, Price Record/Price List/Price Condition creation and changes, price overrides, price approvals and rejections, price-history access/export, configuration changes, administrative actions, data exports, archival and deletion operations, and security events.
 
 Audit Trail must capture sufficient context to reconstruct what happened, when, in which business/entity context, by whom or by what system process, and with what outcome. It may contain events from multiple domains in one chronological sequence. It does not replace any domain-specific History.
 
@@ -3431,6 +3634,28 @@ The following statements summarize rules that must remain true across all future
 163. Catalogue publication, sharing, inheritance, local additions, and overrides require explicit governed relationships and authorization. Organization/Distributor/Shop structure and Service Provider association alone do not grant catalogue access or edit authority; no cross-Tenant sharing is implied.
 164. Product/Variant changes, identifier retirement, catalogue merges, packaging changes, and replacement/supersession must preserve effective history and must not silently rewrite accepted transactions, stock facts, physical instances, or another business's catalogue.
 
+165. The Price Reference and Price Determination Contract is a Shared Domain Model/contract and does not itself establish a separate Pricing Business Module or a universal authoritative Price Master.
+166. Every Price Record has an explicit Price Type, authoritative owner domain, subject, business/applicability scope, INR amount, quantity/UOM/packaging basis where relevant, tax basis where applicable, source/provenance, lifecycle, and effective/recorded times.
+167. Price Types with different business meanings—including MRP, RRP/MSRP, Selling Price, Supplier Quotation/Agreement Price, Actual Purchase Price, Landed/Acquisition Cost, and Inventory Valuation—must not be conflated or stored as one ambiguous Original Price field.
+168. Product/Item Management owns declared MRP/RRP and other applicable Product/Packaging price declarations; Sales owns selling Price Lists and sales conditions; Purchase owns supplier quotations/agreements and purchase transaction prices; Inventory owns cost formation and valuation; GST/Tax owns tax determination; Accounting owns accounting records and postings.
+169. A Price Record must identify whether it applies to a Product, Product Variant, Trade Packaging Configuration, or another expressly permitted subject, and must preserve its quantity and unit/packaging basis.
+170. MRP, RRP/MSRP, and actual transaction Selling Price are distinct. MRP applies only where required by applicable law; for covered pre-packaged retail commodities it is declared inclusive of all applicable taxes and the commodity must not be sold above its applicable MRP. Legal applicability/exemptions must not be guessed or generalized to every item.
+171. Legally required unit-sale-price declarations, where applicable, are distinct from the actual transaction price and must preserve the declared measurement basis and applicable statutory format/rounding.
+172. A Price Tax Basis of Inclusive or Exclusive describes how a price amount is represented. It does not establish GST applicability, HSN/SAC, tax classification, tax rate, Input Tax Credit entitlement, or tax liability; those are GST/Tax responsibilities.
+173. Tax-inclusive supply values must be treated under the applicable statutory valuation rules, including CGST Rules Rule 35 where it applies. Price arithmetic does not replace GST valuation law.
+174. Sales and Purchase may maintain multiple purpose-specific Price Lists and Price Conditions for businesses, customers, suppliers, contracts, channels, locations, quantities, units/packages, and validity periods where applicable. Price priority, combination, exclusivity, fallback, and conflict resolution must be deterministic and governed.
+175. Discounts, promotions, surcharges, rebates, and other adjustments must remain separately represented as governed conditions or transaction adjustments; they must not destructively rewrite the underlying base/list Price Record. GST treatment remains governed by GST/Tax and applicable law.
+176. Price Records support Effective Time, Recorded Time, and approval/publication lifecycle where applicable. Scheduled future changes and authorized corrections must preserve old versions and must not silently backdate or rewrite completed transactions.
+177. Last Purchase Price and Average Purchase Price are derived references with explicit calculation scope and methodology, not manually maintained authoritative replacements for Purchase transaction facts.
+178. Landed/Acquisition Cost and Inventory Valuation are Inventory-owned results/policies and are not automatically equal to supplier invoice price, list price, or MRP.
+179. Accepted Sales, POS, and Purchase transactions preserve immutable Price Snapshots with the applicable price/condition versions, unit/quantity basis, discounts/surcharges, tax basis and Tax-domain result references, accepted values, and provenance. Later price changes do not rewrite accepted transactions.
+180. Product/Item Declared Price History, Sales Pricing History, Purchase Pricing History, and Inventory Cost and Valuation History are separate domain histories owned by their respective Modules. They are not merged into one mixed Price History record set and do not replace transaction records or the comprehensive Audit Trail.
+181. Price changes, approvals, overrides, failures, and access to sensitive price history are captured in the comprehensive Audit Trail independently of each domain's Price History.
+182. Cost, margin, supplier terms, and other commercially sensitive price information require explicit purpose-limited permissions and must not be visible to every User who can view or sell a Product.
+183. Price List publication, inheritance, sharing, and local override require explicit authority and applicability. Organization/Distributor/Shop structure, Service Provider association, or Distributor–Shop Mapping alone does not grant price access or editing authority; strict Business/Tenant Data Isolation remains mandatory.
+184. All authoritative CBM prices operate in INR only. No Price List, Price Record, override, User preference, or lower-level configuration may introduce a foreign currency or multi-currency business operation.
+
+
 
 
 
@@ -3635,6 +3860,18 @@ Official references consulted for Product/Item Management, product identity, var
 - [Microsoft Learn — Product dimensions](https://learn.microsoft.com/en-us/dynamics365/supply-chain/pim/product-dimensions): a product-management implementation example of configurable variant dimensions, dimension groups, valid combinations, and product variants. It is a comparative reference, not a CBM implementation mandate.
 
 These sources support the distinction between an identified trade item, its variants and attributes, identifier values, and the data carrier that transports those values. They do not require CBM to adopt GS1 identifiers for every item, reproduce Microsoft Dynamics concepts, or use a vendor-specific Product Master. CBM's canonical model and applicability rules remain governed by this document; standards are applied where the relevant business, trade, regulatory, or interoperability use case justifies them.
+
+
+Official references consulted for Pricing, MRP, and tax-basis boundaries in Section 6G:
+
+- [Department of Consumer Affairs — Legal Metrology (Packaged Commodities) Rules and amendments](https://consumeraffairs.nic.in/acts-and-rules/legal-metrology): official legal-metrology rules and amendments; current applicability, package classes, declarations, and exemptions must be validated against the effective legal text before implementation.
+- [Department of Consumer Affairs — Legal Metrology FAQs](https://consumeraffairs.nic.in/sites/default/files/file-uploads/latestnews/LM_FAQs.pdf): official guidance explaining MRP inclusive of all taxes, prohibition on retail sale above applicable MRP, unit-sale-price declarations, and related packaged-commodity questions. Guidance must be read with the effective Rules and amendments.
+- [Government of India — Legal Metrology (Packaged Commodities) Amendment Rules, 2021](https://upload.indiacode.nic.in/showfile?actid=AC_PB_82_942_00004_00004_1550217305600&filename=the_legal_metrology_%28packaged_commodities%29_rules%2C2011_with_amendments.pdf&type=rule): official amendment text relevant to packaged-commodity declarations and rule changes.
+- [Department of Consumer Affairs — Legal Metrology (Packaged Commodities) Amendment Rules, 2022, G.S.R. 226(E)](https://consumeraffairs.nic.in/sites/default/files/uploads/legal-metrology-acts-rules/GSR226.pdf): official amendment text for unit-sale-price declaration requirements and related rule changes.
+- [CBIC — Central Goods and Services Tax Act, 2017, Section 15](https://cbic-gst.gov.in/hindi/CGST-bill-e.html): official statutory basis for transaction value and treatment of specified inclusions and discounts. Current amendments and applicable rules must be checked when used.
+- [CBIC — Central Goods and Services Tax Rules, 2017, Rule 35](https://cbic-gst.gov.in/pdf/01012022-CGST-Rules-2017-amended_Part-A.pdf): official method for determining the tax component where a supply value is inclusive of the applicable integrated, central, State, or Union Territory tax.
+
+These sources support the separation of declared MRP, transaction selling price, unit-sale-price declaration, GST-inclusive/exclusive price basis, and statutory tax valuation. They do not establish CBM's future HSN/SAC or GST-rate model. GST/Tax remains the authoritative owner of tax determination; legal rates, classifications, package applicability, and statutory amendments must be revalidated against official current sources before implementation or compliance use.
 
 Official technical references consulted for security and SaaS architecture boundaries:
 
