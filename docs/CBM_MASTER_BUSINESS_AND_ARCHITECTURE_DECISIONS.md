@@ -26,23 +26,24 @@
 12. [Inventory Management and Warehouse Management Boundaries](#6e-inventory-management-and-warehouse-management-boundaries)
 13. [Product/Item Management, Product Identity, Variants, Identifiers, and Trade Packaging](#6f-product-item-management-product-identity-variants-identifiers-and-trade-packaging)
 14. [Pricing, Price References, Price Determination, and Price History](#6g-pricing-price-references-price-determination-and-price-history)
-15. [Business Authority Scope](#7-business-authority-scope)
-16. [Delegated Authority](#8-delegated-authority)
-17. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-18. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-19. [Approval Workflow governance](#11-approval-workflow-governance)
-20. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-21. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-22. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-23. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-24. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-25. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-26. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-27. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-28. [Cross-concept invariants](#19-required-cross-concept-invariants)
-29. [Illustrative scenarios](#20-illustrative-scenarios)
-30. [Documentation governance](#21-documentation-governance)
-31. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+15. [HSN/SAC Classification, GST Rate Applicability, and Tax Determination](#6h-hsnsac-classification-gst-rate-applicability-and-tax-determination)
+16. [Business Authority Scope](#7-business-authority-scope)
+17. [Delegated Authority](#8-delegated-authority)
+18. [Users, Roles, and Permissions](#9-user-roles-permissions-and-action-authorization)
+19. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+20. [Approval Workflow governance](#11-approval-workflow-governance)
+21. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+22. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+23. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+24. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+25. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+26. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+27. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+28. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+29. [Cross-concept invariants](#19-required-cross-concept-invariants)
+30. [Illustrative scenarios](#20-illustrative-scenarios)
+31. [Documentation governance](#21-documentation-governance)
+32. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -168,6 +169,18 @@ This flexibility must be designed intentionally and independently at the relevan
 #### 2.6.3 No flexibility by implication
 
 The existence of a configuration facility, extension point, customization mechanism, or override capability does not grant permission to use it. Every variation remains subject to applicable authority scope, explicit permission, approval requirements where configured, system-defined bounds, auditability, and Stable Core constraints.
+
+#### 2.6.4 Separate domain responsibilities; compose through explicit relationships
+
+A real-world business subject may have many different aspects, attributes, records, rules, and lifecycle events. CBM must not place all information concerning that subject into one oversized record, one universal master, or one Business Module merely because the information refers to the same Product, Service, Employee, Customer, Supplier, Asset, Transaction, or other subject.
+
+Where aspects have different business purposes, authoritative owners, lifecycles, applicability, permissions, sensitivity, validation, history, or change frequency, they must be represented and managed by the appropriate separate domain model or responsible capability. Their relationship to the common subject must be established through explicit, typed, governed references and contracts. The common subject identity may serve as the stable reference point; it does not absorb ownership of every related fact.
+
+For example, a Product Variant may be the common subject referenced by Product/Item attributes and specifications, Product-declared price records, Sales-owned selling-price records, Purchase-owned supplier-price records, Inventory-owned cost/valuation records, HSN/SAC classification assignments, and GST Rate Applicability Rules. Those records are related to the same Variant but remain independently owned and governed according to their business meaning. A consumer workflow may assemble the relevant views and calculations without merging their authoritative models.
+
+This rule is not an instruction to create a separate Module or model for every individual field. Cohesive facts that share the same business responsibility, lifecycle, authority, and validation may remain together. Separation is required when it preserves meaningful domain ownership, independent configuration, customization, applicability, security, history, or evolution. Excessive fragmentation, duplicated sources of truth, circular dependencies, and untyped references are also prohibited.
+
+A composed screen, report, workflow, calculation, or transaction may consume several domain models through explicit contracts. It must preserve each source owner's authority, version, provenance, permissions, correction lifecycle, and data-isolation boundary. A reference, association, or calculated result does not transfer ownership or create shared-write authority.
 
 ---
 
@@ -828,6 +841,26 @@ A **Price Snapshot** is the immutable price-related information captured by an a
 ### 3.125 Declared Retail Price
 
 A **Declared Retail Price** is a price declaration associated with a Product or Trade Packaging Configuration, such as a legally applicable Maximum Retail Price (MRP), Manufacturer Suggested Retail Price, Recommended Retail Price, or other sourced declared/list reference. These declarations have different legal and commercial meanings. In particular, MRP must not be treated as an ordinary transaction Selling Price or as synonymous with RRP/MSRP.
+
+### 3.126 HSN/SAC Code
+
+An **HSN/SAC Code** is an official tax-classification code used to classify goods under the Harmonized System of Nomenclature (HSN) or services under the applicable Service Accounting Code (SAC) structure for GST/tax purposes. The Code Type (HSN or SAC), exact full code value, official description, source/authority, applicable tariff or classification version, and effective status must be explicit. The code is a tax-classification reference, not a Product Code, SKU, GTIN, barcode, Product Category, or GST Rate. CBM stores the code as a string so significant characters and leading zeroes are preserved.
+
+### 3.127 HSN/SAC Classification Assignment
+
+An **HSN/SAC Classification Assignment** is the governed, effective-dated association of an HSN/SAC Code with the eligible supply subject to which that classification applies, ordinarily a Product Variant for goods or an eligible Service Offering/supply subject for services. It records the subject, code reference and version, applicable business/supply context where relevant, evidence/source, effective and recorded times, status, reason, and approval where required. The assignment is distinct from the Code Registry entry and from a GST Rate Applicability Rule.
+
+### 3.128 GST Rate Applicability Rule
+
+A **GST Rate Applicability Rule** is a versioned, legally sourced rule that defines the GST rate treatment applicable to a specified tariff/classification scope, goods or service description, and any associated statutory conditions, exclusions, exceptions, or effective period. It may define the relevant CGST, SGST/UTGST, IGST, Compensation Cess, or other legally applicable components and must preserve its statutory source and effective dates. It is not a permanent rate field on an HSN/SAC Code or Product Variant.
+
+### 3.129 GST Tax Determination
+
+A **GST Tax Determination** is the authorized domain decision for a specific supply/transaction context that resolves the applicable tax classification, rate rule, statutory conditions, taxable value, tax components, and resulting tax treatment using the facts and legal timing relevant to that supply. It is distinct from the HSN/SAC Code, the Code Assignment, the Rate Rule, the Price Record, and the Price Tax Basis.
+
+### 3.130 Tax Determination Snapshot
+
+A **Tax Determination Snapshot** is the immutable classification- and tax-related evidence captured by an accepted transaction. It preserves the full HSN/SAC code and assignment version where applicable, the selected GST Rate Applicability Rule and version, relevant statutory source/notification and effective dates, the determination context, taxable value, applicable component rates and tax amounts, and provenance. Later changes to codes, assignments, rate rules, or tax policies must not rewrite the accepted snapshot.
 
 
 ## 3A. How the CBM relationship model must be read
@@ -1670,6 +1703,18 @@ These classes are not interchangeable. A Shared Model is not a Business Module; 
 6. Shared functionality must be implemented once at the correct shared layer where appropriate; domain-specific validation and business meaning must remain with the relevant Module.
 7. An optional capability may be enabled for one eligible business context and disabled for another, provided that this does not weaken Stable Core, legal requirements, data integrity, or cross-domain contracts.
 
+### 6D.2.1 Domain decomposition and composition of related concepts
+
+A common real-world subject must not be treated as one indivisible data model merely because many kinds of information refer to it. CBM must separate records and capabilities according to their distinct business responsibility, meaning, authoritative owner, lifecycle, applicability, permission/sensitivity, validation, history, and independent configuration needs. The subject's stable identity is used to connect those independently governed aspects through explicit, typed, versioned references and contracts.
+
+For example, Product/Item Management owns Product Definitions, Variants, product attributes and specifications, and catalogue lifecycle. A Product Variant may be referenced by separate Product-declared Price Records, Sales-owned Selling Price Records and Conditions, Purchase-owned supplier-price records, Inventory-owned cost/valuation records, and GST/Tax-owned HSN/SAC Classification Assignments and GST Rate Applicability Rules. The references compose a complete commercial view of the same Variant; they do not convert those responsibilities into Product fields or transfer their authoritative ownership to Product/Item Management.
+
+This principle applies beyond Product/Item Management wherever one business subject has separable aspects—for example, an Employee and its employment, access-account, payroll, attendance, and payment facts; an Asset and its identity, custody, maintenance, depreciation, and accounting facts; or a Customer/Supplier and its identity, relationship, credit, transaction, tax, and settlement facts. These are illustrations of the decomposition rule, not new approvals of the detailed architecture of those domains.
+
+This separation must not become indiscriminate fragmentation. Cohesive facts with the same business meaning, owner, lifecycle, and policy may remain within one model. A separate model or Module is justified by a real responsibility boundary, not merely by the existence of another field. A Shared Domain Model or contract may provide common references and reusable behaviour without creating a universal master, duplicate source of truth, shared-write authority, or new Business Module by implication.
+
+A composed workflow, screen, report, or calculation may assemble data from several owners only through explicit contracts. It must preserve each owner's validation, permissions, effective/version history, provenance, correction lifecycle, and Business/Tenant Data Isolation. The detailed responsibility split for Product, Price, and GST/Tax is governed by Sections 6F, 6G, and 6H.
+
 ### 6D.3 Confirmed module boundaries and distinct ownership areas
 
 The following independent Business Modules and boundaries are established in the current architecture baseline:
@@ -1731,8 +1776,9 @@ A Shared Domain Model must define common meaning and references without becoming
 |---|---|---|
 | **Business Identity Reference Model** | Legal Identity, Professional Identity and verified Business Identity references | Business Identity domain remains authoritative under Section 3.7. A reference does not transfer identity ownership. |
 | **User / Actor Reference Model** | User Account, System Principal, authenticated actor and permitted business-context references | User Account/identity records remain governed by Sections 9 and 15; employee/personnel records remain HR-owned. |
-| **Product/Item Reference Model** | Product Definitions, Product Variants, their attributes and classifications, optional Family/Group relationships, typed identifiers, Data Carrier references, Trade Packaging Configurations, Product Bundle/Kit compositions, declared MRP/RRP and legally required product/package price declarations, and applicable version/provenance references | Product/Item Management owns catalogue definitions, product/variant/trade-unit identity, and its declared product/package price records. Inventory, Warehouse, Sales, Purchase, POS, Asset Management, and other consumers retain their own stock, handling, transaction, commercial-price, cost, asset, and operational facts under Sections 6E–6G. |
-| **Price Reference and Price Determination Contract** | Typed Price Records, Price Lists, Price Conditions, tax-basis declarations, effective periods, selected-price references, and Price Snapshot references | Price Records remain authoritative in their owning domains: Product/Item Management for declared product/package prices; Sales for selling-price lists and sales conditions; Purchase for supplier quotation/agreement/purchase reference prices; Inventory for its cost/valuation references. A shared contract or reusable determination capability does not create a universal price owner or a separate Pricing Business Module. GST/Tax owns tax determination. |
+| **Product/Item Reference Model** | Product Definitions, Product Variants, their attributes and specifications, product tax-classification references/assignment references, optional Family/Group relationships, typed identifiers, Data Carrier references, Trade Packaging Configurations, Product Bundle/Kit compositions, declared MRP/RRP and legally required product/package price declarations, and applicable version/provenance references | Product/Item Management owns catalogue definitions, product/variant/trade-unit identity, product attributes/specifications, and its declared product/package price records. It may retain a reference to the applicable HSN/SAC Classification Assignment but does not own the HSN/SAC Code Registry, GST Rate Applicability Rules, or GST Tax Determination. Inventory, Warehouse, Sales, Purchase, POS, Asset Management, and other consumers retain their own stock, handling, transaction, commercial-price, cost, asset, and operational facts under Sections 6E–6H. |
+| **Price Reference and Price Determination Contract** | Typed Price Records, Price Lists, Price Conditions, tax-basis declarations, effective periods, selected-price references, and Price Snapshot references | Price Records remain authoritative in their owning domains: Product/Item Management for declared product/package prices; Sales for selling-price lists and sales conditions; Purchase for supplier quotation/agreement/purchase reference prices; Inventory for its cost/valuation references. A shared contract or reusable determination capability does not create a universal price owner or a separate Pricing Business Module. GST/Tax owns tax determination under Section 6H. |
+| **HSN/SAC Classification and GST Rate Applicability Contract** | HSN/SAC Code references, effective-dated classification assignments, GST Rate Applicability Rule references and versions, statutory-source references, and Tax Determination/Snapshot references | GST/Tax owns the HSN/SAC Code Registry, classification-assignment rules, GST Rate Applicability Rules, and GST Tax Determination. Product/Item Management supplies the eligible Product Variant reference for goods; the eligible Service Offering/supply domain supplies the service subject for SAC. Other domains consume tax results through this contract without taking ownership of tax codes or rules. |
 | **Unit of Measure and Packaging Reference Model** | Shared units, permitted conversions, product-specific Trade Packaging Configuration references, and quantity presentation | Shared Indian reference units are governed by Section 6B/B6; Product/Item Management owns canonical product-specific packaging definitions, while Inventory, Sales, Purchase, and Warehouse own their operational applicability, precision, quantity, and transaction/stock rules. |
 | **Business Location Reference Model** | Business address, site, branch, operating location and facility references | Business Identity/Professional Identity and relevant domain owners retain their source facts. Warehouse-specific locations are governed by Warehouse Management. |
 | **Inventory Position Model** | Product, stock quantity, stock state, batch/serial/expiry, ownership/custody references and authorized location references | Inventory owns authoritative stock quantities, states and valuation; Warehouse owns physical placement and execution facts through a shared contract. |
@@ -1770,6 +1816,9 @@ A shared reference must not merge separate Legal Identities, Owners, User Accoun
 | Product Definition | Product Variant | Common product identity and shared characteristics versus a specific configured/operational form. |
 | Product Variant | Product/Item Instance | A repeatable type/configuration that may have many occurrences versus one individual occurrence. |
 | Product Family / Product Group | Product Identity | Optional grouping/classification versus the identity of a Product Definition or Variant. |
+| Product Tax Classification | Product Taxonomy | A regulated HSN/SAC assignment used for tax purposes versus a business/product grouping or reporting taxonomy. |
+| HSN/SAC Code | GST Rate Applicability Rule | The classification key/reference versus a time- and condition-dependent statutory rate rule; neither is a permanent substitute for the other. |
+| Product Variant | GST Tax Determination | The goods subject reference versus the tax-domain decision for a particular supply/transaction context. |
 | Product Code / SKU | CBM Internal Record ID | A business/catalogue identifier with an explicit scope and lifecycle versus an immutable CBM record identity. |
 | Identifier | Barcode / Data Carrier | The typed value that identifies a subject versus the machine-readable representation that carries one or more values. |
 | GTIN | CBM Product Code / SKU | A GS1 trade-item identification key allocated under GS1 rules versus a CBM/business-defined identifier with its own namespace and scope. |
@@ -2117,7 +2166,7 @@ Product Family is optional. CBM must not require every Product to belong to exac
 
 Each taxonomy must define its own scope, hierarchy rules, allowed membership cardinality, effective lifecycle, governance, and applicability. A Product may belong to multiple taxonomies where the relevant scheme permits it; a particular taxonomy may impose one primary classification where that business purpose requires it. Classification membership does not change Product identity, Product Variant identity, data ownership, pricing, stock, or Business Structure.
 
-Product Family, Product Category, Brand, Manufacturer, Supplier, Customer, and Business Entity are distinct concepts. Manufacturer and brand-owner information must not be inferred from the supplier currently selling an item. HSN/SAC, tax classifications, and other regulatory classifications are not interchangeable with Product Codes, SKUs, GTINs, or other identifiers.
+Product Family, Product Category, Brand, Manufacturer, Supplier, Customer, and Business Entity are distinct concepts. Manufacturer and brand-owner information must not be inferred from the supplier currently selling an item. HSN/SAC is a regulated tax-classification system, not a Product taxonomy or Product Identifier. A Product taxonomy answers a product-organization/reporting question; an HSN/SAC assignment answers a statutory goods/services classification question. Product/Item Management may reference the applicable HSN/SAC assignment for an eligible Variant but does not own or redefine the tax-classification registry or GST rate rules.
 
 ### 6F.4 Product Variant model and variant dimensions
 
@@ -2266,11 +2315,13 @@ The Product/Item relationship model should support typed, optionally effective-d
 
 A Product Definition or Variant may be marked as applicable for sale, purchase, stocking, consumption, service delivery, or another supported business purpose. These are independently governed applicability capabilities; the existence of a Product record does not automatically enable every purpose. Applicability may vary by business context, channel, location, effective date, and authorized business policy.
 
-Product/Item Management defines the item that a commercial or operational record refers to. It owns catalogue-level declared price records that are intrinsic to, or declared for, the Product/Variant/Trade Packaging Configuration, including legally applicable MRP, Manufacturer Suggested Retail Price / RRP, and required unit-sale-price declarations where the relevant packaged-commodity rules apply. Such declarations must preserve issuer/source, applicable package and declaration version, validity, and history. MRP, RRP/MSRP, and actual Selling Price are distinct.
+Product/Item Management defines the item that a commercial or operational record refers to. Product Variant is the normal reference subject for product-specific commercial prices and goods tax classification. Where the applicable rules permit a Product-level default to cover several Variants, that inheritance must be explicit, validated, and versioned; it must not be assumed merely because Variants share a Product Definition.
 
-Product/Item Management does not own every price or commercial amount associated with the item. Sales owns selling Price Lists, sales conditions, and sales transaction-price facts; Purchase owns supplier quotation/agreement and purchase transaction-price facts; Inventory owns inventory cost and valuation records; Accounting owns accounting records and postings; GST/Tax owns tax classification, applicability, determination, liability, and statutory records. A Product/Variant reference is not itself a price, discount, landed cost, inventory valuation, or accounting value.
+Product/Item Management owns catalogue-level declared price records that are intrinsic to, or declared for, the Product/Variant/Trade Packaging Configuration, including legally applicable MRP, Manufacturer Suggested Retail Price / RRP, and required unit-sale-price declarations where the relevant packaged-commodity rules apply. Such declarations must preserve issuer/source, applicable package and declaration version, validity, and history. MRP, RRP/MSRP, and actual Selling Price are distinct.
 
-The complete cross-domain Price Reference, Price Determination, tax-basis, price-history, and transaction-snapshot rules are defined in Section 6G.
+Product/Item Management does not own every price or commercial amount associated with the item. Sales owns selling Price Lists, sales conditions, and sales transaction-price facts; Purchase owns supplier quotation/agreement and purchase transaction-price facts; Inventory owns inventory cost and valuation records; Accounting owns accounting records and postings; GST/Tax owns the HSN/SAC Code Registry, tax-classification assignments, GST rate applicability rules, tax determination, liability, and statutory records. Product/Variant records retain explicit references to applicable classification assignments; they must not embed or independently redefine HSN/SAC master codes or GST rates as ordinary Product attributes. A Product/Variant reference is not itself a price, discount, landed cost, inventory valuation, or accounting value.
+
+The complete cross-domain Price Reference, Price Determination, tax-basis, price-history, and transaction-snapshot rules are defined in Sections 6G and 6H. The Product Variant to HSN/SAC assignment relationship and GST rate determination boundary are defined in Section 6H.
 
 ### 6F.12 Catalogue ownership, publication, sharing, and tenant isolation
 
@@ -2421,7 +2472,9 @@ Where relevant, every Price Record must be able to state whether its amount is:
 
 Tax basis is part of the Price Record's meaning; it is not a User display preference. A User interface must not silently switch an authoritative inclusive amount to an exclusive amount or vice versa without a defined, authorized calculation and clear presentation.
 
-This Section does not define, own, or store the applicable GST rate, HSN/SAC classification, tax category, tax applicability, Input Tax Credit entitlement, place-of-supply decision, or statutory tax liability. Those remain with the GST/Tax domain and applicable law. A Price Record's tax basis must be consumed by GST/Tax through an explicit contract when a transaction is evaluated. A shared price calculation capability must not calculate or override statutory tax.
+This Section does not define, own, or store the applicable GST rate, HSN/SAC classification, tax category, tax applicability, Input Tax Credit entitlement, place-of-supply decision, or statutory tax liability. Those remain with the GST/Tax domain and applicable law, under Section 6H. A Price Record's tax basis must be consumed by GST/Tax through an explicit contract when a transaction is evaluated. A shared price calculation capability must not calculate or override statutory tax.
+
+Purchase Price Records should normally default to Tax Exclusive for ordinary supplier price references because the commercial purchase price is generally maintained before GST. This is a default, not an assumption about every source document: an imported quotation, accepted purchase transaction, supplier invoice, or other source value may explicitly be Tax Inclusive or Tax Exclusive and must preserve the actual source basis. Sales Price Records may be Tax Inclusive or Tax Exclusive according to their declared commercial purpose and business policy. The basis must be explicit on each applicable Price Record and accepted transaction; a module-level default must never silently replace a source-declared basis.
 
 Where a supply value is stated inclusive of GST, the relevant tax component must be extracted using the applicable statutory valuation rule, including CGST Rules Rule 35 where it applies. Tax-exclusive values must have tax determined separately by GST/Tax. The applicable transaction may also require additional statutory valuation adjustments or rules; inclusive/exclusive arithmetic alone does not replace GST valuation law.
 
@@ -2465,7 +2518,7 @@ Inventory Management owns its cost formation, allocation, costing policy, and st
 
 Last Purchase Price and Average Purchase Price are derived references. Their calculation must define the accountable Business Context, Product Variant/packaging and unit basis, supplier inclusion/exclusion, quantity/returns/charges treatment, time range, and source data. These derived values must be reproducible and must not be manually overwritten as though they were original transaction facts.
 
-Whenever Sales, POS, or Purchase accepts a transaction, the source transaction must preserve an immutable Price Snapshot for its accepted line/value facts. It must capture as applicable the subject, selected Price Record and Price Condition versions, quantity and unit/packaging basis, base/selected price, discounts/surcharges, override details, tax basis, tax determination reference and resulting breakdown supplied by GST/Tax, final accepted line amount, currency, effective time, and provenance. A later change to any Product, Price List, Price Condition, MRP, tax rule, or Price Record must not silently rewrite that completed transaction's historical snapshot.
+Whenever Sales, POS, or Purchase accepts a transaction, the source transaction must preserve an immutable Price Snapshot for its accepted line/value facts. It must capture as applicable the subject, selected Price Record and Price Condition versions, quantity and unit/packaging basis, base/selected price, discounts/surcharges, override details, tax basis, linked Tax Determination Snapshot/reference, final accepted line amount, currency, effective time, and provenance. The associated tax snapshot must preserve the HSN/SAC code and classification-assignment version where applicable, the selected GST Rate Applicability Rule and version, statutory notification/source reference, applicable component rates and tax amounts, and relevant determination context as defined in Section 6H. A later change to any Product, Price List, Price Condition, MRP, HSN/SAC assignment, GST rate rule, or Price Record must not silently rewrite that completed transaction's historical snapshot.
 
 Corrections, credit/debit notes, returns, post-supply discounts, and other adjustments must be represented through the owning transaction domain's authorized correction/adjustment lifecycle. They must not be implemented by editing an old Price Snapshot or overwriting a historical transaction price.
 
@@ -2501,6 +2554,108 @@ The following rules are mandatory:
 13. All monetary records operate in INR under the approved India-only/INR-only Global Business Settings; no lower-level setting may introduce another currency.
 
 
+
+## 6H. HSN/SAC Classification, GST Rate Applicability, and Tax Determination
+
+### 6H.1 Purpose and responsibility boundaries
+
+CBM must manage tax classification, GST rate rules, and transaction tax determination as related but distinct responsibilities and records. The following must not be reduced to one HSN/SAC text field or one GST percentage stored on a Product/Variant:
+
+1. The official HSN/SAC Code Registry.
+2. The effective-dated HSN/SAC Classification Assignment connecting an eligible goods/service subject to a code.
+3. GST Rate Applicability Rules and their statutory conditions, sources, and effective versions.
+4. GST Tax Determination for a particular supply/transaction context.
+5. The immutable Tax Determination Snapshot preserved by an accepted transaction.
+
+The GST/Tax domain is the authoritative owner of the HSN/SAC Code Registry, classification-assignment rules, GST Rate Applicability Rules, tax determination, and its statutory tax records. This establishes a domain responsibility and ownership boundary; it does not, by itself, finalize whether GST/Tax must be one separate Business Module or how it must be packaged/deployed. Any such Module Catalogue classification remains subject to the approved Business Module criteria and a separately finalized decision.
+
+Product/Item Management owns Product/Variant identity, specifications, and applicable product attributes. It must reference the relevant HSN/SAC Classification Assignment for a goods Variant without owning or redefining the tax code or rate. A Price Record owns only its declared Price Type and Price Tax Basis. Sales, Purchase, POS, Inventory, and Accounting consume tax references or results through explicit contracts and retain their own authoritative transaction, stock, cost, or accounting records.
+
+### 6H.2 HSN/SAC Code Registry and mandatory minimum length
+
+The GST/Tax domain must maintain a governed HSN/SAC Code Registry. Each code record must identify, as applicable:
+
+- Code Type: HSN for goods or SAC for services.
+- The exact full official code value and its digit length.
+- The official description and applicable classification/tariff hierarchy.
+- The issuing/statutory authority and authoritative source/reference.
+- The classification/tariff edition or source version and applicable effective period.
+- Current status, supersession or retirement reference, and provenance.
+- Any official explanatory notes, exclusions, or source metadata required to interpret the code.
+
+HSN and SAC are distinct code systems for their respective supply subjects. A service classification must not be treated as a goods HSN merely because the service is sold through a Product catalogue. The code value must be stored as a string, not as a numeric amount, so significant characters and leading zeroes are preserved.
+
+**CBM's mandatory minimum code length is six digits.** Every HSN/SAC code assigned to a CBM goods Variant or service supply subject, selected for CBM GST Tax Determination, or maintained as an assignable CBM code must contain at least six digits. A four-digit, two-digit, or other shorter code must not be accepted as an assignable HSN/SAC code in CBM. This six-digit minimum is a non-configurable, non-customizable, non-overridable Stable Core integrity rule. No business, User, Service Provider, configuration, import, integration, or lower-level policy may reduce it.
+
+The minimum-length rule does not authorize CBM to fabricate a longer code. A valid eight-digit or other longer official code must be preserved in its exact full form. CBM must not truncate the last digits of a valid longer code to create a shorter code, append zeroes, pad a code, or invent a code/description that is not an officially valid classification. Where no valid official code of at least six digits can be established for the relevant subject, the assignment must remain unresolved and be routed for authorized tax-classification review; the system must not guess or silently substitute a shorter code.
+
+The six-digit minimum is an internal CBM Stable Core requirement and must not be represented as a universal statement of the minimum digit count required by every GST reporting circumstance. The applicable statutory reporting, invoice, e-invoice, e-way bill, and filing requirements must be independently checked against the current law and portal rules. Such legal verification must not weaken the CBM internal assignment invariant or justify truncating an official code.
+
+### 6H.3 Variant and service classification assignments
+
+For goods, Product Variant is the normal and primary subject to which the applicable HSN/SAC Classification Assignment is linked. The assignment must reference a specific Registry code/version; it must not copy the code as an uncontrolled free-text value. It must preserve the owning Business Context, source/evidence, classification rationale or relevant product facts where required, effective time, recorded time, status, actor, and approval/review reference where applicable.
+
+A Product Definition-level default may be used only where the GST/Tax domain's governed rule explicitly establishes that the classification applies to all eligible Variants under that Product. A Variant-level classification must take precedence where its composition, material, function, processing, use, specification, packaging condition, or another legally relevant characteristic changes the classification or applicable treatment. Inheritance must be explicit, validated, effective-dated, and auditable; similarity of Product names or category alone is not sufficient evidence.
+
+Where classification can legitimately vary by a legally relevant supply context or condition, the model may preserve multiple scoped/effective assignments or a governed conditional classification rule. There must be one unambiguous applicable result for a given determination context. Conflicting or incomplete assignments must produce an explicit exception, not an arbitrary selection.
+
+For services, SAC must be assigned to the eligible Service Offering or other authoritative service/supply subject defined by the responsible service domain. CBM must not force a SAC code onto an unrelated physical-goods Variant, nor force every service into a goods Product hierarchy. The relevant source domain supplies the service reference; GST/Tax owns the code assignment and tax interpretation.
+
+HSN/SAC Classification Assignment is not a Product Attribute, Product Family, Product Category, SKU, GTIN, PLU, Product Code, or barcode. A Product taxonomy may coexist with a tax classification, but the two answer different questions and have separate owners, rules, and histories.
+
+### 6H.4 GST Rate Applicability Rules and effective-dated rate management
+
+GST Rate management must be separate from HSN/SAC Code Registry management. An HSN/SAC code is a classification reference; it is not itself a permanent GST rate. CBM must not assume a one-to-one, one-rate-for-ever relationship between one code and one GST rate.
+
+A GST Rate Applicability Rule must be able to represent the legally relevant tariff/code scope, goods/service description, required product or supply characteristics, conditions, exclusions, exemptions or other statutory treatments, rate components, effective dates, statutory source, publication/notification references, and the rule version. As applicable, rate components may include CGST, SGST/UTGST, IGST, Compensation Cess, or another legally applicable component. The model must preserve the statutory distinction between nil-rated, exempt, zero-rated, non-taxable, and other treatments; it must not collapse legally different treatments into an unexplained numeric zero.
+
+A rate rule may apply to a specific full tariff item, sub-heading, heading, chapter, service heading, or other legally defined scope. Where an official schedule associates a code/heading with a description, condition, package status, or exception, those qualifications are part of the rule and must be retained. The same code or tariff scope may therefore participate in more than one rate rule where the official schedule distinguishes goods descriptions or conditions. Code-only matching is insufficient where the law requires additional facts.
+
+Rate Rules must be effective-dated and versioned. CBM must preserve the date from which a rule legally applies, its publication/notification date and source, the date CBM recorded/imported it, and its approval/validation status for use. A future notified rate change may be loaded and scheduled without prematurely changing the active determination. A superseded, withdrawn, or corrected rule remains historically retrievable. A late-recorded or backdated notification must not silently rewrite accepted transactions.
+
+The applicability and priority of rate rules must be deterministic. Where multiple rules appear to match, the Tax domain must resolve them through their legally defined scope and specificity. If the available facts do not establish one valid rule, CBM must report an exception and must not choose a convenient or lowest/highest rate automatically.
+
+### 6H.5 GST Tax Determination and price interaction
+
+GST Tax Determination must consume the relevant HSN/SAC Classification Assignment and GST Rate Applicability Rule through explicit versioned references. It must also evaluate the transaction/supply facts required by applicable law, which may include the nature and description of the supply, relevant product/service characteristics, statutory conditions or exemptions, time-of-supply/effective legal timing, transaction type, place of supply, intra-State/inter-State treatment, applicable GST Registration context, taxable-value rules, discounts or other statutory adjustments, and Price Tax Basis. This list is illustrative and does not replace the applicable law.
+
+The same Product Variant and its classification reference may be used in different transactions, but the resulting tax determination may differ where the lawful transaction context or effective rule differs. The HSN/SAC code alone must never be treated as the complete transaction tax calculation.
+
+Tax Determination must return or preserve the resolved classification and assignment reference, selected rate rule/version, applicable component rates, taxable value, tax components and amounts, statutory treatment, relevant legal source, effective time, and an explanation/provenance sufficient to reproduce and audit the result. Missing classification, incomplete conditions, conflicting rules, invalid code length, or insufficient transaction facts must be surfaced as an exception; CBM must not fabricate or infer a tax rate from a Product name, prior transaction, supplier record, or display value.
+
+The GST/Tax domain applies the Price Tax Basis established by the relevant Price Record or transaction source. Purchase price references should normally be tax-exclusive, but the actual source quotation, purchase order, invoice, or accepted transaction must state and preserve its real basis. Sales Price Records may be tax-inclusive or tax-exclusive. Inclusive-price extraction and exclusive-price tax addition must follow the applicable statutory valuation provisions and the Price Architecture in Section 6G; no generic arithmetic formula replaces statutory valuation rules. Purchase input-tax credit eligibility and Inventory cost treatment remain separate legal/domain determinations and must not be inferred solely from the Purchase Price Tax Basis.
+
+### 6H.6 Classification and rate history
+
+The following History record sets must be separately maintained within the GST/Tax domain:
+
+1. **HSN/SAC Registry History:** creation, official-source updates, description changes, hierarchy/version changes, correction, supersession, retirement, and validity changes for a code record.
+2. **Product/Service Tax Classification Assignment History:** assignment, reassignment, effective-date change, scope change, review, correction, approval, and supersession linking a goods Variant or service/supply subject to an HSN/SAC code.
+3. **GST Rate Rule History:** creation/import, statutory notification, rate/component/condition changes, future scheduling, activation, correction, supersession, withdrawal, and expiry of a GST Rate Applicability Rule.
+
+Each History must preserve the prior version and relevant code/rule references, source notification or official evidence, effective time, recorded time, publication/approval time where applicable, reason, actor, and approver. A code or rule correction must not delete the historical record that was previously treated as valid. The Domain History record sets remain distinct from the comprehensive Audit Trail under Section 17A.
+
+### 6H.7 Immutable transaction Tax Determination Snapshot
+
+An accepted Sales, POS, or Purchase transaction that requires GST treatment must preserve the Tax Determination Snapshot applicable to its accepted supply/line. As applicable, it must contain:
+
+- The Product Variant or service/supply subject reference.
+- The complete HSN/SAC code, Code Type, official description/source version, and Classification Assignment reference/version.
+- The selected GST Rate Applicability Rule, rule version, statutory notification/source reference, and effective date.
+- The relevant classification/rate conditions and determination context.
+- The applicable Price Record/Price Snapshot reference and Tax Inclusive/Exclusive basis.
+- Taxable value, applicable tax treatment, component rates, component amounts, rounding outcome, and accepted line/transaction totals.
+- Source/provenance, determination timestamp, and any authorized override/correction reference.
+
+The originating transaction domain owns the accepted transaction and its immutable snapshot. GST/Tax owns the source classification/rate rules and the tax determination record. A later change to a Product Variant, HSN/SAC Registry, classification assignment, GST rate rule, tax configuration, or Price Record must not silently recalculate or rewrite an already accepted transaction. Any correction, debit/credit note, return, or other adjustment must follow the owning transaction domain's authorized lifecycle and preserve its link to the original snapshot.
+
+### 6H.8 Governance, security, configurability, and integrity
+
+The HSN/SAC Registry and GST Rate Applicability Rules must be maintained from authoritative statutory sources, including relevant CBIC notifications/schedules and official GSTN/CBIC code directories or guidance, as applicable. Imported reference data must preserve source, source version, import time, effective time, validation result, and approval/publication status. External feeds or vendor-supplied tax tables are not authoritative merely because they are available or current-looking. A source update must not automatically reclassify existing Product Variants or silently replace a Tax Determination Rule without governed validation and effective-date handling.
+
+The GST/Tax domain may configure legally permitted rate conditions, applicability dimensions, review/approval workflows, publication timing, jurisdictional/business context, and authorized maintenance operations. Those options must remain bounded by the statutory source and Main Portal governance. The six-digit minimum code-length rule is not configurable or overridable. Tenant-specific tax contexts, registrations, access, and permissions must remain isolated and purpose-limited.
+
+The architecture must support different businesses and supply contexts without forcing every business to use every code, rate rule, tax condition, service classification, or workflow. It must also support future statutory changes through versioned reference data and explicit contracts without changing the stable meaning of Product/Variant identity, price records, or historical transactions.
 
 ## 7. Business Authority Scope
 
@@ -3351,6 +3506,9 @@ The History domains established in this baseline are:
 7. **Sales Pricing History:** Sales-owned Price Lists, Selling Price Records, Price Conditions, promotions/discount rules, effective-date changes, approvals, and authorized overrides. It does not replace the accepted Sales/POS transaction records or their Price Snapshots.
 8. **Purchase Pricing History:** Purchase-owned supplier quotation/agreement/reference-price records, their terms, effective-date changes, approvals, and authorized overrides. It does not replace accepted Purchase transaction records or supplier invoice history.
 9. **Inventory Cost and Valuation History:** Inventory-owned cost-reference, cost-formation, valuation-policy and valuation-result changes within Inventory's scope. It must not duplicate or replace the authoritative Inventory Ledger or accepted stock-movement records.
+10. **HSN/SAC Registry History:** GST/Tax-owned official code records, descriptions, classification/tariff versions, sources, effective dates, corrections, supersessions, and retirements.
+11. **Product/Service Tax Classification Assignment History:** GST/Tax-owned effective-dated assignments connecting Product Variants or eligible service/supply subjects to HSN/SAC codes, including source evidence, scope, review, correction, and approval events.
+12. **GST Rate Rule History:** GST/Tax-owned GST Rate Applicability Rule versions, statutory notification references, rate components, conditions, effective dates, scheduled changes, corrections, supersessions, withdrawals, and expiry. It does not replace accepted transaction Tax Determination Snapshots.
 
 A User ID or User profile change must never be inserted into GST Registration History, Ownership History, or Mapping History. A separate User account/profile History may be introduced only if a distinct business need is established and approved. Other History domains must not be assumed merely because Audit Trail records exist; each requires an explicit business requirement and a definition of scope, contents, permissions, and retention.
 
@@ -3366,7 +3524,7 @@ History may be available to multiple appropriately authorized Users. Its visibil
 
 Audit Trail must capture all relevant system events and activities across CBM in chronological order. Its coverage is not limited to the History domains above or to security events alone.
 
-As applicable, Audit Trail includes successful and failed actions, creation and modification attempts, access and authentication events, User and Role changes, User Scope Mapping changes, Ownership Link changes, Business Relationship/Mapping changes, GST verification and assignment events, Price Record/Price List/Price Condition creation and changes, price overrides, price approvals and rejections, price-history access/export, configuration changes, administrative actions, data exports, archival and deletion operations, and security events.
+As applicable, Audit Trail includes successful and failed actions, creation and modification attempts, access and authentication events, User and Role changes, User Scope Mapping changes, Ownership Link changes, Business Relationship/Mapping changes, GST verification and assignment events, Price Record/Price List/Price Condition creation and changes, price overrides, price approvals and rejections, price-history access/export, HSN/SAC Registry changes, Product/Service Tax Classification Assignment changes, GST Rate Applicability Rule changes and approvals, tax-determination overrides, tax-history access/export, configuration changes, administrative actions, data exports, archival and deletion operations, and security events.
 
 Audit Trail must capture sufficient context to reconstruct what happened, when, in which business/entity context, by whom or by what system process, and with what outcome. It may contain events from multiple domains in one chronological sequence. It does not replace any domain-specific History.
 
@@ -3395,6 +3553,8 @@ When a GSTIN is changed, GST Registration History records only the previous and 
 When a User ID is changed, that event is recorded in the comprehensive Audit Trail. It is not inserted into GST Registration History. A separate User History is permitted only if a distinct business need is approved.
 
 When a Distributor–Shop Mapping is created, changed, suspended, or ended, the specific Mapping History records the business chronology of that relationship. The Audit Trail separately captures system events and actions associated with those operations.
+
+When a Product Variant's HSN assignment changes or a GST rate notification changes an applicable rule, the relevant HSN/SAC Registry History, Classification Assignment History, or GST Rate Rule History records the corresponding domain chronology. The Audit Trail separately captures the actors, permissions, source/import process, approvals, failures, access, and resulting system events.
 
 ---
 
@@ -3655,7 +3815,21 @@ The following statements summarize rules that must remain true across all future
 183. Price List publication, inheritance, sharing, and local override require explicit authority and applicability. Organization/Distributor/Shop structure, Service Provider association, or Distributor–Shop Mapping alone does not grant price access or editing authority; strict Business/Tenant Data Isolation remains mandatory.
 184. All authoritative CBM prices operate in INR only. No Price List, Price Record, override, User preference, or lower-level configuration may introduce a foreign currency or multi-currency business operation.
 
-
+185. A real-world subject may have multiple distinct aspects, records, and lifecycles. CBM must separate them into the appropriate authoritative domain models when their business meaning, responsibility, owner, applicability, permissions, validation, history, or configuration needs differ; they must be connected through explicit, typed, versioned references and contracts rather than collapsed into one oversized master or Module.
+186. Domain decomposition must be purposeful, not indiscriminate. Cohesive facts with the same business responsibility, owner, lifecycle, and validation may remain together; a separate Module or model must be justified by a real responsibility boundary, not merely by another field or screen.
+187. A composed workflow, screen, report, or calculation may combine independently owned domain facts through authorized contracts. It must not transfer ownership, create competing sources of truth, grant shared-write authority, bypass permissions, or weaken Business/Tenant Data Isolation.
+188. Product Variant is the normal reference subject for goods-specific price records and HSN/SAC classification assignment. Price records and tax-classification assignments remain separate domain-owned records linked to the Variant; they are not untyped Product fields or evidence that Product/Item Management owns pricing or tax determination.
+189. HSN and SAC are distinct classification types for goods and services. An HSN/SAC code is a regulated tax-classification reference, not a Product taxonomy, SKU, GTIN, Product Code, barcode, or GST rate.
+190. Every HSN/SAC code assignable to a CBM goods Variant or service/supply subject, or selectable for CBM GST Tax Determination, must contain at least six digits. This minimum is non-configurable and non-overridable Stable Core. Codes shorter than six digits are not valid CBM assignments.
+191. The six-digit minimum does not authorize synthetic code creation. Exact full official codes must be preserved; valid longer codes must not be truncated, shortened, padded, or fabricated. A classification that cannot be verified as an official code of at least six digits remains unresolved and must not be guessed or silently substituted.
+192. HSN/SAC Registry entries, Product/Service Tax Classification Assignments, GST Rate Applicability Rules, and transaction GST Tax Determinations are distinct records with distinct purposes and owner boundaries. Product/Item Management references the applicable assignment for goods Variants; GST/Tax owns the registry, assignment rules, rate rules, and tax determinations.
+193. A GST Rate Applicability Rule is not a permanent property of an HSN/SAC Code or Product Variant. A code or tariff scope may relate to multiple rate rules across effective periods or statutory descriptions/conditions; code-only matching must not replace required description, supply, package, or legal-condition checks.
+194. GST Rate Applicability Rules must preserve statutory sources/notifications, rate components, conditions, exclusions, relevant tax treatment, effective dates, recorded dates, versioning, and correction/supersession history. Conflicts or missing facts must produce an explicit exception, not an arbitrary rate selection.
+195. Tax Inclusive/Exclusive remains an explicit Price Tax Basis. Purchase price references should normally default to Tax Exclusive, while source documents and accepted purchase transactions must preserve their actual declared basis. Sales prices may be Tax Inclusive or Tax Exclusive. No generic module default may silently change a source-declared basis.
+196. GST Tax Determination must evaluate the applicable HSN/SAC assignment, rate-rule version, legally relevant supply/transaction facts, tax timing, and Price Tax Basis. A Product Variant's code reference alone is not a complete tax determination.
+197. HSN/SAC Registry History, Product/Service Tax Classification Assignment History, and GST Rate Rule History are separate domain histories. They remain separate from Product, Sales, Purchase, and Inventory price histories, from transaction snapshots, and from the comprehensive Audit Trail.
+198. Accepted transactions requiring GST treatment preserve an immutable Tax Determination Snapshot containing the complete code and assignment version, selected rate rule/version and source, applicable conditions, determination context, taxable value, tax components/amounts, and provenance. Subsequent product, classification, rate, or price changes must not rewrite the accepted snapshot.
+199. External data, vendor tax tables, Product names, prior transactions, or imported text must not automatically establish or replace an HSN/SAC assignment or GST rate. Authoritative statutory source validation, explicit effective dating, approval where required, and traceable provenance are mandatory.
 
 
 
@@ -3795,6 +3969,8 @@ This baseline consolidates:
 9. The project owner's explicit clarification on 19 November 2026 that CBM must not be designed as a copy of Tally or any other external system. External-system relationships are for importing the relevant available data needed to establish business continuity and exporting the relevant CBM data needed to continue business elsewhere. The source system's optional modules, data structures, customizations, accounting method, inventory granularity, warehouse concepts, and workflows do not define CBM's architecture. Missing or insufficient source data must be identified and completed through authorized CBM setup or data entry; data must never be invented. Vendor-specific compatibility is limited to the documented and validated data-transfer capability actually required.
 
 10. The project owner's explicit direction and approval on 19 November 2026 to finalize the Product/Item concept and directly update the authoritative documentation. The approved baseline establishes Product/Item Management as an independent Business Module; distinguishes Product Definition, Product Variant, Product/Item Instance, optional Family/Group classification, typed identifiers, Data Carriers, Trade Packaging Configurations, and Bundles/Kits; and requires flexible, governed product, variant, identifier, packaging, and tracking policies within the existing Stable Core, tenant-isolation, authority, module-ownership, and documentation rules.
+11. The project owner's explicit approval on 19 November 2026 of the HSN/SAC Classification, GST Rate Applicability, and Tax Determination architecture in Section 6H, including a separate HSN/SAC Code Registry, effective-dated Product Variant/service classification assignments, independently versioned statutory GST Rate Applicability Rules, a non-configurable minimum six-digit CBM HSN/SAC code requirement, preservation of exact full official codes without truncation or fabrication, separate classification/rate histories, and immutable transaction Tax Determination Snapshots.
+12. The project owner's explicit approval on 19 November 2026 of the general domain-decomposition and composition rule in Sections 2.6.4 and 6D.2.1: one real-world subject may be referenced by many separately owned aspects and records; those aspects must be managed in the appropriate models/domains when their responsibilities, meanings, lifecycles, permissions, applicability, or histories differ, and then composed through explicit governed contracts. This is not an instruction to create a separate model for every field or to fragment cohesive domain responsibilities.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
@@ -3872,6 +4048,17 @@ Official references consulted for Pricing, MRP, and tax-basis boundaries in Sect
 - [CBIC — Central Goods and Services Tax Rules, 2017, Rule 35](https://cbic-gst.gov.in/pdf/01012022-CGST-Rules-2017-amended_Part-A.pdf): official method for determining the tax component where a supply value is inclusive of the applicable integrated, central, State, or Union Territory tax.
 
 These sources support the separation of declared MRP, transaction selling price, unit-sale-price declaration, GST-inclusive/exclusive price basis, and statutory tax valuation. They do not establish CBM's future HSN/SAC or GST-rate model. GST/Tax remains the authoritative owner of tax determination; legal rates, classifications, package applicability, and statutory amendments must be revalidated against official current sources before implementation or compliance use.
+
+
+
+Official references consulted for HSN/SAC classification, GST rate schedules, and tax-rule versioning in Section 6H:
+
+- [CBIC — GST Goods and Services Rates](https://cbic-gst.gov.in/hindi/gst-goods-services-rates.html): official schedules list tariff/classification scopes together with goods/service descriptions, conditions, CGST, SGST/UTGST, IGST, and cess components. The schedule demonstrates why a bare HSN/SAC-to-one-rate lookup is insufficient; the relevant description and statutory conditions must also be considered.
+- [CBIC — Central Tax (Rate) Notifications](https://cbic-gst.gov.in/hindi/central-tax-rate.html) and [CBIC Tax Information Portal — Notifications](https://taxinformation.cbic.gov.in/): official notification repositories used to source rate changes and their effective dates. For example, Notification No. 01/2026-Central Tax (Rate), dated 30 April 2026, amended tariff-code entries and took effect from 1 May 2026; this illustrates the need for effective-dated, source-linked rate-rule versions.
+- [GSTN — Advisory on HSN and GSTR-1 Filing, 24 August 2021](https://tutorial.gst.gov.in/downloads/news/advisoryonhsnandgstr1.pdf): the advisory described then-applicable reporting digit requirements by aggregate turnover and explicitly warned against truncating a valid eight-digit HSN to six digits when the truncated value is not an independently valid tariff code. Its reporting thresholds are historical guidance and must not be represented as a current universal legal rule; current filing/e-invoice/e-way bill requirements must be verified before implementation.
+- [GST Portal — Search HSN/SAC](https://services.gst.gov.in/services/searchhsnsac): official GSTN lookup facility for validating available HSN/SAC code descriptions and references.
+
+These sources support the architecture's separation of code classification, product/service assignment, rate applicability, transaction-specific tax determination, effective-date versioning, and source provenance. They do not establish that every HSN/SAC code has one permanent rate, do not replace the effective statutory notification or applicable GST law, and do not make the CBM six-digit minimum a universal statutory minimum. Current law, notifications, code directories, portal validation, and reporting obligations must be rechecked from official sources before implementation or compliance use.
 
 Official technical references consulted for security and SaaS architecture boundaries:
 
