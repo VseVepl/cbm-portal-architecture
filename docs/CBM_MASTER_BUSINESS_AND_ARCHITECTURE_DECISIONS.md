@@ -4,7 +4,7 @@
 | Document attribute | Value |
 |---|---|
 | Document status | Approved baseline of finalized decisions |
-| Baseline date | 18 November 2026 |
+| Baseline date | 19 November 2026 |
 | Document role | Single authoritative source for finalized business and architectural decisions captured to date |
 | Project stage | Business concept and logical architecture definition |
 | Implementation authorization | This document does not authorize software implementation or deployment |
@@ -21,30 +21,31 @@
 7. [Service-provider architecture](#6-service-provider-architecture)
 8. [Platform-wide Services Architecture](#6a-platform-wide-services-architecture)
 9. [Global Business Settings](#6b-global-business-settings)
-10. [Business Authority Scope](#7-business-authority-scope)
-11. [Delegated Authority](#8-delegated-authority)
-12. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-13. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-14. [Approval Workflow governance](#11-approval-workflow-governance)
-15. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-16. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-17. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-18. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-19. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-20. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-21. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-22. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-23. [Cross-concept invariants](#19-required-cross-concept-invariants)
-24. [Illustrative scenarios](#20-illustrative-scenarios)
-25. [Documentation governance](#21-documentation-governance)
-26. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+10. [Accounting Management](#6c-accounting-management)
+11. [Business Authority Scope](#7-business-authority-scope)
+12. [Delegated Authority](#8-delegated-authority)
+13. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
+14. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+15. [Approval Workflow governance](#11-approval-workflow-governance)
+16. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+17. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+18. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+19. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+20. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+21. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+22. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+23. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+24. [Cross-concept invariants](#19-required-cross-concept-invariants)
+25. [Illustrative scenarios](#20-illustrative-scenarios)
+26. [Documentation governance](#21-documentation-governance)
+27. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
 
 ### 1.1 Purpose
 
-This document consolidates the project vision and all business-level and logical-architecture decisions explicitly finalized for the CBM Portal through 18 November 2026. It is the authoritative baseline from which subsequent project documentation is to be derived.
+This document consolidates the project vision and all business-level and logical-architecture decisions explicitly finalized for the CBM Portal through 19 November 2026. It is the authoritative baseline from which subsequent project documentation is to be derived.
 
 The document exists to prevent finalized decisions from being lost, contradicted, interpreted inconsistently, or omitted when later architecture and development documents are prepared.
 
@@ -523,6 +524,112 @@ A **Service Capability** is a specific function or operation made available by a
 ### 3.54 Global Business Settings
 
 **Global Business Settings** is the governed set of shared India-specific business and regional defaults, preferences, and reference settings made available across eligible CBM contexts. It provides common defaults and presentation/reference conventions; it does not take ownership of domain-specific business rules, statutory determinations, or authoritative records belonging to Business Modules.
+
+
+
+### 3.55 Accounting Management
+
+**Accounting Management** is an independent Business Module responsible for the governed recognition, classification, recording, posting, control, reconciliation, and financial reporting of the financial effects of business activities within its defined Accounting Contexts and Books of Accounts. It owns its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, Accounting Period controls, and authoritative accounting records. It does not take ownership of the originating business transactions or domain rules of other Business Modules.
+
+### 3.56 Accounting Context
+
+An **Accounting Context** is the governed business and legal scope within which one or more Books of Accounts are maintained. It identifies the accountable Business Identity and Legal Identity, applicable Professional Identity or operating scopes, accounting purpose, governing Accounting Framework and Policies, authorized Books, and applicable authority and access boundaries. An Accounting Context is not automatically identical to an Organization, Tenant, Distributor, Shop, Service Provider, Owner, or User.
+
+### 3.57 Book of Accounts / Accounting Book
+
+A **Book of Accounts** or **Accounting Book** is a governed, internally coherent set of accounting records for a defined accounting purpose and accountable legal/business context. It includes its Chart of Accounts, Accounting Vouchers, Journal Entries, Ledger Postings, Accounting Periods, balances, and required supporting references. A statutory Book must have exactly one accountable Legal Identity. Separate Legal Identities must not share or merge their authoritative statutory Books. Additional management or purpose-specific Books may be maintained only with an explicit purpose, policy, ownership, and reconciliation relationship that prevents competing or conflicting authoritative records.
+
+### 3.58 Accounting Framework
+
+An **Accounting Framework** is the set of accounting standards, presentation requirements, recognition and measurement principles, and related authoritative guidance applicable to a particular Accounting Context or Book. For Indian businesses, the applicable framework may include Indian Accounting Standards (Ind AS), Accounting Standards (AS), or another framework permitted or required for the relevant entity and purpose under applicable Indian law and authoritative regulation. Framework applicability is determined by the actual legal and regulatory status of the entity; it is not an unrestricted User preference.
+
+### 3.59 Accounting Policy
+
+An **Accounting Policy** is a governed selection or application of permitted accounting principles, recognition methods, measurement methods, classifications, and presentation practices within the applicable Accounting Framework. Policies must be effective-dated, versioned, authorized, and consistent with mandatory legal and framework requirements. A configurable policy cannot override an applicable statutory or regulatory requirement.
+
+### 3.60 Accounting Basis
+
+An **Accounting Basis** determines when financial effects are recognized in the Books of Accounts. The default recognition basis for CBM's general-purpose Accounting Books is accrual basis. A cash basis or other permitted treatment may be used only for an entity, report, or purpose for which the applicable law and Accounting Framework allow it and an authorized, effective-dated Accounting Policy expressly enables it. A cash-oriented report or view must not silently change the authoritative recognition basis of statutory Books.
+
+### 3.61 Chart of Accounts
+
+A **Chart of Accounts** is the governed, hierarchical classification structure used by an Accounting Book to organize its Account Groups and Ledger Accounts. It supports standardized baseline classifications and authorized business-specific extensions without weakening the minimum classification, reporting, and integrity requirements of the applicable Accounting Framework.
+
+### 3.62 Account Group
+
+An **Account Group** is a classification node within a Chart of Accounts under which one or more subordinate Groups or Ledger Accounts are organized according to their accounting nature and reporting treatment. Groups may be hierarchical. System-defined foundational classifications remain protected; authorized business-specific Groups may be added within the applicable framework and reporting rules.
+
+### 3.63 Ledger Account
+
+A **Ledger Account** is an individual account within a Chart of Accounts to which one or more Accounting Entries are posted and from which balances and transaction histories are derived. A Ledger Account may be associated with a relevant Business Identity, Customer, Supplier, Bank Account, Tax reference, or other domain record, but such association does not transfer ownership of that source record to Accounting.
+
+### 3.64 Voucher Type
+
+A **Voucher Type** classifies an Accounting Voucher by its accounting purpose and governs its permitted structure, numbering, validation, approval, and posting behaviour. CBM may provide protected system-defined Voucher Types and allow authorized, governed custom Voucher Types. A custom Voucher Type must inherit or explicitly satisfy mandatory Accounting Controls and cannot bypass Double-entry, authorization, or source-domain rules.
+
+### 3.65 Accounting Voucher
+
+An **Accounting Voucher** is an authoritative Accounting record representing a recognized financial transaction, adjustment, opening entry, or other permitted accounting event within a Book of Accounts. It has a Voucher Type, date and period references, one or more Accounting Entry Lines, supporting references, provenance, and a controlled lifecycle. A Voucher may originate from an authorized manual accounting action or from a source transaction owned by another Business Module. It is not automatically the same record as a Sales Invoice, Purchase Invoice, Payment, POS receipt, or other originating business document.
+
+### 3.66 Accounting Entry / Journal Entry
+
+An **Accounting Entry** or **Journal Entry** is the balanced set of debit and credit lines representing the accounting effect of an Accounting Voucher. Each line identifies its Ledger Account, debit or credit amount, applicable Accounting Book, and permitted analytical or source references. One Voucher may contain multiple debit and credit lines. The total debit and total credit of every posted entry set must balance.
+
+### 3.67 Posting
+
+**Posting** is the controlled act by which a validated and, where required, approved Accounting Voucher becomes part of the authoritative balances and transaction history of its Book of Accounts. Draft, validated, pending-approval, posted, and reversal/correction conditions are distinct. Posted records must not be silently overwritten or destructively edited; corrections must preserve the original record and use authorized reversal, adjustment, or correction records.
+
+### 3.68 Sub-ledger and Outstanding Allocation
+
+A **Sub-ledger** is a detailed accounting record set that supports and reconciles to a corresponding control Ledger Account, such as customer receivables or supplier payables. **Outstanding Allocation** links receipts, payments, credit notes, advances, and other permitted settlement amounts to the relevant open references or obligations. It may include bill-wise references such as new reference, against reference, advance, and on-account allocation. The original commercial invoice or obligation remains owned by its originating Business Module.
+
+### 3.69 Cost Centre
+
+A **Cost Centre** is an Accounting analytical unit used to attribute, accumulate, and report income or expenditure for a department, branch, project, activity, person, operating unit, or other approved management dimension. A Cost Centre is not a Business Entity, Legal Identity, Structural Parent/Child relationship, Tenant, Ownership Link, or User Scope.
+
+### 3.70 Cost Category
+
+A **Cost Category** is a governed analytical classification that enables parallel or alternative allocation of eligible income and expenditure across defined Cost Centres or equivalent analytical units. It does not create a new Business Entity or change the authoritative ownership of the underlying transaction.
+
+### 3.71 Accounting Dimension
+
+An **Accounting Dimension** is an approved analytical attribute used to classify, allocate, filter, or report Accounting Entries beyond the Ledger Account itself. Cost Centres and Cost Categories are supported forms. Additional dimensions may be introduced through governed extensions, with explicit applicability, validation, security, and reporting rules.
+
+### 3.72 Accounting Period
+
+An **Accounting Period** is a defined time interval within an Accounting Book for recognizing, organizing, reviewing, closing, and reporting accounting activity. It is governed by the applicable Financial Year, Accounting Framework, statutory requirements, and authorized Accounting Policies. The shared default Financial Year remains 1 April through 31 March, subject to the existing rules in Section 6B.
+
+### 3.73 Reconciliation
+
+**Reconciliation** is a controlled comparison of two or more relevant records, balances, statements, or transaction sets to identify agreement, timing differences, omissions, duplicates, and exceptions. Accounting owns the reconciliation of its Ledger and accounting records; source records such as bank statements, payment settlements, tax determinations, or inventory valuation remain owned by their respective domains.
+
+### 3.74 Accounting Data Migration
+
+**Accounting Data Migration** is the governed transfer of existing accounting masters, opening balances, transactions, and supporting references from a prior Accounting System or source into CBM. It includes source identification, mapping, staging, validation, exception handling, reconciliation, authorized acceptance, provenance, and duplicate protection. Migration does not imply that every source record is accepted as valid or posted automatically.
+
+### 3.75 Accounting Data Export and Audit Data Package
+
+**Accounting Data Export** is the controlled provision of Accounting records, reports, and related permitted references in a selected structured or human-readable format. An **Audit Data Package** is a scoped, traceable collection of Accounting records and authorized cross-domain supporting information prepared for an authorized auditor or other permitted recipient. It is not, by itself, an audit opinion, certification, or statutory filing.
+
+### 3.76 External Accounting Data Exchange Model
+
+The **External Accounting Data Exchange Model** is the separate compatibility and transformation boundary through which CBM exchanges data with external Accounting Systems. It defines external representations, format/version compatibility, mappings, transformations, source identifiers, import/export validation, and exchange provenance. It is not the authoritative Accounting Domain Model and does not own accounting rules or Books of Accounts.
+
+### 3.77 Tally Data Exchange Model
+
+The **Tally Data Exchange Model** is the Tally-specific specialization of the External Accounting Data Exchange Model. It represents Tally-specific masters, groups, ledgers, voucher types, vouchers, fields, identifiers, supported formats, and version-specific exchange behaviour. It must remain separate from CBM's canonical Accounting Model. Tally compatibility must not make Tally's internal data structures, naming, formats, or version-specific rules authoritative within CBM.
+
+### 3.78 Tally Compatibility Adapter
+
+A **Tally Compatibility Adapter** is the governed integration component that reads or produces supported Tally Data Exchange representations and transforms them to or from CBM's canonical domain contracts. It is version-aware and subject to Platform-wide Integration & API, Security, Authorization, and Audit safeguards. It does not bypass the ownership or validation rules of Accounting, Inventory, GST/Tax, HR/Payroll, or any other receiving Business Module.
+
+### 3.79 Fixed Asset Accounting
+
+**Fixed Asset Accounting** is the Accounting responsibility for the financial recognition and accounting records of eligible fixed assets, including acquisition cost, capitalization, depreciation, impairment, revaluation where applicable, disposal, and related ledger treatment. Physical asset custody, maintenance, assignment, and operational tracking are separate responsibilities and are not transferred to Accounting merely because an asset has an Accounting record.
+
+### 3.80 Management Accounting
+
+**Management Accounting** comprises internal planning, budgeting, forecasting, cost/profit analysis, and actual-versus-budget reporting capabilities within the approved Accounting scope. Management reports do not replace statutory Books, and budgets or forecasts do not become posted Accounting Transactions merely by being created.
 
 ## 3A. How the CBM relationship model must be read
 
@@ -1109,6 +1216,230 @@ Global Business Settings is a governed configuration/business-settings responsib
 The India-only scope is a product/business boundary, not a technical localization implementation specification. Generic technical capabilities in B6 do not authorize international language, country, currency, or time-zone support: CBM's enabled language set remains Indian languages only, country and regional references remain India-specific, currency remains INR, and time-zone handling remains IST / Asia/Kolkata. Language-resource implementation, formatting libraries, reference-data storage, and service decomposition remain outside this business and logical-architecture decision.
 
 ---
+
+## 6C. Accounting Management
+
+### 6C.1 Approved architectural classification and purpose
+
+**Accounting Management is an independent Business Module.** Its classification and the business/logical architecture scope in this Section were explicitly approved by the project owner on 19 November 2026.
+
+Accounting Management is responsible for the governed recognition, classification, recording, posting, control, reconciliation, and financial reporting of the financial effects of business activities within its authorized Accounting Contexts and Books of Accounts. It owns its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, Accounting Period controls, and authoritative Accounting records.
+
+The Module is not merely a data-entry facility or a collection of financial reports. It is the authoritative accounting domain for the Books of Accounts it governs. It must support the full accounting lifecycle while preserving the source-domain ownership of Sales, Purchase, Inventory, POS, GST/Tax, Finance/Payment, HR/Payroll, Business Identity, and other Business Modules.
+
+This Section establishes Business and Logical Architecture responsibilities. It does not prescribe database schemas, API endpoints, application screens, software packages, deployment units, or implementation technologies.
+
+### 6C.2 Foundational accounting principles
+
+1. **Double-entry by default:** CBM's default Accounting model is Double-entry Accounting. Every posted Accounting Entry set must have equal total debits and credits. A single transaction may contain multiple debit and credit lines.
+2. **Accrual by default:** The default recognition basis for general-purpose Accounting Books is accrual basis. A cash basis or other alternative may be used only where the applicable law and Accounting Framework permit it and an authorized, effective-dated Accounting Policy expressly enables it. This is a product default, not a claim that every Indian business is legally required to use the same basis.
+3. **Authoritative records:** Each Book of Accounts has a clearly identified accountable owner and one authoritative set of posted records. Reports, exports, exchange packages, caches, and external copies do not replace those records.
+4. **Traceability:** Every posted record must be traceable to its originating source, authorized manual action, migration batch, or other valid accounting basis.
+5. **No silent mutation:** Posted records must not be silently overwritten or destructively altered. Corrections must preserve the original record and use governed reversal, adjustment, or correction records.
+6. **Domain separation:** Accounting owns the accounting treatment and accounting records, not the original commercial, operational, tax, payment, inventory, payroll, or identity records owned by other domains.
+7. **India-only boundaries:** Accounting operates within the approved India-only, INR-only, IST-only, Indian-language and regional boundaries in Sections 2 and 6B. Foreign-currency accounting and multi-currency operation are outside the approved product scope. A source import containing foreign-currency transactions must be identified as an exception; it must not be silently converted or posted as INR.
+8. **Framework compliance:** Accounting Frameworks and Policies must reflect the legal and professional requirements applicable to the actual entity and purpose. Configurability cannot be used to select an inapplicable standard or override mandatory requirements.
+
+### 6C.3 Accounting Contexts and Books of Accounts
+
+1. Accounting Context and Book of Accounts are separate concepts. An Accounting Context defines the accountable business/legal scope and governance; a Book of Accounts is the coherent set of accounting records maintained for a defined purpose within that context.
+2. Every statutory Book must have exactly one accountable Legal Identity. Separate Legal Identities must maintain separate authoritative statutory Books. Common ownership, common branding, common service provider, common Organization-level ownership rules, or a Distributor–Shop Mapping does not merge their Books.
+3. One Legal Identity may maintain more than one Book where a distinct statutory, regulatory, management, operational, or other expressly governed accounting purpose justifies it. Each additional Book must have a defined purpose, owner, policy, scope, effective period, and reconciliation relationship. It must not create a competing or ambiguous authoritative statutory record.
+4. Multiple Professional Identities, branches, Shops, departments, or operating locations under the same Legal Identity may ordinarily be represented in the same statutory Books using authorized Accounting Dimensions, Cost Centres, or other attribution rules. A separate Professional Identity alone does not require a separate statutory Book.
+5. Where a Distributor or Shop has a distinct Legal Identity, its statutory Accounting Books must be separate from the Books of another Legal Identity. Where it operates under a Legal Identity shared with other Professional Identities, the relationship to that Legal Identity must be explicitly verified and its transactions attributed through approved dimensions or other governed accounting arrangements.
+6. A Shop's optional Legal Identity must not be invented or inferred from its Professional Identity, Owner ID, Parent Organization, address, or Mapping. The accountable Legal Identity for its accounting must be explicitly established.
+7. An Accounting Context may contain multiple Books for the same accountable Legal Identity and approved purposes. A consolidated reporting group may refer to Books of multiple legal entities only under explicit authority and applicable accounting/reporting rules. Consolidation does not merge the underlying Books, Legal Identities, Ownership Links, Tenant boundaries, or source records.
+8. Accounting applicability, Book creation, access, consolidation, and reporting must not be inferred from structural placement, ownership, Service Provider association, Subscription Coverage, or User Role. Explicit authority, Permission, and applicable scope are required.
+
+### 6C.4 Accounting Frameworks, Policies, and recognition basis
+
+1. Accounting must support the Indian Accounting Framework applicable to each entity and reporting purpose, including Ind AS, Accounting Standards (AS), or another framework permitted or required under applicable Indian law and authoritative regulation.
+2. Framework applicability must be determined from the actual legal/entity classification, regulatory status, sector, reporting purpose, and effective law. The platform may provide governed applicability profiles and guidance, but a User must not freely select an inapplicable framework.
+3. Applicable Accounting Frameworks, statutory presentation requirements, and accounting rules must be maintained as versioned and effective-dated rule profiles. Changes in authoritative law or standards must be reviewed and introduced through governed updates; existing posted records and historical reports must retain their applicable historical basis.
+4. Accrual basis is the default recognition basis for general-purpose Books. Cash basis or another recognition approach may be enabled only where legally and professionally permitted for the specific entity and purpose. Cash-oriented management views must not alter accrual-based statutory Books.
+5. Double-entry is the default and mandatory basis for all ordinary posted CBM Accounting Entries. Any exceptional statutory or legacy source representation must be normalized, reconciled, and accepted into the CBM Double-entry model before it becomes authoritative.
+6. Accounting owns accounting policies, recognition within the applicable framework, account classification, measurement and presentation of its financial records. GST/Tax owns tax determinations and statutory tax rules; Inventory owns product/stock quantity and inventory valuation determinations; Finance/Payment owns payment execution and settlement source records.
+7. The default Financial Year remains 1 April through 31 March. Any alternative is permitted only under the existing Section 6B rules and the applicable Accounting Framework and domain requirements.
+
+### 6C.5 Chart of Accounts, Account Groups, and Ledger Accounts
+
+1. Each Book must have a governed Chart of Accounts containing hierarchical Account Groups and Ledger Accounts.
+2. The Chart of Accounts must provide a coherent baseline classification for assets, liabilities, equity/capital, income, and expenses, together with any further classifications required by the applicable Accounting Framework and reporting needs.
+3. Main Portal may govern protected foundational classifications, standard templates, identifiers, and minimum reporting requirements. Authorized businesses may create additional Groups and Ledgers, subject to classification integrity, applicability, and reporting rules.
+4. Account Groups classify Ledger Accounts and may form parent-child hierarchies. Ledger Accounts hold the accounting balances and transaction postings.
+5. Ledger Accounts may reference Customer, Supplier, Bank Account, Tax, Business Identity, Product/Inventory, Employee/Payroll, or other domain records where required. Such a reference does not transfer ownership of the referenced record to Accounting.
+6. A shared party or business identity may be referenced by multiple Accounting Books only where each Book has its own authorized accounting relationship. The reference must not merge the Books or grant cross-business access.
+7. System templates and custom Charts of Accounts must be versioned or otherwise controlled so that changes do not silently rewrite historical classifications or financial statements.
+
+### 6C.6 Voucher Types, Accounting Vouchers, Journals, and Posting
+
+1. Accounting must support distinct Voucher Types and Accounting Vouchers. A Voucher Type classifies the accounting purpose and defines permitted structure, numbering, validation, approval, and posting behaviour. A Voucher records a particular accounting transaction or adjustment.
+2. The foundational Voucher Type set must include the common accounting purposes of Contra, Payment, Receipt, Journal, Sales, Purchase, Debit Note, and Credit Note. Further types may be added when justified by business and accounting requirements. These names are conceptual accounting types and do not transfer Sales, Purchase, Tax, POS, or Payment domain ownership to Accounting.
+3. Authorized businesses may configure permitted Voucher Types, numbering series, prefixes/suffixes, effective-date rules, narration requirements, approval conditions, and validated posting templates. Protected system controls and mandatory framework requirements cannot be overridden.
+4. A Voucher may contain multiple Accounting Entry Lines. Each line must identify its Ledger Account, debit or credit amount, applicable Book and period, and permitted source and analytical references. Each posted Voucher's total debit must equal its total credit.
+5. Journal Entries and Ledger Postings are derived from the approved Accounting Voucher and are maintained as authoritative accounting records. A Voucher, its Journal Entry, and its resulting Ledger postings are related but distinct conceptual records.
+6. Voucher states must support controlled preparation and posting, including Draft, Validated, Pending Approval where applicable, Posted, and reversal/correction conditions. Exact state applicability may vary by Voucher Type and approved policy.
+7. Posting must require valid Book, period, accounts, balanced entries, required source evidence, applicable approvals, and Permissions. A successful source transaction or an Event Message does not by itself prove that accounting posting has completed.
+8. A posted Voucher must not be silently edited or deleted. Corrections must use traceable reversal, adjustment, or correction records with explicit links to the original Voucher and appropriate effective dates.
+9. Voucher numbering must be unique within its defined numbering scope and governed series. Source-system Voucher Numbers must also be retained as external references where imported; they must not replace CBM's own identity and uniqueness rules.
+
+### 6C.7 General Ledger, Sub-ledgers, and Outstanding Allocation
+
+1. Accounting owns the General Ledger and the balances derived from posted entries in each Book.
+2. Sub-ledgers may provide party-wise or obligation-wise detail for control accounts such as Trade Receivables and Trade Payables. Sub-ledger totals must reconcile to their corresponding control Ledger Accounts.
+3. Outstanding Allocation must support relevant bill-wise or obligation-wise references, including advances, new references, settlement against existing references, partial settlement, and on-account amounts where applicable.
+4. Customer and Supplier identities and original Sales/Purchase documents remain owned by their source domains. Accounting maintains its ledger references, balances, allocation history, and accounting treatment.
+5. Cash, Bank, Loan, Tax, Inventory, Fixed Asset, Income, Expense, Receivable, Payable, Equity, and other appropriate Ledger classifications must be supported where applicable to the Book and Accounting Framework.
+
+### 6C.8 Cost Centres, Cost Categories, and Accounting Dimensions
+
+1. Accounting must support Cost Centres and Cost Categories for permitted income, expense, cost, and profit analysis.
+2. Cost Centres may be hierarchical and may represent departments, branches, projects, activities, people, operating units, or other management dimensions.
+3. Cost Categories may enable parallel allocation of the same eligible transaction across different analytical sets. Governed allocation templates or classes may automate permitted percentage-based or rule-based allocations.
+4. Additional Accounting Dimensions may be introduced through explicit, versioned extension rules. Each dimension must define its meaning, eligible accounts/transactions, applicability, validation, aggregation, reporting, and access rules.
+5. A Cost Centre or Accounting Dimension is not a Business Entity, Legal Identity, Ownership Link, structural parent-child relationship, Tenant, User Scope, or Permission. Mapping an Accounting Dimension to a Shop, Distributor, branch, or department does not create or modify those separate relationships.
+6. Allocation rules must be traceable, effective-dated where applicable, and reconcilable to the original posted amount. They must not duplicate the underlying financial transaction.
+
+### 6C.9 Management Accounting and Budgeting
+
+1. Accounting may provide Management Accounting capabilities for internal budgets, forecasts, cost/profit analysis, and actual-versus-budget reporting.
+2. Budgets and forecasts are planning records; creating or changing them does not itself create a posted financial transaction or alter the General Ledger.
+3. Budget structures may use approved Accounting Dimensions, periods, accounts, and business scopes. Their approval and availability remain subject to authority, Permissions, and any applicable Approval Workflow.
+4. Budgeting and forecasting capabilities must be configurable and extensible. Their existence does not preclude a future separately justified Business Module, but no separate module is created by this statement.
+
+### 6C.10 Fixed Asset Accounting
+
+1. Accounting owns the financial accounting treatment and records for fixed assets, including acquisition cost, capitalization, depreciation, impairment, revaluation where applicable, disposal, and related ledger balances and disclosures.
+2. The financial fixed-asset register must retain the information required to support its accounting treatment and traceability.
+3. Physical asset custody, location operations, assignment, maintenance, repair, insurance administration, and operational asset lifecycle are not automatically Accounting responsibilities. They remain with the relevant Business Module or capability, if established.
+4. Fixed Asset Accounting must follow the Accounting Framework applicable to the Book and must not hard-code one depreciation, useful-life, or valuation rule for every asset and business.
+
+### 6C.11 Accounting Periods and Closing
+
+1. Each Book must have explicitly defined Accounting Periods within its applicable Financial Year and Accounting Framework.
+2. The default Financial Year is 1 April through 31 March, subject to Section 6B. An alternative requires applicable domain support and explicit authorization.
+3. Accounting must support opening balances, period transactions, adjustments, closing balances, period review, closing, and controlled reopening.
+4. A closed period must be protected against unauthorized postings and changes. Reopening requires explicit Permission, applicable approval, a recorded reason, and Domain History/Audit Trail evidence.
+5. Period closing must not delete or rewrite source transactions, posted entries, or previous closing evidence. Opening balances for a subsequent period must be traceable to the prior authorized closing state and permitted adjustments.
+
+### 6C.12 Reconciliation
+
+1. Accounting must provide reconciliation capabilities for its own records and for authorized comparisons with external or other-domain source records.
+2. Reconciliation may include Bank-to-Ledger, Customer/Supplier sub-ledger-to-control-ledger, source-transaction-to-accounting-posting, Inventory valuation-to-accounting, GST determination-to-accounting, Payment/Settlement-to-accounting, and migration-source-to-imported-record comparisons.
+3. The source domain remains the owner of its source records. Accounting owns the reconciliation result and accounting adjustments within its own Books; it cannot alter a source-domain record merely to force a match.
+4. Reconciliation must identify matches, timing differences, omissions, duplicates, unmatched items, and exceptions. Resolution must be authorized, traceable, and must not silently change posted records.
+
+### 6C.13 Financial Statements and Reporting
+
+1. Accounting owns the authoritative accounting calculations and financial content for Trial Balance, General Ledger, Profit and Loss Statement, Balance Sheet, Cash Flow Statement where applicable, and other financial statements required by the relevant Accounting Framework.
+2. It must support ledger, voucher, day-book, period, receivables, payables, cost-centre, cost-category, and other relevant accounting reports.
+3. Financial statements must use the applicable Accounting Framework, Accounting Policies, approved Book scope, reporting period, and effective rules. Presentation and calculations must not be determined solely by a User display preference.
+4. Consolidated reporting across Books or Legal Identities may be produced only where the relationship, authority, reporting purpose, and applicable Accounting Framework permit it. Consolidated reporting does not merge underlying Books, Legal Identities, ownership, or data boundaries.
+5. Shared Reporting & Analytics infrastructure may distribute, visualize, or analyse accounting reports under authorization. It does not own Accounting calculations, accounting classifications, or authoritative financial statements.
+6. GST returns, tax determinations, payroll reports, payment statements, and inventory valuation reports remain owned by their respective Business Modules. Accounting may provide its own accounting views and authorized references to those domains.
+
+### 6C.14 Integration with other Business Modules
+
+1. Accounting receives authorized source transactions or domain facts from Sales, Purchase, POS, Inventory, GST/Tax, Finance/Payment, HR/Payroll, Subscription/Billing, and other eligible Business Modules through explicit contracts.
+2. The originating Business Module retains ownership of the original transaction, source document, operational lifecycle, and domain rules. Accounting owns only its accounting interpretation, Voucher, Journal Entries, Ledger Postings, balances, and accounting history.
+3. Each source-to-accounting mapping must identify the source event/record, eligible Book, Voucher Type, Ledger mapping, tax/valuation/payment references where applicable, effective Accounting Policy, posting status, and correction behaviour.
+4. Mapping and posting rules must be versioned and effective-dated. A change in a source module or a mapping must not silently rewrite already posted accounting records.
+5. Source transaction status and Accounting Posting status are separate. A source transaction may exist before its accounting posting; a failed or pending posting must be visible as an exception and must not be represented as completed accounting.
+6. Event publication, API success, payment success, invoice issuance, stock movement, or a POS checkout does not independently establish that the corresponding Accounting Voucher has been validated and posted.
+7. Duplicate source events or retries must not create duplicate Accounting Vouchers or postings. Corrections to source transactions must trigger governed accounting adjustment, reversal, or reprocessing rules without deleting the prior accounting history.
+8. Accounting must not directly take over or independently recreate the source domain's validation logic. It validates the accounting requirements and the integrity of the data needed for its own posting.
+
+### 6C.15 Domain Ownership Boundaries and Exclusions
+
+Accounting Management owns accounting treatment and accounting records, not the following originating responsibilities:
+
+- **Business Identity:** Legal Identity, Professional Identity, Owners, statutory identity particulars, and verified business identity records.
+- **GST/Tax:** GSTIN, GST Taxpayer Profile, GST Registration, GST applicability, tax classification, tax rates, statutory tax calculation, tax liability determination, returns, and tax compliance records.
+- **Finance/Payment:** Bank Account ownership/administration, payment instruments, payment initiation/execution, collection, settlement, payment-provider configuration, and authoritative payment records.
+- **Sales:** Customer-facing sales lifecycle, commercial sales terms, sales order, original Sales Invoice, delivery, and Sales Returns.
+- **Purchase:** Supplier-facing purchase lifecycle, purchase terms, purchase order, original Purchase Invoice, goods receipt ownership where assigned, and Purchase Returns.
+- **Inventory/Product:** Product Master, stock quantity, stock movement, stock location, and inventory valuation determination.
+- **POS:** Checkout, sales capture, POS operational transaction, and POS-specific lifecycle.
+- **HR/Payroll:** Employee identity and employment records, attendance, leave, payroll calculation, and authoritative payroll obligations.
+- **Subscription/Billing:** Commercial Account, Subscription, Plan, Entitlement, subscription invoice, and commercial billing lifecycle as defined by Section 14.
+- **Platform-wide Services:** Shared authorization, security, approval execution, messaging, integration infrastructure, file/document infrastructure, and reporting infrastructure.
+
+Accounting may maintain corresponding Ledger Accounts, accounting references, posting records, or reports where necessary. Such records do not transfer source-domain ownership.
+
+### 6C.16 External Accounting Data Exchange and Tally Separation
+
+1. The External Accounting Data Exchange Model is separate from the canonical Accounting Domain Model. The Tally Data Exchange Model is a Tally-specific specialization of that exchange boundary.
+2. Tally Data Exchange must not be embedded as the internal Accounting data model, and Tally-specific object names, fields, formats, numbering behaviour, or version-specific rules must not become authoritative Accounting rules merely for compatibility.
+3. The Tally Compatibility Adapter must use the governed Platform-wide Integration & API, Security, Authorization, and Audit capabilities. Accounting supplies the approved accounting mappings and validation contracts for records within its domain; other Business Modules supply the rules for their own domains.
+4. Tally Masters, Groups, Ledgers, Voucher Types, Vouchers, Cost Centres, Cost Categories, bill-wise details, and other supported representations must be mapped to their appropriate CBM domain concepts. Tally Inventory, Payroll, Tax, and other domain records must be routed to their corresponding owner Modules rather than being absorbed into Accounting.
+5. Format and feature compatibility must be version-aware and maintained against the documented capabilities of the supported Tally product/release. XML, Excel, JSON, and other formats may be supported only to the extent that the selected Tally release and documented exchange workflow support them. Human-readable report formats must not be represented as import formats unless the target product explicitly supports them.
+6. A native or proprietary Tally company backup is distinct from a documented data-exchange export. CBM must not claim that it can directly read or recreate a native Tally backup unless an officially supported and validated exchange capability exists.
+7. Tally compatibility is an initial external integration target, not a vendor lock-in. The same canonical CBM Accounting Model must support additional Accounting System adapters through explicit exchange contracts.
+8. External exchange success does not itself create or post an Accounting record. Every imported record must pass the receiving domain's mapping, validation, authorization, reconciliation, and acceptance controls.
+
+### 6C.17 Accounting Data Import, Migration, and Onboarding
+
+1. Accounting must support complete historical migration, opening-balance migration, and selective migration for eligible source systems and approved scopes.
+2. Migration may include Chart of Accounts, Account Groups, Ledgers, opening balances, Accounting Vouchers, Journal Entries, Ledger balances, bill-wise/sub-ledger references, Cost Centres, Cost Categories, Accounting Period references, narrations, and supporting references to the extent available and valid.
+3. Data owned by Inventory, GST/Tax, HR/Payroll, Finance/Payment, Sales, Purchase, POS, or another domain must be routed to and accepted by that domain under its own rules. An accounting migration must not silently absorb source records owned by another Module.
+4. Every migration must identify the source system/company, source period, extraction method, source version where known, selected scope, accountable Business Identity/Legal Identity, mapping version, and import batch.
+5. Migration must use controlled stages: source inspection, mapping, staging, validation, duplicate detection, exception handling, preview, reconciliation, authorized approval, acceptance, and post-migration verification.
+6. Imported records must preserve available source identifiers, source voucher numbers, original dates, narrations, references, and provenance. Missing or transformed information must be identified; the system must not invent source facts.
+7. A migration must not silently omit invalid records, coerce foreign-currency values into INR, overwrite existing Books, or create duplicate transactions. Unsupported or ambiguous records must be reported as exceptions for authorized resolution.
+8. Imported historical records may become authoritative posted records only after the required validation, mapping, reconciliation, and approval. Records that cannot be verified must remain staged, rejected, or otherwise clearly unaccepted; they must not be presented as valid posted accounting.
+9. Re-running a migration or retrying an import must be idempotent within the defined source and batch identity. Duplicate protection and correction handling must preserve traceability.
+10. The migration record must retain the source, batch, results, record counts, exceptions, reconciliation outcomes, acceptance decision, and responsible authorization.
+11. Migration options must be configurable by source, Book, historical period, record type, and permitted Business Context. The selected mode must not weaken Accounting Integrity or legal retention requirements.
+
+### 6C.18 Accounting Data Export, CA/Auditor Support, and Records Access
+
+1. Accounting must support scoped exports of Chart of Accounts, Groups, Ledgers, Vouchers, Journal Entries, Ledger Transactions, Trial Balance, Financial Statements, sub-ledger/outstanding detail, Cost Centre/Category reports, Reconciliation results, and other authorized accounting records.
+2. Exports may be provided in structured machine-readable formats and human-readable reports suitable for the recipient and target system. Format availability and import compatibility must be stated accurately; a report format is not automatically a round-trip data-exchange format.
+3. An Audit Data Package may contain the selected Accounting records and necessary supporting references from other Business Modules, but cross-domain information must be obtained through the source Module's authorized contract and Permissions.
+4. CA/Auditor access must be explicitly granted, purpose-limited, scoped to the relevant Business Identity, Legal Identity, Books, periods, records, and functions, and read-only by default. A CA/Auditor designation does not independently grant access to any business or its data.
+5. An Audit Data Package must carry enough provenance and scope information to identify the Book, accountable identity, period, extraction time, selected record categories, record counts, exceptions, and reconciliation status. Its creation must be auditable.
+6. Exporting data does not transfer ownership of the original records or authorize the recipient to alter CBM Books. An export is a copy or representation for its authorized purpose.
+7. An Audit Data Package is not an audit opinion, certification, statutory return, or assurance that all external compliance requirements have been met.
+8. Accounting record retention, retrieval, archival, and legal hold must follow the applicable law for the relevant entity and record type, together with authorized platform policy. No single retention duration is presumed to apply to every Business Entity or record category.
+
+### 6C.19 Fixed Asset Accounting and Management Accounting
+
+1. Accounting includes the financial recognition and accounting records for fixed assets: acquisition cost, capitalization, depreciation, impairment, revaluation where applicable, disposal, and related disclosures and ledger treatment.
+2. Physical asset custody, location, maintenance, repair, assignment, and operational lifecycle remain separate from Fixed Asset Accounting and belong to the appropriate operational domain/capability.
+3. Accounting may include Management Accounting capabilities for internal budgets, forecasts, cost/profit analysis, and actual-versus-budget reporting.
+4. Budgets and forecasts are planning records and do not alter the General Ledger merely by being created or approved. Actual financial transactions are posted through the normal Accounting Voucher and Posting controls.
+5. Asset and Budget capabilities must be configurable and extensible, but their rules must remain consistent with applicable Accounting Frameworks and other domain ownership boundaries.
+
+### 6C.20 Configurability, Extensibility, Customization, and Applicability
+
+1. Chart of Accounts, authorized Account Groups, Ledgers, Voucher Types, numbering series, Narration rules, approval conditions, Cost Centres, Cost Categories, Accounting Dimensions, allocation templates, reporting layouts, and migration mappings must be configurable within governed limits.
+2. Standard templates may be provided for common Indian business contexts and applicable Accounting Frameworks. A template is a governed starting point, not a substitute for evaluating the actual entity and purpose.
+3. Authorized businesses may customize permitted accounting workflows, analytical structures, and reports without creating uncontrolled product forks or changing another business's configuration.
+4. Extensions may add new Accounting Dimensions, Voucher Types, source mappings, reports, and external-system adapters through explicit contracts and versioning.
+5. Applicability must identify the eligible Legal Identities, Books, business contexts, transactions, periods, users, and reporting purposes. A capability must not be enabled universally merely because it exists.
+6. Main Portal may establish protected accounting baselines, minimum data integrity rules, approved templates, supported frameworks, and mandatory controls. Lower-level settings may vary only where explicitly permitted and authorized.
+7. Business Data Isolation, Tenant Data Isolation, legal ownership, Double-entry integrity of posted records, auditability, and protected system controls are non-overridable.
+
+### 6C.21 Relationship with Platform-wide Services
+
+Accounting consumes shared Platform-wide capabilities without transferring its domain ownership. Relevant services include Authorization; Security & Trust; Approval Workflow; Audit & History Infrastructure; Event & Messaging; Integration & API; File & Document Services; and Reporting Infrastructure.
+
+Platform-wide Services may provide common execution, transport, storage, security, workflow, and presentation capabilities. Accounting remains the authoritative owner of its accounting meaning, policies, posting rules, ledgers, and financial calculations. Each service operation must preserve the relevant Service Scope, Business Context, authorization, purpose limitation, and Business/Tenant Data Isolation.
+
+### 6C.22 Applicability across the Customer Business Architecture
+
+1. Accounting Management may be made applicable to eligible Organizations, Distributors, and Shops, subject to the applicable Legal Identity, Accounting Context, Book, and accounting requirements.
+2. Accounting is not automatically mandatory or independently instantiated at every structural level. A Book must be created only where a valid accounting purpose and accountable legal/business context exist.
+3. Where multiple Shops, branches, or operating contexts belong to the same Legal Identity, they may be represented within the same statutory Books using appropriate Accounting Dimensions. A separate Professional Identity alone does not require a separate statutory Book.
+4. Where an Organization, Distributor, or Shop has a distinct Legal Identity, its statutory Books must remain separate. Shared Owner IDs, Parent Organization, common service provider, Distributor–Shop Mapping, common branding, or common Users do not merge Accounting Books.
+5. Accounting access and User assignment must follow explicit User–Business Association, User Scope Mapping, Permissions, Delegated Authority, and applicable approval controls. Accounting Book visibility must not be inferred from hierarchy, ownership, Mapping, or a person's CA/Accountant title.
+6. Authorized consolidated reports may be produced across eligible Books where applicable rules permit, but consolidation does not merge source Books or relax their data boundaries.
+
+### 6C.23 Accounting Domain History, Audit Trail, and Retention
+
+Accounting must maintain its Domain History for material accounting-domain changes and lifecycle events, including configuration, Voucher, posting, correction, reversal, period, reconciliation, migration, and export events as applicable. The comprehensive Audit Trail remains a separate Platform-wide record with its own access and retention rules under Section 17A.
+
+Accounting History must not be treated as a substitute for the Audit Trail, operational logs, event messages, or external export records. Retention and archival must follow the applicable statutory requirements for the accountable entity and record category. Where a legal hold or investigation applies, normal archival or deletion must not remove protected records.
 
 ## 7. Business Authority Scope
 
@@ -2163,6 +2494,40 @@ The following statements summarize rules that must remain true across all future
 89. Date/time, language, number/currency, and unit display preferences must not alter authoritative timestamps, legal identity particulars, stored amounts, calculations, source quantities, or source units.
 90. GST/Tax, Accounting, HR/Payroll, Inventory/Product, Finance/Payment, Business Identity, and other domain-specific responsibilities remain owned by their respective Business Modules. Global Business Settings may provide defaults/reference data without assuming domain ownership.
 
+91. Accounting Management is an independent Business Module with authoritative ownership of its Accounting Policies, Chart of Accounts, Account Groups, Ledger Accounts, Voucher Types, Accounting Vouchers, Journal Entries, Ledger Postings, and Book-specific accounting records. It does not own the originating transactions or domain rules of other Business Modules.
+92. CBM's default Accounting model is Double-entry. Every posted Accounting Entry set must have equal total debit and credit. Accrual basis is the default for general-purpose Books; alternative recognition bases may be used only where applicable law and the relevant Accounting Framework permit them and an authorized policy enables them.
+93. Every statutory Book of Accounts has exactly one accountable Legal Identity. Separate Legal Identities maintain separate authoritative statutory Books. Common Owner IDs, structural hierarchy, Service Provider association, shared Professional Identity branding, or Business Mapping never merges Books.
+94. Multiple Professional Identities, branches, Shops, or operating locations under the same Legal Identity may be attributed within shared statutory Books through authorized Accounting Dimensions; a separate Professional Identity alone does not require a separate statutory Book.
+95. Multiple Books under one Legal Identity require explicit accounting purposes, policies, ownership, scope, and reconciliation relationships. They must not create competing or ambiguous authoritative statutory records.
+96. Consolidated reporting across eligible Books or Legal Identities is allowed only under applicable accounting/reporting rules and explicit authority. It does not merge underlying Books, Legal Identities, ownership, or Business/Tenant Data Boundaries.
+97. Accounting Context, Book applicability, access, and posting authority are not inferred from Organization, Distributor, Shop, Tenant, Owner, User Role, Subscription Coverage, Service Provider association, or Distributor–Shop Mapping.
+98. The applicable Accounting Framework is selected according to actual legal/entity classification, regulatory status, sector, reporting purpose, and effective authoritative requirements. Accounting framework or policy configuration cannot override mandatory requirements.
+99. The default Financial Year remains 1 April through 31 March, subject to Section 6B and applicable domain requirements. Accounting Periods and closing controls are owned by Accounting.
+100. The Chart of Accounts is hierarchical and includes Account Groups and Ledger Accounts. Protected foundational classifications and authorized business-specific extensions must coexist without undermining reporting or framework integrity.
+101. Voucher Types classify Accounting Vouchers and govern numbering, structure, validation, approval, and posting. Authorized custom Voucher Types cannot bypass system controls, applicable Accounting Framework requirements, or source-domain ownership.
+102. Every posted Accounting Voucher has a balanced set of debit and credit entries and a clear Book, period, source/provenance, and authorized posting reference. Voucher, Journal Entry, and Ledger Posting are related but distinct concepts.
+103. Posted Accounting records must not be silently overwritten or destructively edited. Corrections require traceable, authorized reversal, adjustment, or correction records linked to the original record.
+104. General Ledger balances are authoritative within a Book. Sub-ledger and bill-wise/outstanding detail must reconcile to the corresponding control Ledger Accounts. Original Customer/Supplier identities and commercial invoices remain owned by their source domains.
+105. Cost Centres, Cost Categories, and other Accounting Dimensions are analytical accounting constructs. They do not create or alter Business Entities, Legal Identities, Business Structure, Ownership Links, User Scope, or Permissions.
+106. Budgets and forecasts are Management Accounting/planning records. Their creation or approval does not itself post a financial transaction or change the General Ledger.
+107. Accounting owns fixed-asset financial recognition and treatment, including capitalization, depreciation, impairment, revaluation where applicable, and disposal records. Physical asset custody and operational lifecycle remain separate responsibilities.
+108. Accounting owns its financial statement calculations and accounting reports. Shared Reporting Infrastructure may distribute or analyse them but does not assume accounting data or calculation ownership.
+109. Sales, Purchase, POS, Inventory, GST/Tax, Finance/Payment, HR/Payroll, Subscription/Billing, and other domains retain ownership of their originating transactions, documents, operational states, statutory determinations, and source records. Accounting owns only the resulting accounting interpretation and accounting records.
+110. A source transaction, Event Message, API response, invoice issuance, payment success, stock movement, payroll calculation, or POS checkout does not by itself prove that the corresponding Accounting Voucher has been validated and posted.
+111. Source-to-accounting mappings and posting rules must be authorized, versioned, effective-dated, idempotent, and traceable. Corrections to source transactions must not silently rewrite previously posted accounting records.
+112. The External Accounting Data Exchange Model, including the Tally Data Exchange Model, is separate from the canonical Accounting Domain Model. Tally-specific structures, fields, formats, and version behaviour are not authoritative CBM Accounting concepts.
+113. The Tally Compatibility Adapter uses documented, version-supported exchange capabilities and the Platform-wide Integration & API and security controls. Tally compatibility does not make CBM dependent on Tally or transfer other domain records to Accounting.
+114. A native/proprietary Tally company backup is distinct from a documented Tally data-exchange export. CBM must not claim direct backup-file compatibility without an officially supported and validated capability.
+115. Accounting Data Migration must identify its source, accountable identity, Book, period, mapping, and batch; stage, validate, detect duplicates, handle exceptions, reconcile, obtain authorization, preserve provenance, and verify accepted records.
+116. Imported historical data is not authoritative posted accounting merely because it was uploaded. It becomes accepted/posted only after required validation, reconciliation, and approval. Unsupported or ambiguous records remain explicit exceptions.
+117. Migration retries must be duplicate-safe and idempotent within their defined source and batch identity. Source identifiers, voucher references, dates, narrations, and available provenance must be preserved.
+118. CA/Auditor access and Audit Data Package creation require explicit, purpose-limited, Business/Legal Identity, Book, period, and record scope, with read-only access by default. A CA/Auditor title alone grants no access.
+119. An Audit Data Package is a scoped data/report export, not an audit opinion, certification, statutory return, or assurance of compliance. Cross-domain supporting records are included only through their owning Module's authorized contract and Permissions.
+120. Accounting record retention follows the applicable law for the accountable entity and record category plus authorized platform policy. No single retention period is presumed to apply to every CBM business or record.
+121. Accounting operates within the fixed India-only and INR-only product boundaries. Foreign-currency accounting and multi-currency operation are outside the approved scope; source data containing foreign-currency transactions must not be silently converted to INR.
+122. Business/Tenant Data Isolation, Legal Identity ownership, Book ownership, Double-entry integrity, posting traceability, and protected Accounting controls are non-overridable.
+
+
 
 ## 20. Illustrative scenarios
 
@@ -2292,6 +2657,8 @@ This baseline consolidates:
 3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
 4. The project owner's explicit approval on 18 November 2026 of the Platform-wide Services Architecture Layer, its four Service Scopes, three Category Groups, fifteen Categories, and the Category → Service → Capability conceptual hierarchy, including the responsibility boundaries and cross-category safeguards recorded in Section 6A.
 5. The project owner's explicit approval on 18 November 2026 of the India-only Global Business Settings scope, its six approved setting domains, three distinct governance paths, non-overridable India-specific platform boundaries, and the separation between shared defaults/reference settings and Business Module-owned rules recorded in Section 6B.
+6. The project owner's explicit approval on 19 November 2026 of Accounting Management as an independent Business Module and its complete business/logical architecture scope recorded in Section 6C, including Double-entry by default, accrual as the default recognition basis subject to legal/framework applicability, Accounting Contexts and Books of Accounts, Tally-similar canonical accounting concepts, Accounting Controls, Reconciliation, Financial Reporting, Management Accounting, Fixed Asset Accounting, source-domain ownership boundaries, and governed migration/export and auditor support.
+7. The project owner's explicit approval on 19 November 2026 that the Tally Data Exchange Model and Tally Compatibility Adapter remain separate from the canonical CBM Accounting Domain Model, with version-aware, documented external data-exchange compatibility and no assumption of native Tally backup-file compatibility.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
@@ -2312,6 +2679,25 @@ Official GST references consulted for the legal architecture boundary:
 
 These references support the logical architecture boundaries. Current law and official GST Portal procedures must be rechecked before implementation.
 
+
+Official accounting and interoperability references consulted for Section 6C:
+
+- [India Code — Companies Act, 2013, Section 128 (Books of Account)](https://www.indiacode.nic.in/bitstream/123456789/2114/5/A2013-18.pdf?v=20260611082938): Section 128 states that companies must keep books on accrual basis and according to the double-entry system; this company-specific statutory requirement must not be generalized to every business type.
+- [India Code — Companies Act, 2013, Section 129 (Financial Statements)](https://www.indiacode.nic.in/bitstream/123456789/2114/5/A2013-18.pdf?v=20260611082938): financial statement requirements and applicable notified standards for companies.
+- [Ministry of Corporate Affairs — Companies (Accounting Standards) Rules, 2021](https://www.mca.gov.in/bin/dms/getdocument?mds=RKk43Bmg99ksfV0bUGr6XA%253D%253D&type=open): official notified Accounting Standards rules for the classes of companies to which they apply.
+- [ICAI — Accounting Standards as on 1 April 2025](https://www.icai.org/post/accounting-standards-as): professional reference for Accounting Standards; applicability must be checked against the relevant entity and current law.
+- [ICAI — Compendium of Indian Accounting Standards 2025–2026](https://www.icai.org/post/compendium-of-indian-accounting-standards): reference to Ind AS and amendments included in the cited compendium.
+- [TallyHelp — Accounting in TallyPrime](https://help.tallysolutions.com/tally-prime/accounting/accounting-in-tally-prime/): Chart of Accounts, Groups, Ledgers, Voucher Types, bill-wise tracking, Cost Centre allocation, and accounting reports.
+- [TallyHelp — Ledgers and Groups in TallyPrime](https://help.tallysolutions.com/ledgers-and-groups-in-tallyprime/): Group and Ledger classification.
+- [TallyHelp — Voucher Types in TallyPrime](https://help.tallysolutions.com/voucher-types-tally/): predefined and configurable Voucher Types, numbering, entry controls, and Voucher Classes.
+- [TallyHelp — Manage Cost Centres in TallyPrime](https://help.tallysolutions.com/cost-centre/): hierarchical Cost Centres, income/expense allocations, and analysis.
+- [TallyHelp — Create Cost Categories in TallyPrime](https://help.tallysolutions.com/cost-categories/): parallel allocation across Cost Centres/Profit Centres.
+- [TallyHelp — Allocate Bills for Payments or Receipts](https://help.tallysolutions.com/allocate-bills-for-payments-or-receipts/): bill-wise outstanding and settlement references.
+- [TallyHelp — Import Data from JSON or XML into TallyPrime](https://help.tallysolutions.com/import-data-from-xml-or-json/): current release-specific import formats and the distinction between Masters and Transactions.
+- [TallyHelp — Export Data in TallyPrime](https://help.tallysolutions.com/export-data-in-tally/): structured and human-readable export capabilities.
+- [TallyHelp — Import Data FAQ](https://help.tallysolutions.com/import-data-faq/): full-data exchange workflows and Masters-before-Transactions guidance.
+
+These sources support the logical accounting concepts and interoperability boundaries. Tally documentation is used as a compatibility reference, not as authority for CBM's internal Accounting Model. Accounting standards, legal applicability, statutory retention, and exchange-format compatibility must be revalidated against current authoritative sources before implementation or compliance use.
 
 Official technical references consulted for security and SaaS architecture boundaries:
 
