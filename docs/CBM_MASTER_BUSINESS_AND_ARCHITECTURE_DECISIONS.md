@@ -19,23 +19,24 @@
 5. [Stable Core principles](#4-stable-core-principles)
 6. [Business entity and ownership model](#5-business-entity-and-ownership-model)
 7. [Service-provider architecture](#6-service-provider-architecture)
-8. [Business Authority Scope](#7-business-authority-scope)
-9. [Delegated Authority](#8-delegated-authority)
-10. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
-11. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
-12. [Approval Workflow governance](#11-approval-workflow-governance)
-13. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
-14. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
-15. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
-16. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
-17. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
-18. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
-19. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
-20. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
-21. [Cross-concept invariants](#19-required-cross-concept-invariants)
-22. [Illustrative scenarios](#20-illustrative-scenarios)
-23. [Documentation governance](#21-documentation-governance)
-24. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
+8. [Platform-wide Services Architecture](#6a-platform-wide-services-architecture)
+9. [Business Authority Scope](#7-business-authority-scope)
+10. [Delegated Authority](#8-delegated-authority)
+11. [Users, Roles, and Permissions](#9-users-roles-permissions-and-action-authorization)
+12. [Configuration governance](#10-configuration-governance-defaults-inheritance-and-overrides)
+13. [Approval Workflow governance](#11-approval-workflow-governance)
+14. [Distributor–Shop relationships and mapping](#12-distributorshop-business-relationships-and-mapping)
+15. [Business Entity Lifecycle and State Management](#13-business-entity-lifecycle-and-state-management)
+16. [Subscription, Plans, Entitlements, and Billing](#14-subscription-plans-entitlements-and-billing)
+17. [User Account Lifecycle and Initial Credential Establishment](#15-user-account-lifecycle-and-initial-credential-establishment)
+18. [Sub-Portal migration and service continuity](#16-sub-portal-migration-and-service-continuity)
+19. [Data archival and object-storage principles](#17-data-archival-and-object-storage-principles)
+20. [Domain History and Audit Trail Management](#17a-domain-history-and-audit-trail-management)
+21. [Stable Core, Configurable, Customizable, and Extensible principles](#18-stable-core-configurable-customizable-and-extensible-design-principles)
+22. [Cross-concept invariants](#19-required-cross-concept-invariants)
+23. [Illustrative scenarios](#20-illustrative-scenarios)
+24. [Documentation governance](#21-documentation-governance)
+25. [Source basis and decision provenance](#22-source-basis-and-decision-provenance)
 ---
 
 ## 1. Purpose, authority, and use of this document
@@ -764,6 +765,186 @@ A Service Provider does not become the owner of the Organization, Distributor, S
 A customer business may migrate from one Service Provider to another under Main Portal governance. Such a migration changes the service-provider relationship only. It does not change the customer's Business Identity, ownership, data rights, or internal business structure.
 
 ---
+
+## 6A. Platform-wide Services Architecture
+
+### 6A.1 Purpose and architectural position
+
+**Platform-wide Services** is a distinct Architecture Layer and Capability Group within the CBM architecture. It provides shared, governed capabilities that may be used by multiple business-management modules, service-provider contexts, tenants, and business contexts without transferring ownership of their domain responsibilities to the shared service layer.
+
+The layer exists to prevent every Business Module or portal context from independently rebuilding common capabilities, while preserving clear domain ownership, authority, data boundaries, and service contracts. It is a logical architecture classification. It does not prescribe a deployment topology, programming language, framework, database, vendor, process boundary, microservice count, or separate application.
+
+Platform-wide Services must follow the architecture-wide design doctrine in Section 2.6 and the Stable Core constraints in Sections 4 and 18. Their shared nature must never be used to create a universal data-access privilege or bypass a business domain's authorization rules.
+
+### 6A.2 Approved Service Scopes
+
+Every Platform-wide Service must declare the scope or scopes in which it is available and applicable. The four approved Service Scopes are:
+
+1. **Ecosystem-wide:** A service capability governed centrally for use across the CBM Ecosystem. Main Portal retains supreme governance. Ecosystem-wide availability does not mean every Sub-Portal, Tenant, Business, User, or process has unrestricted access to every service operation or data set.
+2. **Service Provider-scoped:** A service capability operating within the authorized context of Main Portal or a particular Sub-Portal as a Service Provider. One Sub-Portal's service-provider context must not expose another Sub-Portal's private operational data or authority.
+3. **Tenant-scoped:** A service capability operating within a particular Organization's Tenant context. Tenant-scoped operation must preserve strict Tenant and Business Data Isolation.
+4. **Business-context-scoped:** A service capability operating for a specifically identified Business Entity, business unit, location, relationship, or other authorized business-operating context within the applicable Tenant or Service Provider authority. Its exact eligible context must be explicit.
+
+A Service Scope classifies where a service is governed, made available, or applied. It is not a Business Authority Scope, User Assigned Authority Scope, Role, Permission, Ownership Link, Service Provider relationship, Tenant identity, or Business Relationship. A Service Scope never grants access by itself.
+
+A service may support more than one of the four scopes where its responsibility genuinely requires it. Each supported scope and its boundary must be stated explicitly; a broad scope must not be inferred merely because a service is shared. Where one service supports multiple scopes, data, configuration, policy, credentials, events, and operational actions must remain separated according to their respective contexts.
+
+### 6A.3 Approved Service Category Groups and Categories
+
+Platform-wide Services are organized into three approved groups and fourteen approved categories. The groups classify the broad architectural responsibility; the categories classify related service responsibilities. The category taxonomy is:
+
+#### Group A — Platform Foundation Services
+
+**A1. Identity & Authentication Services**
+
+Shared capabilities for identity lifecycle coordination and authentication, including credential and password management, OTP, MFA, authenticator lifecycle, session and device management, account recovery, and authentication-provider integration.
+
+Identity represents the relevant person, account, or system principal. Authentication establishes or verifies that principal's claimed identity. This category does not determine what the authenticated principal may access or do; that is governed by Authorization & Policy Evaluation and the applicable CBM authorization model. It must preserve the distinct User Account, User–Business Association, Credential/Authenticator Lifecycle, and Service Provider/Customer identity boundaries already established in this Master.
+
+**A2. Authorization & Policy Evaluation Services**
+
+Shared capabilities for evaluating whether a requested action is permitted under the applicable CBM authority, scope, permission, policy, relationship, and control conditions. Responsibilities may include permission-decision evaluation, role-based and User-specific permission evaluation, Business Available Authority Scope and User Assigned Authority Scope checks, Delegated Authority constraints, policy-decision evaluation, and recording authorization decision context for the comprehensive Audit Trail.
+
+This category is an evaluation capability, not a new owner or source of truth for the underlying business rules and assignments. It must consume and respect the authoritative CBM concepts and records defined in Sections 4, 7, 8, 9, 10, and 11. It must not redefine, merge, replace, or silently administer Business Authority Scope, User Scope Mapping, Roles, Permissions, Delegated Authority, Approval Workflow, Ownership, or Business Relationships. It must not infer authority from ownership, hierarchy, service-provider association, Mapping, authentication success, or service availability.
+
+Authorization evaluation must enforce all applicable conditions together. A successful decision for one action, entity, purpose, or context must not be reused as a broader grant for another. A denial or missing required condition must fail closed. Main Portal's supreme authority, downward-only delegation, Stable Core constraints, and strict Business/Tenant Data Isolation take precedence over subordinate policies.
+
+**A3. Security & Trust Services**
+
+Shared security and trust capabilities, including cryptographic key management, secrets management, encryption support, certificate and trust-material lifecycle, secure token validation, security policy enforcement, abuse and attack protection, rate-limiting infrastructure, security risk signals, and security-incident support.
+
+This category provides cross-cutting security controls and trust infrastructure. It does not replace Identity & Authentication, does not decide business action Permissions, and does not become an alternative authorization authority. Identity proof, authentication, authorization, security enforcement, and audit recording remain distinct responsibilities that cooperate through explicit contracts.
+
+Security controls must protect every supported Service Scope and must not weaken tenant boundaries or allow a lower authority to override Main Portal's mandatory security policies. Security telemetry and operational signals do not replace the comprehensive Audit Trail.
+
+**A4. Configuration & Policy Management Services**
+
+Shared capabilities for configuration and policy definition and resolution, including configuration registry/schema, defaults, inheritance resolution, authorized overrides, policy versioning, effective dates, validation, and configuration-change history.
+
+This category must implement, not replace or weaken, the configuration governance already approved in Section 10. Defaults and inheritance flow downward; overrides require explicit authority and permission; system-defined bounds and Stable Core constraints remain non-overridable. Configuration availability does not itself grant permission to change a setting. Configuration and policy applicability must be explicit for the relevant Service Scope and business context.
+
+#### Group B — Shared Functional Services
+
+**B1. Communication & Notification Services**
+
+Shared capabilities for human-facing communication and notification. Communication responsibilities include message delivery through approved channels such as email, SMS, and WhatsApp; delivery-provider management and failover; delivery status; retries and failure handling. Notification responsibilities include determining what notification is required, routing it to the intended recipient/channel, applying notification preferences, and managing notification templates and language variants.
+
+Notification determines and coordinates the intended communication; Communication handles delivery. These are related but distinguishable responsibilities and must not be conflated. All CBM-generated outbound communication remains subject to the absolute, non-overridable prohibition on sending URLs, hyperlinks, URL-bearing buttons, or URL-resolving QR codes for any purpose or through any channel (Section 4.11 and Section 19). Provider capability or customer configuration cannot override this rule.
+
+**B2. File, Document & Storage Services**
+
+Shared capabilities for file and document handling, including upload/download coordination, attachments, metadata, versioning, file validation, malware scanning, access-controlled retrieval, document lifecycle support, provider-neutral object-storage abstraction, archival integration, and retention/preservation support.
+
+Operational file handling, business document management, object-storage infrastructure, and long-term archival are related but distinct responsibilities. This category must respect the provider-neutral Object Storage Abstraction and archival requirements in Section 17, as well as the separate retention and access requirements for Domain History and Audit Trail in Section 17A. File or storage availability does not itself authorize access to the stored content.
+
+**B3. Workflow & Approval Services**
+
+Shared capabilities for defining and executing workflows, including approval routing, single/multiple/sequential/parallel/conditional approval patterns, escalation, delegated approval handling, workflow versioning, and execution history.
+
+The distinction between approval governance and workflow execution is mandatory. Section 11 defines whether approval is required, eligible approvers, and the approval pattern permitted for a business action. This category provides the shared execution capability for those rules; it must not independently invent approval requirements or eligible approvers. Approval never grants the initiating User the action Permission that the User otherwise lacks. Workflow execution must preserve the applicable User Scope, Permission, Delegated Authority, Main Portal governance, and Audit Trail requirements.
+
+**B4. Integration & API Services**
+
+Shared capabilities for controlled interaction with external systems and consumers, including API lifecycle and versioning, API access controls, external-provider connectors, integration registry, webhook configuration and delivery, interface validation, rate limits, and integration monitoring.
+
+This category governs the shared integration boundary and interface capabilities. Business rules, domain validation, and authoritative business records remain owned by the relevant Business Module or domain. An API or integration credential does not itself grant business authority; each operation must be authorized in its actual business, Tenant, Service Provider, and User/system-principal context.
+
+The absolute no-URL rule in Sections 4.11 and 19 applies to CBM-generated outbound communications to people. This section does not create a new decision that prohibits URLs as technical endpoint addresses or payload fields in system-to-system API/webhook contracts; such interfaces remain subject to security, authorization, privacy, and integration governance. Human-facing communication must never use this distinction as a route to send a prohibited URL or link.
+
+**B5. Event & Messaging Services**
+
+Shared capabilities for internal and platform event distribution and asynchronous messaging, including event publication and subscription, routing, queues, delivery coordination, retries, dead-letter handling, event schema definition and versioning, and support for idempotent processing.
+
+This category enables decoupled communication between authorized capabilities and Business Modules through explicit event/message contracts. It is distinct from B1 Communication & Notification Services, which handles human-facing communications, and B4 Integration & API Services, which handles external/system interface boundaries. An event may trigger a notification or an external integration, but the event-distribution responsibility remains distinct from those downstream responsibilities.
+
+An event or message is not, by itself, an authorization grant, approval, command acceptance, or proof that a business transaction has completed. Producers and consumers must enforce the applicable authorization, Service Scope, Tenant/Business Data Isolation, purpose limitation, and data-minimization rules. Events must not expose one Tenant's or Business's data to another context merely because a consumer is subscribed to a shared channel. Subscription eligibility and access to event payloads must be explicitly authorized. Event contracts must identify their meaning, producer, permitted consumers, versioning expectations, and relevant context sufficiently to prevent ambiguous interpretation.
+
+Event delivery and processing must tolerate retries and duplicate delivery where applicable; consumers must not assume that a message is delivered exactly once. Idempotent handling and explicit failure/recovery behaviour are required where repeated processing could cause duplicate or inconsistent business effects. A successful publication or delivery does not replace the authoritative transaction record or its domain lifecycle.
+
+The event/messaging infrastructure is not the Audit Trail. It must not merge with, replace, or become the retention source of truth for Domain History or Audit Trail. Relevant events and actions must still be recorded in the appropriate Domain History and/or comprehensive Audit Trail under Section 17A, independently of message delivery, queue retention, or dead-letter handling.
+
+**B6. Localization & Reference Data Services**
+
+Shared capabilities for language and locale support, translation, timezone handling, date/number formatting, currency metadata, units of measure, country/state/region data, address formats, and other approved common reference data.
+
+Generic Reference Data must remain distinct from a Business's own Master Data. For example, a shared country or unit-of-measure reference does not become a customer's Organization-specific Product Category, Price List, Customer, Supplier, or other Business Master Data. Reference data access and permitted overrides must follow Main Portal governance and the applicable business context.
+
+**B7. Search, Reporting & Analytics Infrastructure**
+
+Shared infrastructure capabilities for search, indexing, query processing, report generation, export processing, analytics, aggregation, and scheduled report execution.
+
+This category provides common infrastructure and shared execution capabilities; it does not take ownership of the business meaning, definitions, calculations, or authoritative records of a domain report. A report whose business meaning belongs to Accounting remains governed by the Accounting domain; Inventory, HR, and other domain reports remain governed by their respective domains. Search, reporting, analytics, and export results must enforce the same Data Isolation, Service Scope, User Assigned Authority Scope, Permissions, purpose limitation, and Audit Trail requirements as direct access to the underlying data.
+
+#### Group C — Platform Operations & Governance Services
+
+**C1. Audit & History Infrastructure**
+
+Shared infrastructure capabilities supporting Domain History and the comprehensive Audit Trail, including event capture pipelines, integrity protection, access-control enforcement, retrieval, export, retention, archival, and integrity verification.
+
+This category must preserve the mandatory separation in Section 17A. Domain-specific History and the comprehensive Audit Trail are separate record categories with different purposes, contents, permissions, and retention rules. They must never be merged into one record set, one undifferentiated log, or one permission domain. Shared infrastructure does not mean shared records or shared authorization. Audit & History Infrastructure does not redefine which business events belong in a particular Domain History or which system events must be recorded in the Audit Trail.
+
+**C2. Observability & Monitoring Services**
+
+Shared operational capabilities for logs, metrics, distributed traces, service health, performance/error/availability monitoring, operational alerting, and diagnostic context.
+
+Observability is for operating, diagnosing, and improving service reliability. It is not Domain History and is not the comprehensive Audit Trail. An operational signal such as an API error, latency spike, or service outage may be relevant to operations without being a business-history event; a security-sensitive or business-significant action must still be recorded in the Audit Trail where required. Operational logs and traces must not be treated as a substitute for the governed audit record, and access to them must respect sensitive-data and Tenant boundaries.
+
+**C3. Background Processing & Scheduling Services**
+
+Shared capabilities for asynchronous/background jobs and scheduled or recurring work, including job dispatch and execution coordination, retry and failure handling, priorities, workload control, idempotent job support, and long-running task coordination.
+
+Examples include scheduled report generation, bulk notification delivery, exports, archival tasks, and reconciliation. This category provides execution and scheduling infrastructure; the business meaning, authorization, and final state changes remain owned by the relevant domain. Background execution must retain the initiating or system principal, applicable business context, authorization basis, and required Audit Trail context. A scheduled job does not acquire broader authority merely because it runs without an interactive User.
+
+**C4. Platform Administration & Operational Management Services**
+
+Shared capabilities supporting administration and operation of the CBM platform and its service-provider ecosystem, including platform service registry, service lifecycle administration, Service Provider administration support, operational configuration, capacity/resource management, backup and disaster-recovery coordination, maintenance, and operational readiness.
+
+Main Portal retains supreme ecosystem governance and control. A Sub-Portal may administer only the service-provider and operational matters delegated to it by Main Portal. Tenant or Business administrators may manage only matters explicitly delegated to their scope. This category does not grant any administrative actor broader authority, cross-Sub-Portal access, or customer-business ownership. Backup and disaster-recovery coordination must preserve Data Isolation, identity and ownership integrity, and the separate retention obligations for business data, Domain History, and Audit Trail.
+
+### 6A.4 Category, Service, and Capability levels
+
+The approved conceptual hierarchy has three distinct levels:
+
+- **Category:** A governed functional grouping of related Platform-wide Service responsibilities.
+- **Service:** A defined responsibility or cohesive service offering within a Category, with an explicit purpose, scope, consumers, inputs/outputs, ownership, policy boundaries, and service contract.
+- **Capability:** A specific function or operation that a Service makes available to its authorized consumers.
+
+For example, within B1 Communication & Notification Services, Communication Services may include Email Delivery, SMS Delivery, and WhatsApp Delivery; Notification Services may include Notification Routing, Notification Preference Management, and Notification Template Management. These examples illustrate the hierarchy and do not require a separate deployment component for each item.
+
+The three levels are conceptual architecture and governance distinctions. They do not mean that every Category, Service, or Capability must be implemented as a separate microservice, application, process, database, vendor product, or independently deployed unit. Technical decomposition must be decided separately when implementation architecture is authorized.
+
+Each Service and Capability must remain within its Category's approved responsibility and must identify any dependency on other services. A capability must not be duplicated under another Category in a way that creates conflicting ownership or competing sources of truth. Where responsibilities cooperate, their contracts and decision ownership must remain explicit.
+
+### 6A.5 Cross-category responsibility and boundary rules
+
+1. **Identity, authentication, authorization, and security are distinct.** Identity identifies the principal; authentication verifies the principal; authorization evaluates whether the principal may perform a specific action in a specific context; Security & Trust provides cross-cutting protective controls. One responsibility must not silently absorb or replace another.
+2. **Authorization evaluates approved CBM rules; it does not create them.** The existing Business Authority Scope, User Assigned Authority Scope, User Scope Mapping, Roles, Permissions, Delegated Authority, approval requirements, and Main Portal governance remain authoritative in their respective domains.
+3. **Approval is not authorization.** Workflow & Approval executes an approved approval requirement. Approval does not supply missing action Permission, User scope, business authority, or Stable Core eligibility.
+4. **Notification, delivery, events, and integrations are distinct.** Notification determines what should be communicated to a person; Communication delivers it; Event & Messaging distributes internal/platform events; Integration & API provides external/system interfaces.
+5. **Domain ownership remains with the relevant Business Module.** Shared services provide common capabilities and contracts. They do not take ownership of Accounting, Inventory, HR, POS, or other module-specific business rules or authoritative records merely because they process or transport related data.
+6. **Audit, History, and Observability remain distinct.** Audit & History Infrastructure supports the separately governed Domain History and Audit Trail records. Observability & Monitoring supports operational diagnosis. Neither operational logs nor event queues replace the Audit Trail.
+7. **Shared infrastructure never means shared business access.** Every service operation, event, message, search result, report, export, file retrieval, and background job must preserve the relevant Service Scope, valid business context, authorization decision, purpose limitation, and strict Data Isolation.
+8. **No authority by technical connectivity.** A service registration, API key, integration connection, event subscription, queue membership, file identifier, or successful authentication does not itself create Business Authority Scope, User Assigned Authority Scope, a Role, Permission, Ownership Link, or Business Relationship.
+9. **Main Portal governance remains supreme.** Sub-Portals and customer businesses may configure or operate only the services and settings within their expressly delegated authority. No Platform-wide Service may enable upward authority, peer Sub-Portal control, or a lower-level override of Stable Core rules.
+10. **No assumed category expansion.** A capability that appears useful does not automatically create a new Category or alter the approved taxonomy. A new Category or a material change to a Category's responsibility requires explicit project-owner approval and an update to this Master.
+
+### 6A.6 Applicability and design obligations
+
+Every proposed Platform-wide Service, Service, and Capability must define, as applicable:
+
+- Its business purpose and responsibility boundary.
+- Its Category and any dependent Categories/Services.
+- Its supported Service Scope(s) and eligible contexts.
+- Its provider/operational ownership and Main Portal governance boundary.
+- Its authorized producers, consumers, Users, and system principals.
+- The business data and metadata it may process, and the data it must not expose.
+- Its authorization, approval, and security requirements.
+- Its configuration, inheritance, customization, and permitted override rules.
+- Its applicability to business types, entities, modules, locations, and operating conditions.
+- Its failure, retry, recovery, continuity, retention, and audit requirements where relevant.
+- Its service contract, versioning, and compatibility expectations where relevant.
+
+These are architecture-definition obligations, not an approval of a specific technical implementation. The detailed design of any individual service remains subject to the relevant domain decisions and explicit project authorization.
 
 ## 7. Business Authority Scope
 
@@ -1791,6 +1972,19 @@ The following statements summarize rules that must remain true across all future
 63. OTP is a one-time, short-lived verification secret. Email, SMS, and WhatsApp are supported delivery channels under the approved account-establishment process; OTP is not treated as compromise-proof.
 64. CBM must never send any URL, hyperlink, URL-bearing button, or URL-resolving QR code to any person for any purpose or through any outbound communication channel. Account establishment and recovery must be completed without URL-based actions.
 65. Invited is not a User Account state and the CBM account model does not use invitation links. Authorized User provisioning and the approved initial credential-establishment process are used instead.
+66. Platform-wide Services is a distinct Architecture Layer and Capability Group that provides shared governed capabilities without taking ownership of Business Module domain rules or authoritative business records.
+67. The four approved Platform-wide Service Scopes are Ecosystem-wide, Service Provider-scoped, Tenant-scoped, and Business-context-scoped. Service Scope classifies service applicability and availability; it is not Business Authority Scope, User Assigned Authority Scope, ownership, or a Permission.
+68. Platform-wide Services is organized into three approved groups—Platform Foundation Services, Shared Functional Services, and Platform Operations & Governance Services—and fourteen approved Categories as defined in Section 6A. A new Category or material change to the approved taxonomy requires explicit project-owner approval.
+69. Category, Service, and Capability are distinct conceptual architecture levels. Their distinction does not prescribe separate applications, processes, databases, vendors, microservices, or deployment units.
+70. Identity, Authentication, Authorization, and Security & Trust are separate responsibilities. Authorization evaluates the existing approved CBM authority, scope, permission, delegation, and approval rules; it does not replace or redefine their authoritative sources.
+71. Approval execution does not grant missing action Permission, User Assigned Authority Scope, Business Available Authority Scope, or other authority.
+72. Communication & Notification, Event & Messaging, and Integration & API are separate responsibilities for human-facing communication, internal/platform event distribution, and external/system interfaces respectively. Technical connectivity, authentication, event subscription, or API credentials do not grant business authority.
+73. Event publication, delivery, or consumption does not itself prove that a business transaction has completed or grant permission to access or change business data. Event processing must preserve context, authorization, idempotency, and Data Isolation.
+74. Event & Messaging infrastructure, operational logs/traces/metrics, Domain History, and the comprehensive Audit Trail are distinct. Event queues and observability data never replace the separately governed Domain History or Audit Trail.
+75. Audit & History Infrastructure must preserve the mandatory separation of Domain History and Audit Trail in their records, purposes, access permissions, and retention rules.
+76. Every Platform-wide Service operation, event, message, search result, report, export, file retrieval, and background job must preserve the applicable Service Scope, business context, authorization, purpose limitation, and strict Business/Tenant Data Isolation.
+77. A service's shared or ecosystem-wide availability does not grant unrestricted access to its operations or data. Service Scope never substitutes for explicit authorization.
+78. Platform-wide Services do not alter Main Portal's permanent supreme authority, downward-only delegation, ownership boundaries, business structure, or any other Stable Core constraint.
 
 
 ## 20. Illustrative scenarios
@@ -1914,6 +2108,7 @@ This baseline consolidates:
 1. The user-provided project context document **CBM_Project_Context_and_Decisions_2026-11-17** (provided in the conversation as the CBM project context text), including its confirmed business, service-provider, ownership, mapping, continuity, migration, archival, and Stable Core principles.
 2. The subsequent project-owner confirmations and clarifications in the conversation through **18 November 2026**, including the unified Shop entity and simplified Business Structure (Organization → Distributor / Shop); exactly one mandatory Parent Organization for every Distributor and Shop; identical Owner ID sets for an Organization and all of its direct Distributor/Shop children within the Customer Business Architecture, while Service Provider ownership remains independent; the Legal Identity and Professional Identity applicability matrix; Organization Network Configurations; GSTIN eligibility independence; generic GST Registration Assignment; two-way Distributor–Shop Secret Code verification with expiry, one-time use, rate limiting, and revocation; Mapping-Type-limited transactions and information exchange; Business Entity Lifecycle parent-child cascades and immutable restoration snapshots; separate Subscription, Plan, Add-on, Entitlement, Coverage, Usage Limit, Invoice, and Payment concepts; separate User Account, User–Business Association, and Credential/Authenticator lifecycles; Organization-configurable initial credential establishment; one Organization-scoped Customer Business User Account per account; immutable portal-wide User Code; the absolute no-URL/no-link outbound communication rule; explicit User Scope Mapping; and the strict separation, contents, access, and retention distinctions between Domain History and Audit Trail.
 3. Official GST reference material used for the logical architecture boundary: Section 25 of the CGST Act, applicable CGST Rules for separate registration at multiple places of business, and GST Portal taxpayer-search and registration guidance.
+4. The project owner's explicit approval on 18 November 2026 of the Platform-wide Services Architecture Layer, its four Service Scopes, three Category Groups, fourteen Categories, and the Category → Service → Capability conceptual hierarchy, including the responsibility boundaries and cross-category safeguards recorded in Section 6A.
 
 Where a later explicit project-owner clarification refined an earlier general description, the later clarification governs. This includes the precise distinction between:
 
