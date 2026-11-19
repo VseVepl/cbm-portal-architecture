@@ -128,3 +128,13 @@ The review found that the Master baseline contains substantive lifecycle rules f
 The review also found that detailed end-to-end workflows are still missing or incomplete for several domains, notably Sales, Purchase & Procurement, Inventory, HR, Payroll, POS offline recovery, GST return preparation/filing, Finance payment execution/settlement, Asset Management, Planning/Budget, Counterparty duplicate merge/split, Platform-wide service operations, notification delivery, integration/event recovery, and full customer onboarding/offboarding. Cross-Module journeys such as Order-to-Cash, Procure-to-Pay, Hire-to-Retire, Payroll-to-Pay, Acquire-to-Retire, Return-to-Refund, and Record-to-Report are not yet fully specified as complete stateful workflows.
 
 A separate [CBM Lifecycle and Workflow Completeness Audit](CBM_LIFECYCLE_AND_WORKFLOW_COMPLETENESS_AUDIT.md) was added to the branch. It records 52 independently scoped lifecycle/workflow entries, maps the fourteen Modules separately, distinguishes Defined/Partial/Missing/Conditional maturity, provides conceptual sequence maps derived from existing ownership decisions, and establishes a fifteen-point minimum completion standard. It explicitly states that the project documentation is **not yet complete at detailed lifecycle/workflow specification level**. The Master document was not changed by this audit, because this catalogue is a discovery/gap-assessment artefact and does not approve new business policies or state machines.
+
+
+## 7. Consolidated domain lifecycle and workflow reference — 19 November 2026
+
+Following the lifecycle/workflow completeness audit, a standalone English-language reference, [CBM Domain Lifecycle and Workflow Reference](CBM_DOMAIN_LIFECYCLE_AND_WORKFLOW_REFERENCE.md), was added to the documentation branch.
+
+The document consolidates the lifecycle inventory and workflow maps into a structured reference with a clear reading order: scope and lifecycle model; ecosystem, identity, authority, and platform lifecycles; the independent workflows of all fourteen Business Modules; cross-module end-to-end journeys; data migration, portability, offboarding, archival and audit; and the lifecycle/workflow completeness assessment.
+
+The document preserves the distinction between finalized Master decisions and conceptual sequence maps that still require detailed specification. It does not approve new business policies, state machines, statutory interpretations, retention periods, or implementation designs. The Master document remains authoritative and was not modified as part of this addition. README was updated to link the new reference.
+
