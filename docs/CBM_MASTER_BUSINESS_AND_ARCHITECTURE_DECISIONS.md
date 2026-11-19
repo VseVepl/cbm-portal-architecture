@@ -863,6 +863,146 @@ A **GST Tax Determination** is the authorized domain decision for a specific sup
 
 A **Tax Determination Snapshot** is the immutable classification- and tax-related evidence captured by an accepted transaction. It preserves the full HSN/SAC code and assignment version where applicable, the selected GST Rate Applicability Rule and version, relevant statutory source/notification and effective dates, the determination context, taxable value, applicable component rates and tax amounts, and provenance. Later changes to codes, assignments, rate rules, or tax policies must not rewrite the accepted snapshot.
 
+### 3.131 Sales Quotation / Offer
+
+A **Sales Quotation** or **Sales Offer** is a Sales-owned commercial proposal made to a prospective or existing Customer. It may identify proposed Products/Services, quantities, prices, discounts, taxes or tax references, terms, validity, and other conditions. A quotation/offer is not automatically an accepted Sales Order, Sales Invoice, stock movement, payment, or Accounting posting. Whether it is binding and when it becomes accepted are governed by its stated terms and applicable law.
+
+### 3.132 Sales Agreement / Commercial Terms
+
+A **Sales Agreement** records Customer-facing commercial terms accepted or agreed by the parties for a defined scope, period, relationship, or set of transactions. Sales Management owns the commercial agreement and its versions. It may govern later Sales Orders or other sales documents but does not itself prove fulfilment, payment settlement, inventory movement, or Accounting posting.
+
+### 3.133 Sales Order
+
+A **Sales Order** is a Sales-owned commercial record of an accepted Customer order or sales commitment, including its Products/Services, quantities, agreed commercial conditions, and fulfilment commitments as applicable. It is not an Inventory reservation or stock movement, a Warehouse execution record, a Payment Transaction, or an Accounting Voucher. Any stock reservation, physical fulfilment, tax determination, payment execution, or accounting posting remains with the corresponding authoritative domain.
+
+### 3.134 Sales Invoice
+
+A **Sales Invoice** is the original commercial invoice/document issued and owned by Sales Management for a sale. It records the accepted commercial supply details and references the Price and Tax Determination Snapshots applicable to the accepted transaction. GST/Tax owns tax determination and statutory tax records; Accounting owns the accounting treatment and postings; Finance & Payment owns payment execution and settlement. A later correction must use the authorized Sales and statutory adjustment lifecycle; an accepted historical invoice must not be silently overwritten.
+
+### 3.135 Sales Return
+
+A **Sales Return** is a Sales-owned commercial record of a Customer's return request, authorization, commercial acceptance, or related adjustment against an original sale. Physical receipt, inspection, inventory status, and stock movement remain with Warehouse and Inventory as applicable. Any refund or payment reversal belongs to Finance & Payment; tax adjustments and Accounting effects remain with GST/Tax and Accounting respectively.
+
+### 3.136 Sales Commercial Credit / Debit Document
+
+A **Sales Commercial Credit Document** or **Sales Commercial Debit Document** is a Sales-owned commercial adjustment record linked to an original Sales Invoice or other eligible Sales transaction. It records the commercial reason, affected items/amounts, and authorized adjustment. It does not independently redefine GST law, create a payment settlement, or post an Accounting entry.
+
+### 3.137 Purchase Requisition / Purchase Request
+
+A **Purchase Requisition** or **Purchase Request** is an internal business request identifying a need for goods or services to be sourced or purchased. It is owned by Purchase & Procurement Management. It is not a supplier commitment, Purchase Order, Purchase Invoice, Inventory receipt, payment instruction, or Accounting posting. A requisition is required only where the applicable procurement policy makes it a prerequisite.
+
+### 3.138 Request for Quotation (RFQ)
+
+A **Request for Quotation (RFQ)** is a Purchase-owned request inviting one or more prospective suppliers to provide a quotation against stated requirements and conditions. An RFQ is a sourcing/evaluation record; it does not itself accept a supplier offer or create a Purchase Order or supplier obligation.
+
+### 3.139 Supplier Quotation
+
+A **Supplier Quotation** is a commercial offer received from a Supplier and recorded by Purchase & Procurement Management for evaluation, negotiation, comparison, or acceptance. It may reference quantity, price, tax basis, delivery, validity, and other terms. It is not an accepted Purchase Order, supplier invoice, physical receipt, payment, or Accounting posting unless a separate authorized record/event establishes that effect.
+
+### 3.140 Purchase Agreement
+
+A **Purchase Agreement** records agreed supplier-facing commercial terms for a defined scope, period, or relationship. Purchase & Procurement Management owns the agreement and its versions. It may govern subsequent Purchase Orders or transactions but does not by itself prove physical receipt, accepted stock, payment settlement, or Accounting posting.
+
+### 3.141 Purchase Order
+
+A **Purchase Order** is a Purchase-owned commercial order issued to a Supplier under authorized procurement conditions. It records the agreed purchase scope, Products/Services, quantities, prices, terms, and expected delivery as applicable. It is not proof that goods were physically received, accepted into Inventory, paid, or posted to Accounting.
+
+### 3.142 Purchase Invoice
+
+A **Purchase Invoice** is the original supplier commercial invoice/document received and recorded by Purchase & Procurement Management. It records the supplier's billed commercial supply and references the applicable purchase and tax evidence. It does not by itself prove physical receipt or accepted Inventory stock, payment execution/settlement, or Accounting posting. GST/Tax owns tax determination, Finance & Payment owns payment execution, and Accounting owns the accounting treatment and postings.
+
+### 3.143 Purchase Return
+
+A **Purchase Return** is a Purchase-owned commercial record of goods/services being returned, rejected, or otherwise adjusted against a supplier purchase. Purchase owns the supplier-facing commercial return and related credit/debit documents. Physical handling and stock changes remain with Warehouse and Inventory; payment/refund/settlement remains with Finance & Payment; tax and accounting effects remain with GST/Tax and Accounting respectively.
+
+### 3.144 Purchase Commercial Receipt Confirmation
+
+A **Purchase Commercial Receipt Confirmation** is a Purchase-owned record confirming the supplier-document and commercial status of a delivery or service receipt, including accepted, partially accepted, disputed, or discrepant quantities/conditions where relevant. It is not the Warehouse's physical receiving/inspection/putaway record and does not itself post an Inventory Stock Movement or increase authoritative stock.
+
+### 3.145 POS Terminal / Workstation
+
+A **POS Terminal** or **POS Workstation** is an identifiable operational point/device configured for POS checkout and related operational activity. It may be associated with a business location, operator context, session, and till. It is not the POS Application Client itself, the Sales transaction master, or an Accounting terminal/account.
+
+### 3.146 POS Operator Context
+
+A **POS Operator Context** is the authorized User/Actor and operating scope under which a POS terminal or session is used. It references the applicable identity, User–Business association, assigned scope, and Permissions; it does not create a new User identity or independently grant permissions.
+
+### 3.147 POS Session / Shift
+
+A **POS Session** or **POS Shift** is a governed operational period for POS activity associated with an identified terminal/workstation and authorized operator/till context. It records applicable opening, operational activity, exceptions, closing, and reconciliation facts. It is not an Accounting Period or a substitute for Sales, Payment, or Accounting records.
+
+### 3.148 Till / Cash Drawer
+
+A **Till** or **Cash Drawer** is the POS operational cash-handling unit or controlled cash balance context associated with a terminal/session. It records operational opening float, cash-in/cash-out, cash counts, and differences. It is distinct from a Finance-owned operational Bank/Cash Account and from an Accounting Ledger Account.
+
+### 3.149 POS Checkout
+
+A **POS Checkout** is the POS-owned operational execution of a checkout attempt, including terminal/operator/session context, checkout trace, operational exceptions, and references to the resulting authoritative Sales, GST/Tax, Inventory, and Finance/Payment records as applicable. POS Checkout does not create a competing Sales transaction or Sales Invoice master.
+
+### 3.150 Payment Instruction
+
+A **Payment Instruction** is an authorized Finance & Payment request to initiate, collect, or disburse a specified amount through an identified payment method or operational account and within a defined business context. The instruction records intent and applicable authorization; it is not proof that the payment was executed, settled, or posted to Accounting.
+
+### 3.151 Payment Transaction
+
+A **Payment Transaction** is the Finance & Payment record of an execution attempt and its outcome, including relevant provider/bank references, amount, method, timestamps, status, response evidence, and failure/retry relationships. A Payment Transaction is distinct from the originating Sales/Purchase obligation, POS checkout, Accounting Voucher/Posting, and final settlement evidence.
+
+### 3.152 Payment Settlement
+
+A **Payment Settlement** is the Finance & Payment record/evidence that a payment provider, acquiring network, bank, or other payment participant has processed or settled the relevant funds under its settlement process. Settlement must retain references to the originating payment transactions and provider/bank evidence. It is not an Accounting posting or Bank-to-Ledger reconciliation.
+
+### 3.153 Payment Reconciliation
+
+**Payment Reconciliation** is the Finance & Payment process of comparing payment instructions, Payment Transactions, provider/bank settlement evidence, and operational collection/disbursement records to identify matched, unmatched, short, excess, delayed, failed, reversed, or disputed amounts. It is distinct from Accounting's Bank-to-Ledger reconciliation and does not create or alter authoritative accounting balances.
+
+### 3.154 Operational Cash/Bank Account
+
+An **Operational Cash/Bank Account** is a Finance & Payment-managed reference to a real-world cash-holding or banking/payment account used for business collections, disbursements, or settlement. It identifies operational account particulars, access/usage scope, provider/bank relationship, and status as applicable. It is not an Accounting Ledger Account; Accounting separately records the corresponding accounting representation and reconciliation.
+
+### 3.155 Operational Asset
+
+An **Operational Asset** is a business resource separately identified and managed because its custody, responsible assignment, location, use/status, inspection, maintenance, transfer, or retirement requires an asset-specific lifecycle. Asset Management owns this operational identity and lifecycle. It is distinct from a Product Definition, a quantity-based Inventory balance, a Warehouse Handling Unit, and the Asset's Fixed Asset Accounting representation.
+
+### 3.156 Asset Recognition / Inventory-to-Asset Conversion Event
+
+An **Asset Recognition Event** is the controlled business event by which an eligible item/resource is recognized as an Operational Asset and linked to its source acquisition and, where relevant, Inventory records. It preserves provenance and prevents the same quantity or unit from remaining simultaneously represented as ordinary available stock and as an in-use Asset. Asset Management owns the operational Asset record; Accounting independently determines and records any required capitalization or other accounting treatment.
+
+### 3.157 Business Plan
+
+A **Business Plan** is a governed planning record describing intended business objectives, operating or financial direction, assumptions, actions, scope, and planning horizon. Business Planning & Budget Management owns the plan and its versions. A plan does not itself create an operational transaction, accounting entry, funding reservation, or delegated authority.
+
+### 3.158 Budget
+
+A **Budget** is a governed financial or operational planning allocation/limit for a defined business scope, period, purpose, or responsibility. It may be divided into categories, departments, locations, projects, or other applicable dimensions. A Budget is not an actual cash balance, an Accounting Ledger balance, a Purchase Order, or an automatic authorization to commit or spend funds.
+
+### 3.159 Forecast
+
+A **Forecast** is a versioned forward-looking estimate of expected financial or operational outcomes based on stated assumptions, source facts, and a defined horizon. It is distinct from an approved Budget or a posted actual result. Changes to source-domain actuals do not silently rewrite the assumptions or historical versions of a Forecast.
+
+### 3.160 Approved Planning Baseline
+
+An **Approved Planning Baseline** is an authorized version of a Business Plan, Budget, target, or other planning record selected as the governed reference for monitoring and planned-versus-actual analysis. Its approval, effective period, scope, version, and supersession must be explicit. A later revision creates a new version/baseline relationship and does not erase the previously approved baseline.
+
+### 3.161 Party / Counterparty
+
+A **Party** or **Counterparty** is a person or organization with which a Customer Business has, may establish, or has had a governed commercial or operational relationship, such as a Customer or Supplier. Counterparty identity and roles are scoped to the owning Business/Tenant context. A Counterparty is not a CBM User Account, Employee, Business Identity, Legal Identity, or GST Registration, and matching personal/business particulars do not grant cross-tenant access.
+
+### 3.162 Customer Role Profile
+
+A **Customer Role Profile** is the Counterparty Management record describing the Customer role of a Party within a specific Business/Tenant context. It may reference customer-specific identity, contact, delivery, and relationship-status information. Sales owns the commercial sales terms, Price Conditions, and original Sales transactions associated with that Customer role.
+
+### 3.163 Supplier Role Profile
+
+A **Supplier Role Profile** is the Counterparty Management record describing the Supplier role of a Party within a specific Business/Tenant context. It may reference supplier-specific identity, contact, remittance, and relationship-status information. Purchase & Procurement owns supplier-specific sourcing, quotations, agreements, purchase terms, and original Purchase transactions.
+
+### 3.164 Counterparty Contact Record
+
+A **Counterparty Contact Record** identifies a person, communication address, telephone/mobile number, email address, or other permitted contact method associated with a Party/Counterparty and its Customer/Supplier role where applicable. Contact records are scoped, validated, permission-controlled, and history-preserving. They do not create a CBM User Account or authorize the contact person to access CBM.
+
+### 3.165 GST Compliance / Filing Record
+
+A **GST Compliance / Filing Record** is a GST/Tax-owned record of preparing, validating, approving where applicable, submitting/filing, acknowledging, amending, correcting, or resolving an applicable GST statutory return or compliance process. It references the relevant taxpayer/registration, return period, source transaction/tax evidence, statutory schema/version, submission outcome, acknowledgement, and correction/supersession as applicable. It does not replace the originating Sales/Purchase transaction, Accounting posting, GST Registration History, or transaction Tax Determination Snapshot.
+
 
 ## 3A. How the CBM relationship model must be read
 
