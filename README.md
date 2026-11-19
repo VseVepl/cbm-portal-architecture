@@ -129,7 +129,7 @@ Customer offboarding must provide the selected CBM-owned data needed to continue
 
 ## Documentation rule
 
-Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. Keep discussion history separate from the master source of truth.
+Only decisions explicitly finalized by the project owner belong in the authoritative master document. Discussion notes, rejected approaches, unapproved recommendations, and unresolved matters must not be presented as finalized decisions. The chronological, non-authoritative project discussion and decision record is maintained separately in [CBM Project Discussion History](docs/CBM_PROJECT_DISCUSSION_HISTORY.md); the Master document remains the sole authoritative source.
 
 ## Current project stage
 
