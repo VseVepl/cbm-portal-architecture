@@ -38,15 +38,11 @@ The document is intentionally broader than a list of happy-path steps. It distin
 - **Part IV — Cross-module business journeys:** end-to-end orchestration while preserving each module's ownership and completion state.
 - **Part V — Data and operational lifecycle:** onboarding, migration, export, offboarding, archival, restoration, history, and audit.
 - **Part VI — Completeness assessment:** maturity definitions, known gaps, and minimum completion standard.
+- **Part VII — Supplementary lifecycle inventory:** onboarding, ownership/mapping, account security, Subscription/Billing, accounting subobjects, product/pricing, inventory/warehouse, application clients, platform operations, and shared contracts.
+- **Part VIII — Additional end-to-end journeys:** customer/provider onboarding, Subscription-to-Cash, User-to-Work, recall/quality, GST payment/close, reconciliation, cross-portal exchange, and permanent closure.
+- **Part IX — Traceability and research:** Master Glossary crosswalk, all twenty-five Domain History sets, official research sources, scope exclusions, and updated completeness determination.
 
 ---
-
-# CBM Domain Lifecycle and Workflow Reference
-
-**Review date:** 19 November 2026  
-**Branch:** `architecture/domain-architecture-continuation-2026-11-19`  
-**Document status:** Consolidated lifecycle/workflow reference and completeness assessment; not a finalized implementation specification  
-**Authority:** The Master Business and Architecture Decisions document remains the sole authoritative source for approved business concepts and ownership boundaries.
 
 ## 1. Purpose and conclusion
 
@@ -868,6 +864,9 @@ This crosswalk is intended to prevent a named concept in the Master Glossary fro
 | Business Plan; Budget; Forecast; Approved Planning Baseline | Sections 5.13, 6.9 |
 | Party/Counterparty; Customer Role Profile; Supplier Role Profile; Counterparty Contact Record | Sections 5.14 and 11.11 |
 | Service Offering/Supply Subject | Sections 11.9 and 12.1; originating service domain remains authoritative |
+
+
+**Exact Master Glossary terms covered through equivalent wording or owner-boundary mapping:** Default, Inheritance, and Override; Book of Accounts / Accounting Book; Storage Location and Storage Bin; Warehouse Workstation / Counter; Inventory Transaction / Stock Movement; Warehouse Storage Type / Section; External / Third-party Warehouse Facility; Product Family, Group, and Classification; Data Carrier / Barcode; Batch / Lot; Product Bundle / Kit; Product Attribute and Variant Dimension; Sales Quotation / Offer; Sales Agreement / Commercial Terms; Sales Commercial Credit / Debit Document; Purchase Requisition / Purchase Request; Request for Quotation (RFQ); POS Terminal / Workstation; POS Session / Shift; Till / Cash Drawer; Asset Recognition / Inventory-to-Asset Conversion Event; Party / Counterparty; GST Compliance / Filing Record; Service Offering / Supply Subject.
 
 ## 13.1 Approved Domain History register — all 25 domains
 
