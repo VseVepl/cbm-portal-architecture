@@ -594,9 +594,9 @@ This reference consolidates the lifecycle inventory and completeness assessment 
 
 ---
 
-# 11. Supplementary lifecycle inventory from the systematic coverage review
+## 11. Supplementary lifecycle inventory from the systematic coverage review
 
-## 11.1 Customer Business onboarding, provisioning, and operational activation — Partial
+### 11.1 Customer Business onboarding, provisioning, and operational activation — Partial
 
 This is a composed onboarding workflow, not an additional Business Entity state and not a new Business Module.
 
@@ -606,7 +606,7 @@ This is a composed onboarding workflow, not an additional Business Entity state 
 
 **Boundary:** Creating an Organization does not automatically create its Distributor/Shop children, GST registrations, User Accounts, Subscription coverage, accounting Books, or operational opening balances. Each is a separately owned record/workflow. A service-provider relationship is not ownership.
 
-## 11.2 Owner, Owner ID, Ownership Link, and Ownership ID lifecycle — Partial
+### 11.2 Owner, Owner ID, Ownership Link, and Ownership ID lifecycle — Partial
 
 **Separate object/workflows:** Owner identity reference; Owner ID; Business Identity; Ownership Link; and Ownership ID must not be collapsed into one record.
 
@@ -614,7 +614,7 @@ This is a composed onboarding workflow, not an additional Business Entity state 
 
 **Unspecified:** accepted evidence classes, verification strength, disputed/contested ownership procedure, legal succession/reorganization, effective-date policy, correction versus replacement, and approval authority. These require explicit project policy and, where law is involved, current jurisdiction-specific legal review.
 
-## 11.3 Distributor–Shop Mapping lifecycle — Partial
+### 11.3 Distributor–Shop Mapping lifecycle — Partial
 
 **Approved initiation and mutual-verification sequence:** an eligible Shop initiates a Mapping request and generates its own Secret Code → the eligible Distributor verifies that Shop-generated code → after that verification, the Distributor generates a separate confirmation code → the Shop verifies the Distributor-generated code → only after both distinct verification stages succeed may the Mapping become Active.
 
@@ -622,7 +622,7 @@ This is a composed onboarding workflow, not an additional Business Entity state 
 
 Both codes remain separate, expire, are single-use, rate-limited and revocable. Failed, expired, replayed, revoked or rate-limited attempts must not create an Active Mapping. A Mapping does not change ownership, structural Parent, data isolation, or confer unrestricted permissions. Exact retry limits, code lifetime, cooldown, request expiry, suspension grounds, remapping restrictions and unilateral/bilateral termination conditions remain policy items and are not invented here.
 
-## 11.4 User Account, contact verification, authentication, credential, authenticator, and session lifecycles — Partial
+### 11.4 User Account, contact verification, authentication, credential, authenticator, and session lifecycles — Partial
 
 These are separate but connected lifecycles. The account, the person, the User–Business association, User Scope Mapping, credential, authenticator, and authenticated session are not interchangeable.
 
@@ -658,7 +658,7 @@ The design must explicitly consider browser tabs/windows, multiple devices, conc
 
 **Research alignment:** NIST SP 800-63B-4 separately addresses authenticator binding, maintenance, loss/theft/compromise, expiration, invalidation and session management. It discusses explicit logout, inactivity and overall timeouts, reauthentication, and warns against insecure session-secret storage such as HTML5 Local Storage. These are research inputs for later CBM security specification, not automatic CBM policy adoption.
 
-## 11.5 Role, Permission, User Scope, Delegation, and Approval instance lifecycles — Partial
+### 11.5 Role, Permission, User Scope, Delegation, and Approval instance lifecycles — Partial
 
 The four control types remain distinct.
 
@@ -670,7 +670,7 @@ The four control types remain distinct.
 
 Policy version changes while a request is pending, approver unavailability, escalation, quorum, delegation during approval, emergency intervention and resubmission rules remain to be specified per approval family. Approval never substitutes for Permission.
 
-## 11.6 Platform Subscription, Plan, Add-on, Entitlement, Usage Limit, Invoice, and Payment lifecycles — Partial
+### 11.6 Platform Subscription, Plan, Add-on, Entitlement, Usage Limit, Invoice, and Payment lifecycles — Partial
 
 This is the CBM ecosystem's Platform Subscription/Billing domain, not the customer's Finance & Payment Management Module.
 
@@ -686,7 +686,7 @@ This is the CBM ecosystem's Platform Subscription/Billing domain, not the custom
 
 Platform Subscription invoice/payment facts must not be moved into a customer's business Finance records merely because the same platform may use payment infrastructure. CBM's platform billing lifecycle and a Tenant's business payment lifecycle are distinct.
 
-## 11.7 GST taxpayer, registration, place-of-business, assignment, and compliance record lifecycles — Partial
+### 11.7 GST taxpayer, registration, place-of-business, assignment, and compliance record lifecycles — Partial
 
 The Reference's Section 5.10 already covers taxpayer profile, GST Registration, Registration Assignment, HSN/SAC registry, classification assignment, rate rules, transaction Tax Determination and filing. The following granularity is also required:
 
@@ -697,7 +697,7 @@ The Reference's Section 5.10 already covers taxpayer profile, GST Registration, 
 
 Official GST Portal guidance distinguishes preparation, summary/preview, filing and acknowledgement for GSTR-1, and separately documents creation, saving, payment of tax and filing for GSTR-3B. It also states that GSTR-3B amendment is not allowed. These guides are process evidence for current portal workflows, not permission to hard-code those form names, controls, deadlines or correction paths permanently. At detailed design time, confirm current return types, taxpayer category, applicability, statutory deadlines, amendment routes and electronic signing requirements from the then-current official GST sources.
 
-## 11.8 Accounting master-data and Fixed Asset Accounting sub-lifecycles — Partial
+### 11.8 Accounting master-data and Fixed Asset Accounting sub-lifecycles — Partial
 
 Section 5.1 covers Book, Voucher, Posting, Period, Reconciliation and data exchange. Each foundational accounting object also needs an explicit lifecycle:
 
@@ -712,7 +712,7 @@ Section 5.1 covers Book, Voucher, Posting, Period, Reconciliation and data excha
 
 The IFRS Foundation's IAS 2 and IAS 16 pages are useful reference examples for the distinct accounting topics of inventory cost/expense recognition and PPE recognition, measurement, depreciation, impairment and derecognition. They are not a declaration that IFRS is CBM's universal or mandatory accounting framework. Each Book must follow its applicable approved Accounting Framework and law.
 
-## 11.9 Product/Item catalogue, identifiers, attributes, price and tax-reference sub-lifecycles — Partial
+### 11.9 Product/Item catalogue, identifiers, attributes, price and tax-reference sub-lifecycles — Partial
 
 Section 5.2 covers the principal Product Definition, Variant, Instance, Identifier, packaging/bundle/kit and catalogue-sharing paths. The following subordinate objects must also be mapped independently:
 
@@ -725,7 +725,7 @@ Section 5.2 covers the principal Product Definition, Variant, Instance, Identifi
 - **Declared Product/Packaging Price:** create declaration and subject/basis → validate required source/legal declaration and tax basis → approve/publish with effective date → supersede/correct → preserve price declaration snapshot. It remains separate from Sales price lists, Purchase prices and Inventory valuation.
 - **Service Offering/Supply Subject:** the authoritative service domain creates and maintains the actual service/supply identity and offering lifecycle → define applicability, scope and version/effective period → publish/withdraw/change → expose a typed reference to Product/Item where applicable → GST/Tax maintains SAC classification and Tax Determination. This reference does not create a generic Service Operations, Service Centre or service-delivery Business Module.
 
-## 11.10 Inventory and Warehouse subordinate operational lifecycles — Partial
+### 11.10 Inventory and Warehouse subordinate operational lifecycles — Partial
 
 - **Inventory Position:** derive from accepted Inventory transactions and eligible reservations/statuses → expose a scoped as-of position → reconcile to the authoritative Stock Ledger → correct through source movements, not by direct editing of a derived display.
 - **Inventory Status:** create/use only governed status values applicable to the stock context → transition through authorized receipt, inspection, quality/hold, reservation, availability, issue, return or disposal events → preserve status history. The exact status catalogue and transition matrix remain to be approved; examples in Section 5.3 are not a finalized universal enumeration.
@@ -738,7 +738,7 @@ Section 5.2 covers the principal Product Definition, Variant, Instance, Identifi
 - **Handling Unit:** create/identify → associate contents and quantities → close/seal → receive/move/pick/stage/load/dispatch → split/merge/repack only under authorized traceable operations → empty/retire. A Handling Unit is not a Product Variant, Trade Packaging Configuration or Inventory ownership record.
 - **Warehouse Work Task exception/recovery:** request and plan → assign and execute → record partial/failed/blocked/damaged/short or unsafe outcome → hold or escalate → re-plan/reassign/cancel → confirm completed physical work → publish explicit Inventory/Purchase/Sales contract outcome → reconcile. A completed task does not by itself prove Inventory acceptance.
 
-## 11.11 Counterparty contact, address and role-reference lifecycles — Partial
+### 11.11 Counterparty contact, address and role-reference lifecycles — Partial
 
 **Contact/address record:** add with Party and tenant/business scope → validate type, purpose, source and permitted usage → verify where required → mark preferred/primary only under explicit rules → amend/version → deactivate/retire → preserve provenance and relevant historical transaction snapshots. Contact details for a Party must not be treated as User Account login identifiers unless separately registered and verified for that account under the User lifecycle.
 
@@ -746,7 +746,7 @@ Section 5.2 covers the principal Product Definition, Variant, Instance, Identifi
 
 **Merge/split:** before merge, identify the surviving Party, record all source identities, analyze dependent references and prevent cross-tenant merges; update only permitted reference links via governed migration, never rewrite accepted historical transaction snapshots. A split must reconstruct the separately evidenced Parties and reassign only references demonstrably attributable to each, with an exception report and audit evidence. Exact reversibility, conflict priority and approval rules remain unresolved.
 
-## 11.12 Application Client, endpoint/device, terminal, and provider credential lifecycles — Partial / Conditional
+### 11.12 Application Client, endpoint/device, terminal, and provider credential lifecycles — Partial / Conditional
 
 **Application Client registration:** client purpose/owner and supported portal context → authorization and permitted scopes → client registration/version → credential or device binding where applicable → activation → usage monitoring and version compatibility → credential rotation/revocation → deprecation/migration → retirement. An Application Client is a channel, not a Business Module, User Account, or independent owner of business records.
 
@@ -754,7 +754,7 @@ Section 5.2 covers the principal Product Definition, Variant, Instance, Identifi
 
 **External provider credentials:** issue/store restricted provider credentials → test binding and least-scope access → activate → rotate/renew → suspend on suspected compromise → revoke on disconnect/termination → verify provider-side revocation where supported → preserve security evidence. Exact vault, cryptographic and provider-specific procedures belong in technical security specifications.
 
-## 11.13 Platform Service operations, release/change, incident and continuity lifecycles — Partial / Conditional
+### 11.13 Platform Service operations, release/change, incident and continuity lifecycles — Partial / Conditional
 
 The Master classifies Platform-wide Services, categories and capabilities. For each enabled service, operational specification must also cover:
 
@@ -768,7 +768,7 @@ The Master classifies Platform-wide Services, categories and capabilities. For e
 
 These operational workflows are conditional on the relevant platform capability and require later service-specific runbooks and targets.
 
-## 11.14 Shared Domain Model, contract, external mapping, and synchronization lifecycles — Partial
+### 11.14 Shared Domain Model, contract, external mapping, and synchronization lifecycles — Partial
 
 - **Shared Domain Model/Contract:** identify owner and use case → define typed subject/reference and permitted operations → define schema/version, provenance, tenant/business context and compatibility → approve/publish → consumer onboarding → version transition/deprecation → consumer migration → revoke/retire. Shared contracts do not create shared write authority.
 - **Source Transaction Reference:** establish reference to an owner-issued source record → validate source owner, scope, immutable identifier, version and relationship → consume under permitted context → retain reference through correction/reversal → handle source retirement without dangling or silently substituted references.
@@ -776,7 +776,7 @@ These operational workflows are conditional on the relevant platform capability 
 - **Synchronization Contract:** identify source-of-truth per field/object → define direction, permitted operations, ordering/version, cursor/sequence, idempotency, conflict rule and deletion semantics → authorize endpoints → synchronize → detect duplicates/gaps/conflicts → reconcile → replay or compensate as permitted → revoke/retire. No bidirectional unrestricted synchronization is implied.
 - **Portal-to-Portal interoperability:** authorize participating portals and exact dataset/purpose → validate user and portal scope → establish contract/version → exchange only allowed records → reconcile acknowledgements/conflicts and provenance → revoke relationship/credentials and terminate exchange → preserve each portal's ownership and tenant boundaries.
 
-## 11.15 Subscription billing, customer business Finance and provider payment regulatory boundary — mandatory separation
+### 11.15 Subscription billing, customer business Finance and provider payment regulatory boundary — mandatory separation
 
 Three separate contexts must be retained:
 
@@ -788,7 +788,7 @@ Payment service provider/Payment Aggregator onboarding and regulated operation m
 
 ---
 
-# 12. Additional end-to-end journeys required for complete lifecycle coverage
+## 12. Additional end-to-end journeys required for complete lifecycle coverage
 
 The journeys below complement Section 6. They do not combine domain ownership. Each participating Module must expose its own completion state, immutable source record and exception result.
 
@@ -827,7 +827,7 @@ Policy/configuration proposal → ownership, authority, applicability and Stable
 
 ---
 
-# 13. Master glossary and approved History-domain coverage crosswalk
+## 13. Master glossary and approved History-domain coverage crosswalk
 
 This crosswalk is intended to prevent a named concept in the Master Glossary from disappearing between the business baseline and the lifecycle catalogue. It maps concept families to the relevant lifecycle sections. Being mapped means that the concept has a lifecycle/workflow entry or an explicit owner-boundary reference; it does **not** mean every detailed state machine is complete.
 
@@ -868,7 +868,7 @@ This crosswalk is intended to prevent a named concept in the Master Glossary fro
 
 **Exact Master Glossary terms covered through equivalent wording or owner-boundary mapping:** Default, Inheritance, and Override; Book of Accounts / Accounting Book; Storage Location and Storage Bin; Warehouse Workstation / Counter; Inventory Transaction / Stock Movement; Warehouse Storage Type / Section; External / Third-party Warehouse Facility; Product Family, Group, and Classification; Data Carrier / Barcode; Batch / Lot; Product Bundle / Kit; Product Attribute and Variant Dimension; Sales Quotation / Offer; Sales Agreement / Commercial Terms; Sales Commercial Credit / Debit Document; Purchase Requisition / Purchase Request; Request for Quotation (RFQ); POS Terminal / Workstation; POS Session / Shift; Till / Cash Drawer; Asset Recognition / Inventory-to-Asset Conversion Event; Party / Counterparty; GST Compliance / Filing Record; Service Offering / Supply Subject.
 
-## 13.1 Approved Domain History register — all 25 domains
+### 13.1 Approved Domain History register — all 25 domains
 
 The Master document establishes twenty-five separate Domain History record sets. Every one is mapped below. These must remain separate record sets; this list must not be interpreted as permission to merge them.
 
@@ -902,7 +902,7 @@ The Master document establishes twenty-five separate Domain History record sets.
 
 ---
 
-# 14. Research basis and application boundaries
+## 14. Research basis and application boundaries
 
 The following primary/official materials were reviewed to validate lifecycle dimensions and workflow completeness. They inform the architecture-level sequence catalogue; they do not replace the CBM Master baseline or approve a CBM-specific policy.
 
@@ -922,7 +922,7 @@ The following primary/official materials were reviewed to validate lifecycle dim
 
 ---
 
-# 15. Scope exclusions and conditional workflow register
+## 15. Scope exclusions and conditional workflow register
 
 A completeness audit must distinguish an omitted in-scope lifecycle from a capability that is not approved or is expressly optional. The following must not be added to the CBM baseline by implication:
 
@@ -941,9 +941,9 @@ Where one of these capabilities is later approved, it becomes an applicability-c
 
 ---
 
-# 16. Updated systematic completeness determination — 19 November 2026
+## 16. Updated systematic completeness determination — 19 November 2026
 
-## 16.1 What this review verified
+### 16.1 What this review verified
 
 The Reference was checked against:
 - the Master Glossary and the complete 14-Module Catalogue;
@@ -952,7 +952,7 @@ The Reference was checked against:
 - all twenty-five separately approved Domain History record sets;
 - official source material for authentication/session, GST registration/returns, payment-aggregator regulatory scope, inventory and asset accounting topics, and distributed event retry/recovery.
 
-## 16.2 Coverage status after this update
+### 16.2 Coverage status after this update
 
 | Coverage layer | Result after review | Qualification |
 |---|---|---|
@@ -972,7 +972,7 @@ The Reference was checked against:
 | All 25 approved Domain History sets | Explicitly mapped | Their record schemas, access policies and retention controls still need detailed design |
 | Research basis | Added | Only relevant authoritative/high-quality references reviewed; not every domain's implementation law researched in depth |
 
-## 16.3 Remaining work that cannot responsibly be declared complete
+### 16.3 Remaining work that cannot responsibly be declared complete
 
 The systematic review has closed material **catalogue-coverage gaps** by adding the lifecycle families and crosswalks above. It has not produced a complete field/state/transition specification for every object. The remaining work is detailed domain specification, with particular focus on:
 
@@ -986,7 +986,7 @@ The systematic review has closed material **catalogue-coverage gaps** by adding 
 
 An unresolved item must remain labelled as such and must not be silently filled with an assumed rule.
 
-## 16.4 Final conclusion
+### 16.4 Final conclusion
 
 **Lifecycle and workflow catalogue coverage is now materially more complete and has been cross-referenced against the Master Glossary, fourteen Business Modules and all twenty-five approved Domain History sets.** This improves confidence that the principal in-scope lifecycle families have not been omitted from the Reference.
 
