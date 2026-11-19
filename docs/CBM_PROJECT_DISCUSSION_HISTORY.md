@@ -154,3 +154,17 @@ The exact-name cross-check returned **zero missing Master Glossary terms** (166/
 
 The final determination remains that lifecycle/workflow catalogue coverage is substantially improved and has explicit traceability, while the full lifecycle/workflow specification work is **not yet complete**. The outstanding work is enumerated in Section 16.3 of the Reference. No new business policy or state machine was approved through this review; the Master document was not changed. README was updated to reflect the expanded coverage and continuing incompleteness of detailed specifications.
 
+
+
+### 19 November 2026 — Development phase architecture and foundation installation planning
+
+A new development-planning workstream was initiated using the existing approved business/architecture baseline and the consolidated lifecycle/workflow inventory. The designated branch was re-verified as `architecture/domain-architecture-continuation-2026-11-19`; at the start of this work it remained 24 commits ahead of `main` and zero commits behind it, with comparison base `30bad8ac9903340d2a0331dbc6aa674967206d4e`. No work was made on `main`.
+
+Two supporting planning documents were added:
+
+- [CBM Development Phases and Lifecycle Plan](CBM_DEVELOPMENT_PHASES_AND_LIFECYCLE_PLAN.md), proposing a governed hybrid iterative-incremental, risk-driven lifecycle with seventeen phases from mobilization through retirement, common phase gates, detailed phase responsibilities, module dependency sequencing, environment separation, continuous quality/security controls, release governance and operational continuity.
+- [CBM Development Foundation Installation and Validation Runbook](CBM_DEVELOPMENT_FOUNDATION_INSTALLATION_RUNBOOK.md), setting out a dependency-aware first-stage installation plan for the OS, Git, PHP/Laravel toolchain, Composer, Node/React/Vite/Tailwind, PostgreSQL 18, browser automation, test/static/security tooling and justified conditional services, with validation, licensing, security and recovery requirements.
+
+Official sources were checked for software lifecycle standards and current toolchain support. The standards review distinguished published ISO/IEC/IEEE 12207:2026 and 24748-1:2024 from the still-draft DIS 29148 Edition 3; the current published ISO/IEC/IEEE 29148:2018 remains the applicable published reference at this baseline. The toolchain plan records recommended version lines and explicitly requires fresh patch/compatibility/license verification at installation time rather than inventing immutable patch pins.
+
+The lifecycle model is a technical/process recommendation, not a newly approved business decision. The fourteen Business Modules and all source-of-truth boundaries remain unchanged. The documents explicitly preserve the fact that detailed domain lifecycle/workflow specifications remain incomplete under the existing fifteen-point standard. The runbook is marked NOT EXECUTED. No software was installed, no application code or database was changed, and no deployment was performed.
