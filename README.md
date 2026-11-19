@@ -145,3 +145,12 @@ The [CBM Lifecycle and Workflow Completeness Audit](docs/CBM_LIFECYCLE_AND_WORKF
 ## Current project stage
 
 The current business-concept and logical-architecture baseline records the finalized decisions approved or delegated through **19 November 2026**, including the project vision, Stable Core, Business Entity and Service Provider model, authority and access boundaries, Platform-wide Services, India-only Global Business Settings, lifecycle and Subscription rules, User Account and credential rules, Accounting, Product/Item, Inventory/Warehouse, Pricing, GST/Tax, the complete fourteen-Module Catalogue, cross-module ownership invariants, and domain-specific History/Audit Trail boundaries. This baseline is complete for the decisions and classification scope stated in the Master document. Detailed domain specifications, field-level models, cross-module contract schemas, transaction lifecycle specifications, logical data architecture, and later technical architecture are subsequent documentation stages; they are not implied approvals or implementation tasks in this baseline. This repository remains documentation-only. It does not authorize application implementation, code changes, database changes, infrastructure changes, or deployment.
+
+## Development Lifecycle and Foundation Planning
+
+The development process is documented separately from finalized business and architecture decisions:
+
+- [CBM Development Phases and Lifecycle Plan](docs/CBM_DEVELOPMENT_PHASES_AND_LIFECYCLE_PLAN.md) — the proposed hybrid iterative-incremental lifecycle, phase catalogue, phase gates, module dependencies, environment model, quality/security governance, release, operations, migration and retirement.
+- [CBM Development Foundation Installation and Validation Runbook](docs/CBM_DEVELOPMENT_FOUNDATION_INSTALLATION_RUNBOOK.md) — the researched first-stage OS, runtimes, packages, tools, PostgreSQL 18 baseline, installation order, validation, security, licensing and recovery plan.
+
+These are planning documents, not implementation authorization. The installation runbook has not been executed. The Master Business and Architecture Decisions document remains authoritative for all finalized business and architecture rules. Detailed domain lifecycle/workflow specifications remain subject to the outstanding work recorded in Section 16.3 of the Domain Lifecycle and Workflow Reference.
