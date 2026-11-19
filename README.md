@@ -61,7 +61,7 @@ The finalized independent Business Module Catalogue contains fourteen Modules. T
 | **Accounting Management** | Accounting Contexts/Books, vouchers, journals, posting, accounting balances, reconciliation, financial statements, Management Accounting, and Fixed Asset Accounting. |
 | **Product/Item Management** | Product/Item catalogue identity, Product Definitions/Variants, attributes/classifications, typed identifiers, Trade Packaging Configurations, Bundles/Kits, and applicable declared product/package prices. |
 | **Inventory Management** | Authoritative stock quantities/statuses, reservations/availability, Inventory Ledger, Stock Movements, batch/lot/serial traceability, reconciliation, and inventory cost/valuation. |
-| **Warehouse Management** | Warehouse facilities/layout, storage locations, racks/shelves/bins, Handling Units, physical receiving/putaway/picking/packing/dispatch, warehouse tasks, and physical execution evidence. |
+| **Warehouse Management** | Warehouse facilities/layout, storage locations, racks/shelves/bins, Handling Units, physical receiving, inspection work where assigned, putaway/picking/packing/dispatch, warehouse tasks, and physical execution evidence. |
 | **Human Resource Management** | Employee and Employment records, recruitment/onboarding, attendance/leave, workforce administration, and HR policies. |
 | **Payroll Management** | Payroll rules, periods/runs, earnings/deductions, calculations, payslips, statutory payroll obligations, and authoritative payroll results. |
 | **Sales Management** | Commercial sales lifecycle, quotations/offers, agreements, Sales Orders, original Sales Invoices, returns, selling-price lists/conditions, and fulfilment commitments. |
