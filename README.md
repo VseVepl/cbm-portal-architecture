@@ -138,7 +138,7 @@ The separate [CBM Lifecycle and Workflow Completeness Audit](docs/CBM_LIFECYCLE_
 
 ## Domain Lifecycle and Workflow Reference
 
-The independent [CBM Domain Lifecycle and Workflow Reference](docs/CBM_DOMAIN_LIFECYCLE_AND_WORKFLOW_REFERENCE.md) consolidates the ecosystem, identity, authority, platform, and data lifecycles; the separate workflows of all fourteen Business Modules; cross-module business journeys; and the lifecycle/workflow documentation-completion standard. It is an English-only supporting reference. It does not replace the Master document or convert incomplete sequence maps into approved business policy.
+The independent [CBM Domain Lifecycle and Workflow Reference](docs/CBM_DOMAIN_LIFECYCLE_AND_WORKFLOW_REFERENCE.md) consolidates the ecosystem, identity, authority, platform, and data lifecycles; the separate workflows of all fourteen Business Modules; cross-module business journeys; a traceability crosswalk against all 166 Master Glossary entries and all 25 approved Domain History record sets; and an official-source research basis. It is an English-only supporting reference. Its latest systematic coverage review is recorded in Sections 11–16. It does not replace the Master document or convert incomplete sequence maps into approved business policy. Catalogue coverage has been expanded, but detailed lifecycle/workflow specifications and unresolved domain policies remain incomplete.
 
 The [CBM Lifecycle and Workflow Completeness Audit](docs/CBM_LIFECYCLE_AND_WORKFLOW_COMPLETENESS_AUDIT.md) remains available as the original discovery/gap-assessment record.
 
