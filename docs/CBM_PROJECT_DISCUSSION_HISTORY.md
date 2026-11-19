@@ -1,7 +1,7 @@
 # CBM Project Discussion and Architecture Decision History
 
-**Record status:** Non-authoritative chronological context  
-**Current through:** 19 November 2026  
+**Record status:** Non-authoritative chronological context
+**Current through:** 19 November 2026
 **Authoritative source:** [CBM Master Business and Architecture Decisions](CBM_MASTER_BUSINESS_AND_ARCHITECTURE_DECISIONS.md)
 
 ## 1. Purpose and authority
