@@ -4074,4 +4074,187 @@ Official technical references consulted for security and SaaS architecture bound
 These references inform security and implementation considerations but do not override CBM's explicitly approved business rules. In particular, CBM's no-URL rule and its Organization-configurable initial credential methods are project-specific decisions. Technical implementations must follow the approved CBM rules while applying appropriate compensating security controls.
 ---
 
+
+
+## 6I. Business Module Catalogue Completion and Domain Ownership Boundaries
+
+**Decision status:** The following Business Module classifications and responsibility boundaries were finalized on 19 November 2026 under the project owner's explicit instruction to independently finalize all architecture decisions that do not require an owner-level business or product-policy choice. These decisions extend the existing Sections 6A–6H and do not supersede any previously finalized rule unless an explicit amendment is recorded.
+
+### 6I.1 Complete Independent Business Module Catalogue
+
+CBM's independent Business Module Catalogue contains the following fourteen Modules:
+
+1. Accounting Management.
+2. Product/Item Management.
+3. Inventory Management.
+4. Warehouse Management.
+5. Human Resource Management.
+6. Payroll Management.
+7. Sales Management.
+8. Purchase & Procurement Management.
+9. Point of Sale (POS) Operations.
+10. GST/Tax Management.
+11. Finance & Payment Management.
+12. Asset Management.
+13. Business Planning & Budget Management.
+14. Counterparty Management.
+
+A Business Module is an independently governed business responsibility with its own authoritative records, domain rules, lifecycle, history, applicability, and authorization boundary. This catalogue does not make every Module mandatory for every Business Entity. Module availability and use remain subject to applicable Business Context, Main Portal governance, Subscription/Entitlement where applicable, and explicit authorization.
+
+The catalogue is not an exhaustive list of every future capability. A future capability must be classified by its genuine business responsibility and must not be added as a separate Module merely because it has a screen, report, workflow, integration, or data table.
+
+### 6I.2 Sales Management
+
+Sales Management owns the customer-facing commercial sales lifecycle and its authoritative sales records, including quotations/offers, sales agreements and terms, sales orders, original Sales Invoices, Sales Returns and related commercial credit/debit documents, sales-side price lists and conditions, discounts/promotions, fulfilment commitments and sales-domain reporting.
+
+Sales does not own Product/Item identity or declared product/packaging prices, GST classification or tax determination, stock quantities or stock movements, physical warehouse execution, payment execution/settlement, or accounting postings. It consumes the relevant Product/Item, Pricing, GST/Tax, Inventory, Warehouse, Finance/Payment, Counterparty and Accounting contracts.
+
+The original commercial Sales Invoice and its sales lifecycle belong to Sales Management. GST/Tax owns the applicable tax determination and statutory tax records; Accounting owns the accounting interpretation, vouchers and postings; Finance & Payment owns payment execution and settlement. A shared workflow or composed screen does not merge these ownership boundaries.
+
+### 6I.3 Purchase & Procurement Management
+
+Purchase & Procurement Management is one independent Business Module. Sourcing, procurement evaluation, supplier selection, purchase requests/requisitions, RFQs, supplier quotations, purchase agreements, Purchase Orders, purchase-side terms, original Purchase Invoices, Purchase Returns and related commercial credit/debit documents belong to this Module. It owns supplier quotation/agreement and purchase transaction price records and commercial purchase matching.
+
+Purchase owns the commercial facts of what was requested, ordered, invoiced, returned, and commercially received. It does not own the authoritative stock ledger, physical warehouse execution, tax determination, payment execution/settlement, or accounting postings.
+
+The receiving boundary is explicitly divided:
+- Purchase owns the purchase-order and supplier-document relationship, commercial receipt confirmation, and purchase-side discrepancy/acceptance facts.
+- Warehouse owns physical receiving execution, inspection work where assigned, putaway, handling, and physical placement.
+- Inventory owns accepted stock quantities, stock states, stock ledger entries, reservations, and inventory movements.
+- GST/Tax owns tax determination.
+- Finance & Payment owns payment execution and settlement.
+- Accounting owns accounting interpretation and postings.
+
+A Purchase receipt or supplier delivery notice does not itself increase authoritative Inventory stock. Stock changes only through the Inventory domain's validated process and explicit source references.
+
+### 6I.4 Point of Sale (POS) Operations
+
+POS Operations is an independent Business Module because terminal/session, cashier, till, checkout execution and POS operational lifecycle are distinct business responsibilities. It owns POS terminals/workstations, POS operator context, POS sessions and shifts, cash-drawer/till operations, opening float, cash-in/cash-out, drawer counting, checkout execution traces, POS operational exceptions, and POS session/till reconciliation.
+
+The POS Application (web, desktop, mobile, or handheld) is an Application Client Channel and is not itself the POS Business Module.
+
+POS is not a competing Sales Transaction or Sales Invoice master. Sales Management owns the authoritative commercial sale and original Sales Document. POS owns its terminal/session/checkout/till operational records and maintains typed references to the corresponding Sales records. POS consumes Sales pricing/commercial determination, GST/Tax determination, Inventory availability/reservation, and Finance/Payment execution through explicit contracts.
+
+Payment execution and settlement belong to Finance & Payment. Accounting postings belong to Accounting. A completed POS checkout, provider response, or payment event does not by itself prove that the required Accounting posting has been validated and posted.
+
+Offline POS is an optional, applicability-controlled capability, not a universal assumption. If enabled, it must provide governed transaction sequencing, duplicate prevention/idempotency, synchronization, conflict handling, reconciliation, statutory compliance checks, and traceable failure recovery before offline-originated transactions are treated as accepted.
+
+### 6I.5 GST/Tax Management
+
+GST/Tax Management is an independent Business Module and the authoritative owner of the GST/Tax domain, including GST Taxpayer Profile and GST Registration tax-domain records, HSN/SAC Code Registry, HSN/SAC Classification Assignments, GST Rate Applicability Rules, GST Tax Determination, tax components and taxable-value calculations, statutory tax records, GST return preparation/validation/filing records where applicable, and tax-domain history and compliance exceptions.
+
+All finalized rules in Section 6H remain applicable, including the CBM Stable Core six-digit minimum, preservation of the full official code, separate code/assignment/rate histories, effective-dated legal rules, deterministic applicability, provenance, and immutable transaction Tax Determination Snapshots. The six-digit minimum is a CBM internal invariant and is not represented as a universal statutory minimum.
+
+GST/Tax does not own original Sales or Purchase transactions, Product/Item identity, Inventory or Warehouse records, Payment execution, Payroll calculation, or Accounting Books and postings. GST/Tax's final classification as an independent Business Module is confirmed by this Section.
+
+The initial statutory tax scope is GST-focused. Other tax regimes, such as TDS or Income Tax, must be added only through an explicit domain-scope decision. Payroll-related statutory deductions and payroll obligations remain owned by Payroll Management where they arise from payroll rules and employment.
+
+### 6I.6 Finance & Payment Management
+
+Finance & Payment Management is one independent Business Module with distinct Cash/Bank Operations and Payment Operations subdomains. It owns operational bank/cash account administration, payment methods and instruments as applicable, payment instructions and initiation, collections, disbursements, payment execution states, provider/gateway operational references and configuration, settlements, refunds, reversals, chargebacks, payment failures, provider/bank settlement evidence, payment-to-obligation application instructions, and payment/settlement reconciliation records.
+
+Finance & Payment does not own a General Ledger or a competing authoritative Accounting balance. Accounting owns Books, receivable/payable accounting balances, authoritative accounting allocation and postings, Bank-to-Ledger reconciliation, and financial statements. Finance & Payment owns payment execution and settlement facts; Accounting records their authorized accounting effects.
+
+Subscription/Billing for the CBM platform's own commercial relationship remains within the existing Platform Subscription/Billing domain under Section 14. A Customer Business's own collections and disbursements belong to that Customer Business's Finance & Payment Module. The two contexts must not share records or authority merely because both involve payments.
+
+### 6I.7 Asset Management
+
+Asset Management is an independent Business Module owning operational asset identity and lifecycle, including asset registration, classification, custody, responsible assignment, physical location, transfers, usage/status, inspection, maintenance, repair, insurance administration, retirement and physical disposal records.
+
+Accounting Management retains ownership of Fixed Asset Accounting, including capitalization, acquisition cost accounting, depreciation, impairment, revaluation where applicable, disposal accounting, ledger treatment and financial disclosures. Purchase owns the original acquisition transaction. Inventory/Warehouse own stock and physical handling records where an asset passes through those processes. Asset Management and Accounting use explicit shared Asset Identity and Asset Event references; neither takes over the other's source records.
+
+An inventory item does not become an Asset merely because of price or value. A controlled conversion/recognition event is required where an item is taken into use as an asset. That event must preserve the relationship between the source Inventory records and the new Asset operational record and must prevent duplicate stock/asset quantity representation.
+
+Asset Management does not automatically include Warranty Management, Service Centre Management, Fleet Management, or a full enterprise maintenance execution suite. Those capabilities require separate applicability and scope decisions; existing explicit exclusions remain unchanged.
+
+### 6I.8 Business Planning & Budget Management
+
+Business Planning & Budget Management is one independent Business Module owning business plans, financial and operational budgets, departmental budgets, targets, forecasts, scenarios, allocations, approved baselines, revisions, versions, planning approvals, and planned-versus-actual planning analysis.
+
+Budgets, forecasts, targets and plans are planning records. Their creation, approval or revision does not create a posted financial transaction, alter a General Ledger, reserve funds automatically, approve a Purchase Order, or authorize a Sales commitment unless a separate explicitly governed contract and authorization rule provides that effect.
+
+Accounting remains the authoritative source of posted financial actuals and accounting classifications. Sales, Purchase, Inventory, HR, Payroll, Finance/Payment and other source domains remain authoritative for their operational facts. Planning consumes authorized actuals and source references through explicit contracts and owns only its planning records, versions, approval state and analytical results.
+
+### 6I.9 Counterparty Management
+
+Counterparty Management is an independent Business Module owning scoped Party/Counterparty identity records, party classification, Customer and Supplier role profiles, contact persons and contact details, addresses, relationship status/lifecycle, duplicate detection, controlled merge/split, provenance and counterparty-domain history.
+
+Customer and Supplier are business roles/profiles that may coexist for the same Party. They are not inherently separate natural persons or legal entities. Role-specific commercial terms and conditions remain owned by Sales or Purchase respectively; Counterparty Management owns the underlying party identity and role/profile references.
+
+Counterparty is not a CBM User Account, Employee, Business Identity, Legal Identity, or GST Registration. Those identities and records remain within their respective authoritative domains. A Counterparty record does not grant system access or business authority.
+
+Counterparty records are scoped to the applicable Business/Tenant context and are not a universal cross-tenant shared master. Name, address, phone, email, tax identifier or other matching values do not grant access to another tenant's Counterparty data. Duplicate detection and merge/split require explicit scope, authorization, evidence, provenance and history. Cross-tenant sharing, if ever required, needs a separate governed consent and data-sharing architecture; it is not implied by this Module.
+
+Counterparty Management is not automatically a full CRM, Marketing Automation, Sales Pipeline, Customer Support, or Customer Success module. Such capabilities require separately justified domain boundaries and applicability.
+
+### 6I.10 Cross-Module Ownership and Transaction Rules
+
+The following ownership rules apply across the Catalogue:
+
+| Business fact / responsibility | Authoritative owner |
+|---|---|
+| Product and goods identity, variants, packaging and catalogue definitions | Product/Item Management |
+| Product/packaging declared prices, including applicable MRP/RRP | Product/Item Management |
+| Sales quotations, orders, original Sales Invoices, sales terms and selling price conditions | Sales Management |
+| Supplier quotations, purchase agreements, purchase orders, original Purchase Invoices and purchase terms | Purchase & Procurement Management |
+| POS terminal/session/checkout/till operational facts | POS Operations |
+| Original commercial sale linked to a POS checkout | Sales Management |
+| HSN/SAC Registry, assignments, GST rates and tax determination | GST/Tax Management |
+| Payment initiation, execution, settlement and operational payment records | Finance & Payment Management |
+| Accounting Books, vouchers, postings, balances and financial statements | Accounting Management |
+| Stock quantities, stock ledger, reservations, stock movements and inventory valuation | Inventory Management |
+| Warehouse facility/layout, storage locations and physical warehouse execution | Warehouse Management |
+| Employee and employment records | Human Resource Management |
+| Payroll rules, runs, calculations and payroll results | Payroll Management |
+| Operational asset identity, custody, maintenance and lifecycle | Asset Management |
+| Fixed Asset Accounting | Accounting Management |
+| Plans, budgets, targets, forecasts and approved planning baselines | Business Planning & Budget Management |
+| Party identity and Customer/Supplier role profiles | Counterparty Management |
+
+A Module may request, validate, consume, reference, or receive events from another Module only through an authorized, versioned and purpose-scoped contract. Cross-Module workflows, dashboards, reports, screens, shared storage infrastructure, or event transport do not transfer source-record ownership or grant shared write access.
+
+Source transaction state, payment state, tax determination state, inventory state, warehouse execution state, and accounting posting state are distinct. Success in one domain does not imply success in another. Each domain must expose its own status and exceptions, preserve idempotency and provenance, and support authorized reconciliation and correction without silently rewriting accepted historical facts.
+
+### 6I.11 Shared Domain and Platform Classification
+
+The following are not independent Business Modules merely by virtue of being shared or visible across Modules:
+
+- Pricing Reference and Price Determination remain a Shared Domain Model/Contract under Section 6G; there is no universal Pricing Master or separate Pricing Module.
+- Product/Item Reference Model remains governed by Product/Item Management and its shared contract; it is not a separate Module.
+- HSN/SAC and GST Rate references remain GST/Tax-owned contracts.
+- UOM, currency, address, location, party/actor references, document/source references and event/change references are shared typed models or governed reference capabilities with explicit owners and scopes, not universal shared-write masters.
+- Approval execution, authorization, security, messaging, API/event transport, file/document infrastructure, audit/history infrastructure, search/reporting infrastructure and background processing remain Internal Platform Capabilities or Platform-wide Services under Section 6A and related sections.
+- Web, desktop, mobile and handheld applications are Application Client Channels.
+- External accounting, tax, payment, commerce, device and other connectors are External Connectivity Capabilities. External systems do not define CBM's canonical domain models.
+
+### 6I.12 Service Offering / SAC Subject Boundary
+
+A Service Offering or other eligible service/supply subject used for SAC classification must be supplied by its authoritative service domain. It must not be forced into a physical-goods Product Variant or the Product/Item goods hierarchy merely to satisfy GST classification. Product/Item Management's six approved canonical structures remain unchanged by this Section. No generic Service Operations or Service Centre Module is created by implication. The responsible service domain must be identified when a concrete service business capability is defined; GST/Tax continues to own SAC classification assignment and tax determination.
+
+### 6I.13 Applicability, Configuration and Non-Override Rules
+
+The fourteen-Module Catalogue is a responsibility classification, not a universal enablement list. Applicability must be evaluated against Business Entity type/context, legal and operational purpose, subscription/entitlement where relevant, supported capability, and authorized configuration.
+
+Each Module may configure eligible workflows, document types, numbering, conditions, approval rules, reports, templates and extensions within protected domain invariants. Configuration or customization must not:
+- transfer an authoritative record to another Module;
+- create a competing source of truth;
+- bypass Business/Tenant Data Isolation, Permissions, Delegated Authority or approval controls;
+- alter accepted historical transactions or their snapshots;
+- weaken statutory, accounting, tax, identity, security or audit integrity requirements;
+- create uncontrolled circular dependencies or unrestricted cross-domain writes.
+
+Main Portal may define protected baselines and non-overridable platform invariants. Lower-level configuration and overrides are permitted only where explicitly authorized by the relevant governance rules.
+
+### 6I.14 Decisions Deliberately Outside This Classification
+
+The following are product/commercial or later domain-detail decisions and are not determined by this Catalogue:
+- MVP, release sequencing, rollout priorities and commercial packaging;
+- Subscription Plan prices, add-on prices and entitlement bundles;
+- detailed feature scope for advanced/offline POS, CRM, marketing, customer support, fleet, warranty, service centre or enterprise maintenance;
+- detailed service-domain ownership for any future Service Offering that has not yet been assigned to a concrete service business domain;
+- statutory implementation profiles, tax rates, retention durations and legal filing procedures, which must be validated against current authoritative requirements at the authorized implementation/compliance stage.
+
+These matters do not prevent the fourteen-Module classification or its ownership boundaries from being authoritative.
+
+
 **End of authoritative finalized baseline.**
