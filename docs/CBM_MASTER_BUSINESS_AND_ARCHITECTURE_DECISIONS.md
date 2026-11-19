@@ -2279,7 +2279,7 @@ Physical counts, damaged/blocked/quarantined stock, missing goods, overages, sho
 
 Product/Item Management provides reliable canonical references to eligible consumers, including Sales, Purchase, POS, Inventory, Warehouse Management, and Asset Management. Each consumer owns its own source transactions and operational facts. A screen or workflow may coordinate several Modules, but it must not merge their ownership. Product/Item Management does not own sales orders/invoices, purchase orders/bills, POS transactions, customer/supplier relationships, Inventory quantities/valuation, Warehouse physical execution, Accounting entries, GST/Tax determinations, payment execution, or asset lifecycle merely because those domains use Product/Item references.
 
-The model must accommodate physical goods, services, non-stock items, consumables, raw materials, components, configurable offerings, and future eligible item classes without forcing every business to use every capability. Applicability is explicit and governed.
+The model must accommodate physical goods, non-stock items, consumables, raw materials, components, configurable offerings, and future eligible item classes without forcing every business to use every capability. It may support service-related catalogue representations where an explicit business requirement and governed Product/Item applicability justify them; this does not make Product/Item Management the authoritative owner of the underlying Service Offering/supply subject, service performance, or service-delivery lifecycle. Those remain with the responsible service domain, while GST/Tax owns SAC assignment and tax determination under Sections 3.166 and 6I.12. Applicability is explicit and governed.
 
 ### 6F.2 Canonical identity structure
 
@@ -4294,7 +4294,7 @@ The master decision record contains finalized decisions only. An unresolved matt
 
 ### 21.3 Separate Project Discussion History from domain records and decisions
 
-Chronological project discussions, reasoning, rejected approaches, and superseded wording belong in a separate **Project Discussion History** record if one is maintained. Project Discussion History is not Domain History and is not the Audit Trail. Neither Domain History nor Audit Trail belongs in the authoritative decision text as a substitute for project discussion history.
+Chronological project discussions, reasoning, rejected approaches, and superseded wording belong in a separate **Project Discussion History** record, maintained separately from the authoritative decision baseline. In this repository, that record is `docs/CBM_PROJECT_DISCUSSION_HISTORY.md`. Project Discussion History is not Domain History and is not the Audit Trail. Neither Domain History nor Audit Trail belongs in the authoritative decision text as a substitute for project discussion history.
 
 ### 21.4 Downstream documentation consistency
 
